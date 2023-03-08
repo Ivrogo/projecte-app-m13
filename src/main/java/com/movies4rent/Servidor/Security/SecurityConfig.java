@@ -1,7 +1,8 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+/* */
+/*
 package com.movies4rent.Servidor.Security;
 
 import com.movies4rent.Servidor.Entities.Usuari;
@@ -18,7 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  *
  * @author Er_jo
  */
-
+/*
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -45,3 +46,4 @@ public class SecurityConfig {
     };
    
 }
+*/

@@ -4,6 +4,7 @@
  */
 package com.movies4rent.Servidor.Controller;
 
+import com.movies4rent.Servidor.DTO.UserLoginDTO;
 import com.movies4rent.Servidor.Entities.Usuari;
 import com.movies4rent.Servidor.Service.UsuariService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,9 @@ public class LoginController {
     private UsuariService usuariService;
     
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Usuari usuari) {
-        Usuari foundUsuari = usuariService.findByUsername(usuari.getUsername());
-        if (foundUsuari == null || !foundUsuari.getPassword().equals(usuari.getPassword())){
+    public ResponseEntity<?> login(@RequestBody UserLoginDTO user) {
+        Usuari foundUsuari = usuariService.findByUsername(user.getUsername());
+        if (foundUsuari == null || !foundUsuari.getPassword().equals(user.getPassword())){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
         return ResponseEntity.ok().build();
