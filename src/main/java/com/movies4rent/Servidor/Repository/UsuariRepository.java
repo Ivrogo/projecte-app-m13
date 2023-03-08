@@ -4,15 +4,13 @@
  */
 package com.movies4rent.Servidor.Repository;
 
-import com.movies4rent.Servidor.Model.UsuariModel;
-import java.util.Optional;
+import com.movies4rent.Servidor.Entities.Usuari;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author Er_jo
  */
-public interface UsuariRepository extends JpaRepository<UsuariModel, Long>{
+public interface UsuariRepository extends JpaRepository<Usuari, Long>{
     
-    Optional<UsuariModel> findByUsername(String username);
 }
