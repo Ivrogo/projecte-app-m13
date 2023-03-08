@@ -2,6 +2,7 @@ package com.movies4rent.Servidor.Controller;
 
 
 
+import com.movies4rent.Servidor.DTO.UserInfoDTO;
 import com.movies4rent.Servidor.Entities.Usuari;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
 import java.util.List;
@@ -41,17 +42,15 @@ public class UsuariController {
     }
     
     @PutMapping(value="/updateusuari/{id}")
-    public String updateUsuari(@PathVariable long id, @RequestBody Usuari usuari){
+    public String updateUsuari(@PathVariable long id, @RequestBody UserInfoDTO user){
         
         Usuari updateUsuari = repository.findById(id).get();
-        updateUsuari.setNombre(usuari.getNombre());
-        updateUsuari.setApellidos(usuari.getApellidos());
-        updateUsuari.setEmail(usuari.getEmail());
-        updateUsuari.setAddress(usuari.getAddress());
-        updateUsuari.setTelefono(usuari.getTelefono());
-        updateUsuari.setUsername(usuari.getUsername());
-        updateUsuari.setPassword(usuari.getPassword());
-        updateUsuari.setConfirmPassword(usuari.getConfirmPassword());
+        updateUsuari.setNombre(user.getNombre());
+        updateUsuari.setApellidos(user.getApellidos());
+        updateUsuari.setEmail(user.getEmail());
+        updateUsuari.setAddress(user.getAddress());
+        updateUsuari.setTelefono(user.getTelefono());
+
         
         repository.save(updateUsuari);
         

@@ -14,6 +14,24 @@ public class UserInfoDTO {
     private String apellidos;
     private String email;
     private String direccion;
+    private String address;
+    private String telefono;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
 
     public String getNombre() {
         return nombre;
