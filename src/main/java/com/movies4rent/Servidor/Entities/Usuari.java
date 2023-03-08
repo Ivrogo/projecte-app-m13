@@ -54,11 +54,8 @@ public class Usuari{
     @Transient
     private String confirmPassword;
     
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles", 
-            joinColumns=@JoinColumn(name="user_id", referencedColumnName = "id"), 
-            inverseJoinColumns=@JoinColumn(name="role_id", referencedColumnName = "id"))
-    private Set<Role> roles;
+    @Column(nullable = false)
+    private long id_rol;
 
     public Usuari() {
         super();
@@ -140,14 +137,14 @@ public class Usuari{
         this.confirmPassword = confirmPassword;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public long getId_rol() {
+        return id_rol;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setId_rol(long id_rol) {
+        this.id_rol = id_rol;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 5;
@@ -160,7 +157,7 @@ public class Usuari{
         hash = 67 * hash + Objects.hashCode(this.username);
         hash = 67 * hash + Objects.hashCode(this.password);
         hash = 67 * hash + Objects.hashCode(this.confirmPassword);
-        hash = 67 * hash + Objects.hashCode(this.roles);
+        hash = 67 * hash + Objects.hashCode(this.id_rol);
         return hash;
     }
 
@@ -203,13 +200,13 @@ public class Usuari{
         if (!Objects.equals(this.confirmPassword, other.confirmPassword)) {
             return false;
         }
-        return Objects.equals(this.roles, other.roles);
+        return Objects.equals(this.id_rol, other.id_rol);
     }
 
     
     @Override
     public String toString() {
-        return "Usuari{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", email=" + email + ", address=" + address + ", username=" + username + ", password=" + password + ", confirmPassword=" + confirmPassword + ", roles=" + roles + '}';
+        return "Usuari{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", email=" + email + ", address=" + address + ", username=" + username + ", password=" + password + ", confirmPassword=" + confirmPassword + ", roles=" + id_rol + '}';
     }
 
 }
