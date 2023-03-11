@@ -25,12 +25,12 @@ public class UsuariController {
     @Autowired
     private UsuariRepository repository;
     
-    @GetMapping(value ="/demo")
+    @GetMapping(value ="/demo/")
     public String demo() {
         return "hola mundo";
     }
  
-    @GetMapping(value = "/usuaris")
+    @GetMapping(value = "/usuaris/")
     public List<Usuari> getUsuaris() {
         return repository.findAll();
     }

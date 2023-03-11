@@ -10,7 +10,7 @@ import com.movies4rent.Servidor.Service.UsuariService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +24,7 @@ public class LoginController {
     @Autowired
     private UsuariService usuariService;
     
-    @PostMapping("/login")
+    @GetMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginDTO user) {
         Usuari foundUsuari = usuariService.findByUsername(user.getUsername());
         if (foundUsuari == null || !foundUsuari.getPassword().equals(user.getPassword())){
