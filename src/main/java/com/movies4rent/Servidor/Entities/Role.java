@@ -4,13 +4,7 @@
  */
 package com.movies4rent.Servidor.Entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.util.Objects;
+import jakarta.persistence.*;
 
 /**
  *
@@ -26,9 +20,6 @@ public class Role {
     
     @Column
     private String nomRol;
-    
-    @Column
-    private String descripcion;
 
     public Role(Long id) {
         this.id = id;
@@ -50,47 +41,13 @@ public class Role {
         this.nomRol = nomRol;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public Role() {
+        super();
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 31 * hash + Objects.hashCode(this.id);
-        hash = 31 * hash + Objects.hashCode(this.nomRol);
-        hash = 31 * hash + Objects.hashCode(this.descripcion);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Role other = (Role) obj;
-        if (!Objects.equals(this.nomRol, other.nomRol)) {
-            return false;
-        }
-        if (!Objects.equals(this.descripcion, other.descripcion)) {
-            return false;
-        }
-        return Objects.equals(this.id, other.id);
-    }
-    
     @Override
     public String toString() {
-        return "roles{" + "id=" + id + ", nomRol=" + nomRol + ", descripcion=" + descripcion + '}';
+        return "roles{" + "id=" + id + ", nomRol=" + nomRol ;
     }
-   
+
 }

@@ -1,37 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.movies4rent.Servidor.DTO;
 
-/**
- *
- * @author Er_jo
- */
+import com.movies4rent.Servidor.Entities.Usuari;
+
 public class UserInfoDTO {
-    
+
     private String nombre;
-    private String apellidos;
-    private String email;
-    private String direccion;
-    private String address;
-    private String telefono;
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
 
     public String getNombre() {
         return nombre;
@@ -49,20 +22,34 @@ public class UserInfoDTO {
         this.apellidos = apellidos;
     }
 
-    public String getEmail() {
-        return email;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
+    private String apellidos;
+
+    private String correo;
+
+    private String address;
+
+
+    public static void fromDTOToEntityUpdate (UserInfoDTO userInfoDTO, Usuari usuari) {
+
+        usuari.setNombre(userInfoDTO.getNombre());
+        usuari.setApellidos(userInfoDTO.getApellidos());
+        usuari.setEmail(userInfoDTO.getCorreo());
+        usuari.setAddress(userInfoDTO.getAddress());
+    }
 }

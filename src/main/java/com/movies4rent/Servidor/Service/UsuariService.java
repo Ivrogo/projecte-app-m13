@@ -4,12 +4,30 @@
  */
 package com.movies4rent.Servidor.Service;
 
+import com.movies4rent.Servidor.DTO.RegisterUserDTO;
+import com.movies4rent.Servidor.DTO.UserInfoDTO;
 import com.movies4rent.Servidor.Entities.Usuari;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  *
  * @author Er_jo
  */
 public interface UsuariService {
-        public Usuari findByUsername(String username);
+         Usuari findByUsername(String username);
+
+         ResponseEntity<List<Usuari>> findAll();
+        ResponseEntity<Usuari> findUserById(Long id);
+
+        ResponseEntity updateUser (UserInfoDTO userInfoDTO, Long id);
+
+         ResponseEntity updateUserAdmin (Boolean admin, Long id);
+
+         ResponseEntity registerUser(RegisterUserDTO userDTO);
+
+         ResponseEntity deleteUser(Long id);
+
+
 }
