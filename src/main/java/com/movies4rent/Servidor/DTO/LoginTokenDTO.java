@@ -26,8 +26,5 @@ public class LoginTokenDTO {
         this.token = token;
     }
 
-    /*
-    public void getToken(String username, String password) {
-        Usuari usuari =
-    }*/
+    
 }
