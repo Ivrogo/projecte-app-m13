@@ -32,7 +32,7 @@ public class UsuariControllerImpl implements UsuariController {
 
 
     @PutMapping("/update/{id}/{admin}")
-    public ResponseEntity<ResponseDTO> updateUsuariAdmin(@PathParam("admin") Boolean admin, @PathParam("id") UUID id, @RequestParam(value = "token", required = true) String token) {
+    public ResponseEntity<ResponseDTO> updateUsuariAdmin(@PathParam("admin") boolean admin, @PathParam("id") UUID id, @RequestParam(value = "token", required = true) String token) {
         return usuariService.updateUserAdmin(admin, id, token);
     }
 
