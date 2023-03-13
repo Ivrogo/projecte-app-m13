@@ -32,13 +32,13 @@ public class UsuariControllerImpl implements UsuariController {
 
 
     @PutMapping("/update/{id}/{admin}")
-    public ResponseEntity<ResponseDTO> updateUsuariAdmin(@PathParam("admin") boolean admin, @PathParam("id") UUID id, @RequestParam(value = "token", required = true) String token) {
+    public ResponseEntity<ResponseDTO> updateUsuariAdmin(@PathParam("admin") boolean admin, @PathVariable("id") UUID id, @RequestParam(value = "token", required = true) String token) {
         return usuariService.updateUserAdmin(admin, id, token);
     }
 
     @Override
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseDTO> deleteUsuari(UUID id, String token) {
+    public ResponseEntity<ResponseDTO> deleteUsuari(@PathVariable UUID id, String token) {
         return usuariService.deleteUser(id, token);
     }
 
