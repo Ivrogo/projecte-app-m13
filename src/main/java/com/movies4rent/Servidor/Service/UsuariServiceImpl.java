@@ -4,7 +4,6 @@ package com.movies4rent.Servidor.Service;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.DTO.UserUpdateDTO;
 import com.movies4rent.Servidor.Entities.Usuari;
-import com.movies4rent.Servidor.Repository.TokenRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
 import com.movies4rent.Servidor.Utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +75,7 @@ public class UsuariServiceImpl implements UsuariService {
     }
 
     @Override
-    public ResponseEntity<ResponseDTO> updateUserAdmin(Boolean admin, UUID id, String token) {
+    public ResponseEntity<ResponseDTO> updateUserAdmin(boolean admin, UUID id, String token) {
         ResponseDTO response = new ResponseDTO();
 
         if (!tokenUtils.isTokenValid(token)) {

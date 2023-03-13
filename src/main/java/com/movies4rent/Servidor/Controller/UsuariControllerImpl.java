@@ -36,4 +36,10 @@ public class UsuariControllerImpl implements UsuariController {
         return usuariService.updateUserAdmin(admin, id, token);
     }
 
+    @Override
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseDTO> deleteUsuari(UUID id, String token) {
+        return usuariService.deleteUser(id, token);
+    }
+
 }

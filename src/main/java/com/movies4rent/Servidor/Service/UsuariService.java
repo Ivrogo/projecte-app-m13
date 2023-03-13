@@ -19,7 +19,7 @@ public interface UsuariService {
 
     ResponseEntity<ResponseDTO> updateUser(UserUpdateDTO userUpdateDTO, String token);
 
-    ResponseEntity<ResponseDTO> updateUserAdmin(Boolean admin, UUID id, String token);
+    ResponseEntity<ResponseDTO> updateUserAdmin(boolean admin, UUID id, String token);
 
     ResponseEntity<ResponseDTO> deleteUser(UUID id, String token);
 }
