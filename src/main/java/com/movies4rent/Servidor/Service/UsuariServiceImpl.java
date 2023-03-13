@@ -1,12 +1,12 @@
 package com.movies4rent.Servidor.Service;
 
 
-import com.movies4rent.Servidor.DTO.RegisterUserDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
-import com.movies4rent.Servidor.DTO.UserInfoDTO;
+import com.movies4rent.Servidor.DTO.UserUpdateDTO;
 import com.movies4rent.Servidor.Entities.Usuari;
+import com.movies4rent.Servidor.Repository.TokenRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
-import com.movies4rent.Servidor.Utils.Utils;
+import com.movies4rent.Servidor.Utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,112 +14,119 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UsuariServiceImpl implements UsuariService {
 
     @Autowired
-    private UsuariRepository repo;
+    private UsuariRepository usuariRepository;
+    @Autowired
+    private TokenUtils tokenUtils;
+    @Autowired
+    private TokenRepository tokenRepository;
+
 
     @Override
-    public ResponseEntity<List<Usuari>> findByUsername(String username) {
-        try {
-            List<Usuari> usuaris = repo.findUserByUsername(username);
-            return Utils.okStatus(usuaris);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ResponseDTO> findAll(String token) {
+        ResponseDTO<List<Usuari>> response = new ResponseDTO();
+
+        if (!tokenUtils.isTokenValid(token)) {
+            response.setMessage("Sesión no válida");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
-    }
 
-    @Override
-    public ResponseEntity<ResponseDTO> findByUsernameAndPassword(String username, String password) {
-        ResponseDTO<List<Usuari>> responseDTO = new ResponseDTO();
-        List<Usuari> usuaris;
         try {
-            usuaris = repo.findUserByUsernameAndPassword(username, password);
-            responseDTO.setValue(usuaris);
-            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            responseDTO.setMessage("Error, demo");
-            return new ResponseEntity<>(responseDTO, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public ResponseEntity<List<Usuari>> findAll() {
-        try {
-            List<Usuari> usuaris = repo.findAll();
-            return Utils.okStatus(usuaris);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Override
-    public <T>ResponseEntity<T> findUserById(Long id) {
-        try {
-            Optional<Usuari> usuari = repo.findById(id);
-            if (!usuari.isPresent()) {
-                return (ResponseEntity<T>) Utils.NotFound("l'usuari no existeix");
+            List<Usuari> usuaris = usuariRepository.findAll();
+            if (usuaris.size() <= 0) {
+                response.setMessage("No hay usuarios");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
-            return (ResponseEntity<T>) Utils.okStatus(usuari);
-        } catch (Exception e) {
-            return (ResponseEntity<T>) Utils.InternalError("Error s'ha trobat una excepció");
-        }
 
+            response.setValue(usuaris);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.setMessage("Error.");
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
-    public <T>ResponseEntity<T> updateUser(UserInfoDTO userInfoDTO, Long id) {
+    public ResponseEntity<ResponseDTO> updateUser(UserUpdateDTO userUpdateDTO, String token) {
+        ResponseDTO response = new ResponseDTO();
+
+        if (!tokenUtils.isTokenValid(token)) {
+            response.setMessage("Sesión no válida");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
         try {
-            Optional<Usuari> updatedUsuari = repo.findUserById(id);
+            Optional<Usuari> user = tokenUtils.getUser(token);
+            if (user == null || !user.isPresent()) {
+                response.setMessage("Sesión no válida");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+
+            UserUpdateDTO.updateEntityFromDTO(user.get(), userUpdateDTO);
+            usuariRepository.save(user.get());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.setMessage("Error.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> updateUserAdmin(Boolean admin, UUID id, String token) {
+        ResponseDTO response = new ResponseDTO();
+
+        if (!tokenUtils.isTokenValid(token)) {
+            response.setMessage("Sesión no válida");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            Optional<Usuari> updatedUsuari = usuariRepository.findById(id);
             if (!updatedUsuari.isPresent()) {
-                return (ResponseEntity<T>) Utils.NotFound("Usuari no trobat");
+                response.setMessage("Usuari no trobat");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
-            UserInfoDTO.fromDTOToEntityUpdate(userInfoDTO, updatedUsuari.get());
-            repo.save(updatedUsuari.get());
-            return (ResponseEntity<T>) Utils.okStatus(updatedUsuari);
-        } catch (Exception e) {
-            return (ResponseEntity<T>) Utils.InternalError("Error Excepció trobada");
-        }
-    }
 
-    @Override
-    public <T>ResponseEntity<T> updateUserAdmin(Boolean admin, Long id) {
-        try{
-            Optional<Usuari> updatedUsuari = repo.findUserById(id);
-            if (!updatedUsuari.isPresent()) {
-                return (ResponseEntity<T>) Utils.NotFound("Usuari no trobat");
-            }
             updatedUsuari.get().setAdmin(admin);
-            repo.save(updatedUsuari.get());
-            return (ResponseEntity<T>) Utils.okStatus("OK");
+            usuariRepository.save(updatedUsuari.get());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            return (ResponseEntity<T>) Utils.InternalError("Error Excepció trobada");
+            response.setMessage("Error Excepció trobada");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @Override
-    public <T>ResponseEntity<T> registerUser(RegisterUserDTO userDTO) {
-        try {
-            repo.save(RegisterUserDTO.fromDTOToEntity(userDTO));
-            return (ResponseEntity<T>) Utils.okStatus("OK");
-        } catch (Exception e) {
-            return (ResponseEntity<T>) Utils.InternalError("Error excepció trobada");
-        }
-    }
 
     @Override
-    public <T>ResponseEntity<T> deleteUser(Long id) {
+    public ResponseEntity<ResponseDTO> deleteUser(UUID id, String token) {
+        ResponseDTO response = new ResponseDTO();
+
+        if (!tokenUtils.isTokenValid(token)) {
+            response.setMessage("Sesión no válida");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
         try {
-            Optional<Usuari> updatedUsuari = repo.findUserById(id);
+            Optional<Usuari> updatedUsuari = usuariRepository.findById(id);
             if (!updatedUsuari.isPresent()) {
-                return (ResponseEntity<T>) Utils.NotFound("Usuari no trobat");
+                response.setMessage("Usuari no trobat");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
-            repo.deleteById(id);
-            return (ResponseEntity<T>) Utils.okStatus("OK");
+            usuariRepository.deleteById(id);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            return (ResponseEntity<T>) Utils.InternalError("Error excepcio trobada");
+            response.setMessage("Error Excepció trobada");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

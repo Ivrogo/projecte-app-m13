@@ -1,67 +1,39 @@
 package com.movies4rent.Servidor.Controller;
 
 
-import com.movies4rent.Servidor.DTO.RegisterUserDTO;
-import com.movies4rent.Servidor.DTO.UserInfoDTO;
-import com.movies4rent.Servidor.Entities.Usuari;
+import com.movies4rent.Servidor.DTO.ResponseDTO;
+import com.movies4rent.Servidor.DTO.UserUpdateDTO;
 import com.movies4rent.Servidor.Service.UsuariService;
-import com.movies4rent.Servidor.Utils.Utils;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
-public class UsuariControllerImpl {
+public class UsuariControllerImpl implements UsuariController {
 
     @Autowired
-    private UsuariService service;
+    private UsuariService usuariService;
 
-
-    @GetMapping()
-    public ResponseEntity<List<Usuari>> getUsuari() {
-       return service.findAll();
+    @Override
+    @GetMapping
+    public ResponseEntity<ResponseDTO> getUsuaris(@RequestParam(value = "token", required = true) String token) {
+        return usuariService.findAll(token);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity getUsuariById(Long id) {
-       return service.findUserById(id);
+    @Override
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDTO> updateUsuari(@RequestBody UserUpdateDTO userUpdateDTO, @RequestParam(value = "token", required = true) String token) {
+        return usuariService.updateUser(userUpdateDTO, token);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity RegisterUsuari(@RequestBody RegisterUserDTO userDTO) {
-        if (userDTO == null) {
-            return Utils.badRequest("L'objecte no existeix");
-        }
-        if (Utils.isNullOrEmpty(userDTO.getEmail())) {
-            return Utils.badRequest("Error falta l'email");
-        }
-        if (Utils.isNullOrEmpty(userDTO.getPassword())){
-            return Utils.badRequest("Error falta la contrasenya");
-        }
-        if (Utils.isNullOrEmpty(userDTO.getUsername())){
-            return Utils.badRequest("Error falta l'usuari");
-        }
-        return service.registerUser(userDTO);
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity updateUsuari(@RequestBody UserInfoDTO userInfoDTO, Long id) {
-        if (userInfoDTO == null) {
-            return Utils.badRequest("l'objecte esta no existeix");
-        }
-        return service.updateUser(userInfoDTO, id);
-    }
 
     @PutMapping("/update/{id}/{admin}")
-    public ResponseEntity updateUsuariAdmin(Boolean admin, Long id) {
-        return service.updateUserAdmin(admin, id);
+    public ResponseEntity<ResponseDTO> updateUsuariAdmin(@PathParam("admin") Boolean admin, @PathParam("id") UUID id, @RequestParam(value = "token", required = true) String token) {
+        return usuariService.updateUserAdmin(admin, id, token);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteUsuari(Long id) {
-        return service.deleteUser(id);
-    }
- }
+}

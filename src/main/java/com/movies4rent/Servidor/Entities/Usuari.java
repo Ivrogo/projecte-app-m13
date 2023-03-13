@@ -6,8 +6,9 @@ package com.movies4rent.Servidor.Entities;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 /**
- *
  * @author Er_jo
  */
 @Entity
@@ -15,8 +16,8 @@ import jakarta.persistence.*;
 public class Usuari {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column
     private String nombre;
@@ -39,29 +40,24 @@ public class Usuari {
     @Column(nullable = false)
     private String password;
 
-   /* @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "usuari_roles",
-            joinColumns = @JoinColumn(name = "usuari_id"),
-            inverseJoinColumns = @JoinColumn(name = "rol_id"))
-    private Set<Role> roles = new HashSet<>();*/
 
     @Column(nullable = false)
     private boolean isAdmin;
+
     public Usuari() {
         super();
         isAdmin = false;
     }
-    
-    public Usuari(long id) {
+
+    public Usuari(UUID id) {
         this.id = id;
     }
-    
-    public long getId() {
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -121,7 +117,7 @@ public class Usuari {
         this.password = password;
     }
 
-    
+
     @Override
     public String toString() {
         return "Usuari{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", email=" + email + ", address=" + address + ", username=" + username + ", password=" + password + ", isAdmin=" + isAdmin + '}';

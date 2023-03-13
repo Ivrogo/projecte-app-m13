@@ -1,23 +1,21 @@
 package com.movies4rent.Servidor.DTO;
 
-public class UserTokenDTO {
+public class LoginTokenDTO {
 
-    private String username;
     private String token;
-    private String message;
+    private boolean isAdmin;
 
-
-    public UserTokenDTO(String username, String token, String message) {
-        this.username = username;
+    public LoginTokenDTO(String token, boolean isAdmin) {
         this.token = token;
+        this.isAdmin = isAdmin;
     }
 
-    public String getUsername() {
-        return username;
+    public boolean isAdmin() {
+        return isAdmin;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public String getToken() {

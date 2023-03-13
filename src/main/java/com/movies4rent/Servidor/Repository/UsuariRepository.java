@@ -10,18 +10,16 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
- *
  * @author Er_jo
  */
 @Repository
-public interface UsuariRepository extends JpaRepository<Usuari, Long>{
+public interface UsuariRepository extends JpaRepository<Usuari, UUID> {
 
-    public Optional<Usuari> findUserById(Long id);
+    public Optional<Usuari> findUserByUsername(String username);
 
-    public List<Usuari> findUserByUsername(String username);
-
-    public List<Usuari> findUserByUsernameAndPassword(String username, String password);
+    public Optional<Usuari> findUserByUsernameAndPassword(String username, String password);
 
 }

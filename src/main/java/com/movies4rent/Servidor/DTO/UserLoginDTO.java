@@ -4,16 +4,6 @@ public class UserLoginDTO {
 
     private String username;
     private String password;
-    private Boolean rememberMe;
-
-    @Override
-    public String toString() {
-        return "UserLoginDTO{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", rememberMe=" + rememberMe +
-                '}';
-    }
 
     public String getUsername() {
         return username;
@@ -29,20 +19,6 @@ public class UserLoginDTO {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public boolean getRememberMe() {
-        return rememberMe;
-    }
-
-    public void setRememberMe(boolean rememberMe) {
-        this.rememberMe = rememberMe;
-    }
-
-    public UserLoginDTO(String username, String password, boolean rememberMe) {
-        this.username = username;
-        this.password = password;
-        this.rememberMe = rememberMe;
     }
 
     public UserLoginDTO(String username, String password) {

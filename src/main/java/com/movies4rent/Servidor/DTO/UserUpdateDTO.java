@@ -2,7 +2,7 @@ package com.movies4rent.Servidor.DTO;
 
 import com.movies4rent.Servidor.Entities.Usuari;
 
-public class UserInfoDTO {
+public class UserUpdateDTO {
 
     private String nombre;
 
@@ -55,12 +55,20 @@ public class UserInfoDTO {
     private String telefono;
 
 
-    public static void fromDTOToEntityUpdate(UserInfoDTO userInfoDTO, Usuari usuari) {
+    public static void fromDTOToEntityUpdate(UserUpdateDTO userUpdateDTO, Usuari usuari) {
 
-        usuari.setNombre(userInfoDTO.getNombre());
-        usuari.setApellidos(userInfoDTO.getApellidos());
-        usuari.setEmail(userInfoDTO.getCorreo());
-        usuari.setAddress(userInfoDTO.getAddress());
-        usuari.setTelefono(userInfoDTO.getTelefono());
+        usuari.setNombre(userUpdateDTO.getNombre());
+        usuari.setApellidos(userUpdateDTO.getApellidos());
+        usuari.setEmail(userUpdateDTO.getCorreo());
+        usuari.setAddress(userUpdateDTO.getAddress());
+        usuari.setTelefono(userUpdateDTO.getTelefono());
+    }
+
+    public static void updateEntityFromDTO(Usuari userEntity, UserUpdateDTO userDTO) {
+        userEntity.setNombre(userDTO.getNombre());
+        userEntity.setAddress(userDTO.getAddress());
+        userEntity.setTelefono(userDTO.getTelefono());
+        userEntity.setApellidos(userDTO.getApellidos());
+        userEntity.setEmail(userDTO.getCorreo());
     }
 }

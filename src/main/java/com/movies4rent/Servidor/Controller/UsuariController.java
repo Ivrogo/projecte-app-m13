@@ -1,25 +1,18 @@
 package com.movies4rent.Servidor.Controller;
 
-import com.movies4rent.Servidor.DTO.RegisterUserDTO;
-import com.movies4rent.Servidor.DTO.UserInfoDTO;
-import com.movies4rent.Servidor.Entities.Usuari;
+import com.movies4rent.Servidor.DTO.ResponseDTO;
+import com.movies4rent.Servidor.DTO.UserUpdateDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import java.util.UUID;
 
 public interface UsuariController {
 
-    ResponseEntity<List<Usuari>> getUsuari();
+    ResponseEntity<ResponseDTO> getUsuaris(@RequestParam(value = "token", required = true) String token);
 
-    ResponseEntity getUsuariById(Long id);
+    ResponseEntity<ResponseDTO> updateUsuari(@RequestBody UserUpdateDTO userUpdateDTO, @RequestParam(value = "token", required = true) String token);
 
-    ResponseEntity RegisterUsuari(@RequestBody RegisterUserDTO userDTO);
-
-    ResponseEntity updateUsuari(@RequestBody UserInfoDTO userInfoDTO, Long id);
-
-    ResponseEntity updateUsuariAdmin(Boolean admin, Long id);
-
-    ResponseEntity deleteUsuari(Long id);
-
+    ResponseEntity<ResponseDTO> updateUsuariAdmin(Boolean admin, UUID id, @RequestParam(value = "token", required = true) String token);
 }

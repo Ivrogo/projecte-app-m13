@@ -1,6 +1,6 @@
 package com.movies4rent.Servidor.DTO;
 
-public class ResponseDTO<T>{
+public class ResponseDTO<T> {
 
     private String message;
     private T value;

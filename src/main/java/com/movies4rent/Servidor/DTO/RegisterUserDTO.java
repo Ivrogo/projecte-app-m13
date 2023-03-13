@@ -6,13 +6,7 @@ import com.movies4rent.Servidor.Entities.Usuari;
 public class RegisterUserDTO {
 
     private String email;
-
-    private String nombre;
-
-    private String apellidos;
-
     private String username;
-
     private String password;
 
 
