@@ -33,10 +33,16 @@ public class UsuariControllerImpl {
     @PostMapping("/register")
     public ResponseEntity RegisterUsuari(@RequestBody RegisterUserDTO userDTO) {
         if (userDTO == null) {
-            return Utils.badRequest();
+            return Utils.badRequest("L'objecte no existeix");
         }
-        if (Utils.isNullOrEmpty(userDTO.getEmail()) || Utils.isNullOrEmpty(userDTO.getPassword()) || Utils.isNullOrEmpty(userDTO.getUsername())) {
-            return Utils.badRequest();
+        if (Utils.isNullOrEmpty(userDTO.getEmail())) {
+            return Utils.badRequest("Error falta l'email");
+        }
+        if (Utils.isNullOrEmpty(userDTO.getPassword())){
+            return Utils.badRequest("Error falta la contrasenya");
+        }
+        if (Utils.isNullOrEmpty(userDTO.getUsername())){
+            return Utils.badRequest("Error falta l'usuari");
         }
         return service.registerUser(userDTO);
     }
@@ -44,7 +50,7 @@ public class UsuariControllerImpl {
     @PutMapping("/update/{id}")
     public ResponseEntity updateUsuari(@RequestBody UserInfoDTO userInfoDTO, Long id) {
         if (userInfoDTO == null) {
-            return Utils.badRequest();
+            return Utils.badRequest("l'objecte esta no existeix");
         }
         return service.updateUser(userInfoDTO, id);
     }

@@ -44,12 +44,23 @@ public class UserInfoDTO {
 
     private String address;
 
+    public String getTelefono() {
+        return telefono;
+    }
 
-    public static void fromDTOToEntityUpdate (UserInfoDTO userInfoDTO, Usuari usuari) {
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    private String telefono;
+
+
+    public static void fromDTOToEntityUpdate(UserInfoDTO userInfoDTO, Usuari usuari) {
 
         usuari.setNombre(userInfoDTO.getNombre());
         usuari.setApellidos(userInfoDTO.getApellidos());
         usuari.setEmail(userInfoDTO.getCorreo());
         usuari.setAddress(userInfoDTO.getAddress());
+        usuari.setTelefono(userInfoDTO.getTelefono());
     }
 }

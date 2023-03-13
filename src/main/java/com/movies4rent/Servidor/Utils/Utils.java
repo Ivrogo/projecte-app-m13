@@ -9,19 +9,19 @@ public class Utils {
         return param == null || param.trim().length() == 0;
     }
 
-    public static ResponseEntity badRequest() {
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    public static <T>ResponseEntity<T> badRequest(T value) {
+        return new ResponseEntity(value, HttpStatus.BAD_REQUEST);
     }
 
-    public static ResponseEntity okStatus() {
-        return new ResponseEntity(HttpStatus.OK);
+    public static <T>ResponseEntity<T> okStatus(T value) {
+        return new ResponseEntity(value, HttpStatus.OK);
     }
 
-    public static ResponseEntity NotFound() {
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    public static <T>ResponseEntity<T> NotFound(T value) {
+        return new ResponseEntity(value, HttpStatus.NOT_FOUND);
     }
 
-    public static ResponseEntity InternalError() {
-        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    public static <T>ResponseEntity<T> InternalError(T value) {
+        return new <T>ResponseEntity<T>(value, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

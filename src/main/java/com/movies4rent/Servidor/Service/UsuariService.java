@@ -16,18 +16,18 @@ import java.util.List;
  * @author Er_jo
  */
 public interface UsuariService {
-         Usuari findByUsername(String username);
+         ResponseEntity<List<Usuari>> findByUsername(String username);
 
          ResponseEntity<List<Usuari>> findAll();
-        ResponseEntity<Usuari> findUserById(Long id);
+        <T>ResponseEntity<T> findUserById(Long id);
 
-        ResponseEntity updateUser (UserInfoDTO userInfoDTO, Long id);
+        <T>ResponseEntity<T> updateUser (UserInfoDTO userInfoDTO, Long id);
 
-         ResponseEntity updateUserAdmin (Boolean admin, Long id);
+         <T>ResponseEntity<T> updateUserAdmin (Boolean admin, Long id);
 
-         ResponseEntity registerUser(RegisterUserDTO userDTO);
+         <T>ResponseEntity<T> registerUser(RegisterUserDTO userDTO);
 
-         ResponseEntity deleteUser(Long id);
+         <T>ResponseEntity<T> deleteUser(Long id);
 
 
 }

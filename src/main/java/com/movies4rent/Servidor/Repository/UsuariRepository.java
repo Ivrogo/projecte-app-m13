@@ -8,6 +8,7 @@ import com.movies4rent.Servidor.Entities.Usuari;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,6 +20,6 @@ public interface UsuariRepository extends JpaRepository<Usuari, Long>{
 
     public Optional<Usuari> findUserById(Long id);
 
-    public Usuari findUserByUsername(String username);
+    public List<Usuari> findUserByUsername(String username);
 
 }

@@ -21,88 +21,90 @@ public class UsuariServiceImpl implements UsuariService {
     private UsuariRepository repo;
 
     @Override
-    public Usuari findByUsername(String username) {
-       return repo.findUserByUsername(username);
+    public ResponseEntity<List<Usuari>> findByUsername(String username) {
+        try {
+            List<Usuari> usuaris = repo.findUserByUsername(username);
+            return Utils.okStatus(usuaris);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override
     public ResponseEntity<List<Usuari>> findAll() {
         try {
             List<Usuari> usuaris = repo.findAll();
-            return Utils.okStatus();
+            return Utils.okStatus(usuaris);
         } catch (Exception e) {
-            return Utils.badRequest();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
-    public ResponseEntity<Usuari> findUserById(Long id) {
+    public <T>ResponseEntity<T> findUserById(Long id) {
         try {
             Optional<Usuari> usuari = repo.findById(id);
             if (!usuari.isPresent()) {
-                return Utils.NotFound();
+                return (ResponseEntity<T>) Utils.NotFound("l'usuari no existeix");
             }
-            return Utils.okStatus();
+            return (ResponseEntity<T>) Utils.okStatus(usuari);
         } catch (Exception e) {
-            return Utils.InternalError();
+            return (ResponseEntity<T>) Utils.InternalError("Error s'ha trobat una excepció");
         }
 
     }
 
     @Override
-    public ResponseEntity updateUser(UserInfoDTO userInfoDTO, Long id) {
+    public <T>ResponseEntity<T> updateUser(UserInfoDTO userInfoDTO, Long id) {
         try {
             Optional<Usuari> updatedUsuari = repo.findUserById(id);
             if (!updatedUsuari.isPresent()) {
-                return Utils.NotFound();
+                return (ResponseEntity<T>) Utils.NotFound("Usuari no trobat");
             }
             UserInfoDTO.fromDTOToEntityUpdate(userInfoDTO, updatedUsuari.get());
             repo.save(updatedUsuari.get());
-            return Utils.okStatus();
+            return (ResponseEntity<T>) Utils.okStatus(updatedUsuari);
         } catch (Exception e) {
-            return Utils.InternalError();
+            return (ResponseEntity<T>) Utils.InternalError("Error Excepció trobada");
         }
     }
 
     @Override
-    public ResponseEntity updateUserAdmin(Boolean admin, Long id) {
+    public <T>ResponseEntity<T> updateUserAdmin(Boolean admin, Long id) {
         try{
             Optional<Usuari> updatedUsuari = repo.findUserById(id);
             if (!updatedUsuari.isPresent()) {
-                return Utils.NotFound();
+                return (ResponseEntity<T>) Utils.NotFound("Usuari no trobat");
             }
             updatedUsuari.get().setAdmin(admin);
             repo.save(updatedUsuari.get());
-            return Utils.okStatus();
+            return (ResponseEntity<T>) Utils.okStatus("OK");
         } catch (Exception e) {
-            return Utils.InternalError();
+            return (ResponseEntity<T>) Utils.InternalError("Error Excepció trobada");
         }
     }
 
     @Override
-    public ResponseEntity registerUser(RegisterUserDTO userDTO) {
+    public <T>ResponseEntity<T> registerUser(RegisterUserDTO userDTO) {
         try {
-            if (userDTO.getPassword().length() < 8) {
-                return new ResponseEntity("El limite minimo de caracteres", HttpStatus.BAD_REQUEST);
-            }
             repo.save(RegisterUserDTO.fromDTOToEntity(userDTO));
-            return Utils.okStatus();
+            return (ResponseEntity<T>) Utils.okStatus("OK");
         } catch (Exception e) {
-            return Utils.InternalError();
+            return (ResponseEntity<T>) Utils.InternalError("Error excepció trobada");
         }
     }
 
     @Override
-    public ResponseEntity deleteUser(Long id) {
+    public <T>ResponseEntity<T> deleteUser(Long id) {
         try {
             Optional<Usuari> updatedUsuari = repo.findUserById(id);
             if (!updatedUsuari.isPresent()) {
-                return Utils.NotFound();
+                return (ResponseEntity<T>) Utils.NotFound("Usuari no trobat");
             }
             repo.deleteById(id);
-            return Utils.okStatus();
+            return (ResponseEntity<T>) Utils.okStatus("OK");
         } catch (Exception e) {
-            return Utils.InternalError();
+            return (ResponseEntity<T>) Utils.InternalError("Error excepcio trobada");
         }
     }
 }
