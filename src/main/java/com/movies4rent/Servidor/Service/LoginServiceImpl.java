@@ -1,8 +1,8 @@
 package com.movies4rent.Servidor.Service;
 
+import com.movies4rent.Servidor.DTO.LoginTokenDTO;
 import com.movies4rent.Servidor.DTO.RegisterUserDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
-import com.movies4rent.Servidor.DTO.LoginTokenDTO;
 import com.movies4rent.Servidor.Entities.Token;
 import com.movies4rent.Servidor.Entities.Usuari;
 import com.movies4rent.Servidor.Repository.TokenRepository;
@@ -61,10 +61,11 @@ public class LoginServiceImpl implements LoginService {
         try {
             Optional<Token> tokenEntity = tokenRepository.findByToken(token);
 
-            if (!tokenEntity.isPresent()) {
-                response.setMessage("Sesión no existente");
+            if (!tokenUtils.isTokenValid(tokenEntity.get().getToken())) {
+                response.setMessage("Sesión no válida");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
+
             tokenRepository.delete(tokenEntity.get());
             return new ResponseEntity<>(new ResponseDTO(), HttpStatus.OK);
 

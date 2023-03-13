@@ -23,9 +23,6 @@ public class UsuariServiceImpl implements UsuariService {
     private UsuariRepository usuariRepository;
     @Autowired
     private TokenUtils tokenUtils;
-    @Autowired
-    private TokenRepository tokenRepository;
-
 
     @Override
     public ResponseEntity<ResponseDTO> findAll(String token) {
