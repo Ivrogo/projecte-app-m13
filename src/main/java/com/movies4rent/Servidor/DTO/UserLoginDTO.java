@@ -31,15 +31,15 @@ public class UserLoginDTO {
         this.password = password;
     }
 
-    public Boolean getRememberMe() {
+    public boolean getRememberMe() {
         return rememberMe;
     }
 
-    public void setRememberMe(Boolean rememberMe) {
+    public void setRememberMe(boolean rememberMe) {
         this.rememberMe = rememberMe;
     }
 
-    public UserLoginDTO(String username, String password, Boolean rememberMe) {
+    public UserLoginDTO(String username, String password, boolean rememberMe) {
         this.username = username;
         this.password = password;
         this.rememberMe = rememberMe;

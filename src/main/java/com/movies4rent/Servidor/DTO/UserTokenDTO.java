@@ -10,7 +10,6 @@ public class UserTokenDTO {
     public UserTokenDTO(String username, String token, String message) {
         this.username = username;
         this.token = token;
-        this.message = message;
     }
 
     public String getUsername() {
@@ -29,23 +28,7 @@ public class UserTokenDTO {
         this.token = token;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    @Override
-    public String toString() {
-        return "UserTokenDTO{" +
-                "username='" + username + '\'' +
-                ", token='" + token + '\'' +
-                ", message='" + message + '\'' +
-                '}';
-    }
-/*
+    /*
     public void getToken(String username, String password) {
         Usuari usuari =
     }*/

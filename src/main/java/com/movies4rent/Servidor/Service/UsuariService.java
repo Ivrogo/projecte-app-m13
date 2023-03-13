@@ -5,6 +5,7 @@
 package com.movies4rent.Servidor.Service;
 
 import com.movies4rent.Servidor.DTO.RegisterUserDTO;
+import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.DTO.UserInfoDTO;
 import com.movies4rent.Servidor.Entities.Usuari;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import java.util.List;
  */
 public interface UsuariService {
          ResponseEntity<List<Usuari>> findByUsername(String username);
+
+         ResponseEntity<ResponseDTO> findByUsernameAndPassword(String username, String password);
 
          ResponseEntity<List<Usuari>> findAll();
         <T>ResponseEntity<T> findUserById(Long id);

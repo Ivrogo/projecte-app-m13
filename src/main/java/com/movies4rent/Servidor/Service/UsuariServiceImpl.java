@@ -2,6 +2,7 @@ package com.movies4rent.Servidor.Service;
 
 
 import com.movies4rent.Servidor.DTO.RegisterUserDTO;
+import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.DTO.UserInfoDTO;
 import com.movies4rent.Servidor.Entities.Usuari;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
@@ -27,6 +28,20 @@ public class UsuariServiceImpl implements UsuariService {
             return Utils.okStatus(usuaris);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> findByUsernameAndPassword(String username, String password) {
+        ResponseDTO<List<Usuari>> responseDTO = new ResponseDTO();
+        List<Usuari> usuaris;
+        try {
+            usuaris = repo.findUserByUsernameAndPassword(username, password);
+            responseDTO.setValue(usuaris);
+            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            responseDTO.setMessage("Error, demo");
+            return new ResponseEntity<>(responseDTO, HttpStatus.BAD_REQUEST);
         }
     }
 
