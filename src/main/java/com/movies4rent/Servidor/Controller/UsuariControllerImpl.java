@@ -25,6 +25,12 @@ public class UsuariControllerImpl implements UsuariController {
     }
 
     @Override
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDTO> getUsuari(UUID id, String token) {
+        return usuariService.findById(id, token);
+    }
+
+    @Override
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO> updateUsuari(@RequestBody UserUpdateDTO userUpdateDTO, @RequestParam(value = "token", required = true) String token) {
         return usuariService.updateUser(userUpdateDTO, token);

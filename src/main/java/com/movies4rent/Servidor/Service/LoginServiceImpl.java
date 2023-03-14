@@ -46,6 +46,7 @@ public class LoginServiceImpl implements LoginService {
             String token = tokenUtils.checkToken(username);
 
             LoginTokenDTO loginTokenDTO = new LoginTokenDTO(token, usuari.get().isAdmin());
+            responseDTO.setMessage("Login correcto");
             responseDTO.setValue(loginTokenDTO);
 
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
@@ -67,7 +68,8 @@ public class LoginServiceImpl implements LoginService {
             }
 
             tokenRepository.delete(tokenEntity.get());
-            return new ResponseEntity<>(new ResponseDTO(), HttpStatus.OK);
+            response.setMessage("Sesión cerrada correctamente");
+            return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception ex) {
             response.setMessage("Sesión no existente");
@@ -80,6 +82,7 @@ public class LoginServiceImpl implements LoginService {
         ResponseDTO response = new ResponseDTO();
         try {
             usuariRepository.save(RegisterUserDTO.fromDTOToEntity(userDTO));
+            response.setMessage("Usuario registrado correctamente");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             response.setMessage("Error excepció trobada");

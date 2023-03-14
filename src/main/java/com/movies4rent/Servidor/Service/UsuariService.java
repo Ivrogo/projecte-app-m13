@@ -17,6 +17,8 @@ public interface UsuariService {
 
     ResponseEntity<ResponseDTO> findAll(String token);
 
+    ResponseEntity<ResponseDTO> findById(UUID id, String token);
+
     ResponseEntity<ResponseDTO> updateUser(UserUpdateDTO userUpdateDTO, String token);
 
     ResponseEntity<ResponseDTO> updateUserAdmin(boolean admin, UUID id, String token);
