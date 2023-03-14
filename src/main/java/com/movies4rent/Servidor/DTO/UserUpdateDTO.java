@@ -60,13 +60,13 @@ public class UserUpdateDTO {
         usuari.setNombre(userUpdateDTO.getNombre());
         usuari.setApellidos(userUpdateDTO.getApellidos());
         usuari.setEmail(userUpdateDTO.getCorreo());
-        usuari.setAddress(userUpdateDTO.getAddress());
+        usuari.setDireccion(userUpdateDTO.getAddress());
         usuari.setTelefono(userUpdateDTO.getTelefono());
     }
 
     public static void updateEntityFromDTO(Usuari userEntity, UserUpdateDTO userDTO) {
         userEntity.setNombre(userDTO.getNombre());
-        userEntity.setAddress(userDTO.getAddress());
+        userEntity.setDireccion(userDTO.getAddress());
         userEntity.setTelefono(userDTO.getTelefono());
         userEntity.setApellidos(userDTO.getApellidos());
         userEntity.setEmail(userDTO.getCorreo());

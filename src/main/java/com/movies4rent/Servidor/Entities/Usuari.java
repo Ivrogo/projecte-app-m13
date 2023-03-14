@@ -32,7 +32,7 @@ public class Usuari {
     private String email;
 
     @Column
-    private String address;
+    private String direccion;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -93,12 +93,12 @@ public class Usuari {
         this.email = email;
     }
 
-    public String getAddress() {
-        return address;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setDireccion(String address) {
+        this.direccion = address;
     }
 
     public String getUsername() {
@@ -120,7 +120,7 @@ public class Usuari {
 
     @Override
     public String toString() {
-        return "Usuari{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", email=" + email + ", address=" + address + ", username=" + username + ", password=" + password + ", isAdmin=" + isAdmin + '}';
+        return "Usuari{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", email=" + email + ", address=" + direccion + ", username=" + username + ", password=" + password + ", isAdmin=" + isAdmin + '}';
     }
 
 
