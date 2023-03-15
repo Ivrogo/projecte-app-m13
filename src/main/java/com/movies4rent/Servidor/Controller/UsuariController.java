@@ -21,4 +21,6 @@ public interface UsuariController {
 
     ResponseEntity<ResponseDTO> deleteUsuari(@PathVariable UUID id, @RequestParam(value = "token", required = true) String token);
 
+    ResponseEntity<ResponseDTO> getInfoUsuariByToken(@PathVariable @RequestParam(value = "token", required = true) String token);
+
 }

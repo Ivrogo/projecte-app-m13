@@ -48,4 +48,10 @@ public class UsuariControllerImpl implements UsuariController {
         return usuariService.deleteUser(id, token);
     }
 
+    @Override
+    @GetMapping("/info")
+    public ResponseEntity<ResponseDTO> getInfoUsuariByToken(String token) {
+        return usuariService.getUserByToken(token);
+    }
+
 }

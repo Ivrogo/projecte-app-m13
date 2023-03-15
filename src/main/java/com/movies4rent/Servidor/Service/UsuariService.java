@@ -24,4 +24,6 @@ public interface UsuariService {
     ResponseEntity<ResponseDTO> updateUserAdmin(boolean admin, UUID id, String token);
 
     ResponseEntity<ResponseDTO> deleteUser(UUID id, String token);
+
+    ResponseEntity<ResponseDTO> getUserByToken(String token);
 }

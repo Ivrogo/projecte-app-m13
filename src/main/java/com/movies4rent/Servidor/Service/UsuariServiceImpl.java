@@ -3,6 +3,7 @@ package com.movies4rent.Servidor.Service;
 
 import com.movies4rent.Servidor.DTO.GetUsuariDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
+import com.movies4rent.Servidor.DTO.UserInfoDTO;
 import com.movies4rent.Servidor.DTO.UserUpdateDTO;
 import com.movies4rent.Servidor.Entities.Usuari;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
@@ -157,6 +158,30 @@ public class UsuariServiceImpl implements UsuariService {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             response.setMessage("Error Excepció trobada");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> getUserByToken(String token) {
+        ResponseDTO response = new ResponseDTO();
+
+        if(!tokenUtils.isTokenValid(token)){
+            response.setMessage("Sesión no válida");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            Optional<Usuari> user = tokenUtils.getUser(token);
+            if (user == null ||!user.isPresent()) {
+                response.setMessage("Sesión no válida");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+                response.setValue(UserInfoDTO.fromEntityToDTO(user.get()));
+                return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (Exception e) {
+            response.setMessage("Error.");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
