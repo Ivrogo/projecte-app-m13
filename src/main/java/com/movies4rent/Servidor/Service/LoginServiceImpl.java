@@ -45,7 +45,7 @@ public class LoginServiceImpl implements LoginService {
 
             String token = tokenUtils.checkToken(username);
 
-            LoginTokenDTO loginTokenDTO = new LoginTokenDTO(token, usuari.get().isAdmin());
+            LoginTokenDTO loginTokenDTO = new LoginTokenDTO(token, usuari.get().isIsAdmin());
             responseDTO.setMessage("Login correcto");
             responseDTO.setValue(loginTokenDTO);
 

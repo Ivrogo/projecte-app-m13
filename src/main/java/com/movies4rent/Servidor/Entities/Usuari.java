@@ -42,11 +42,11 @@ public class Usuari {
 
 
     @Column(nullable = false)
-    private boolean isAdmin;
+    private boolean isIsAdmin;
 
     public Usuari() {
         super();
-        isAdmin = false;
+        isIsAdmin = false;
     }
 
     public Usuari(UUID id) {
@@ -120,15 +120,15 @@ public class Usuari {
 
     @Override
     public String toString() {
-        return "Usuari{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", email=" + email + ", address=" + direccion + ", username=" + username + ", password=" + password + ", isAdmin=" + isAdmin + '}';
+        return "Usuari{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", email=" + email + ", address=" + direccion + ", username=" + username + ", password=" + password + ", isAdmin=" + isIsAdmin + '}';
     }
 
 
-    public boolean isAdmin() {
-        return isAdmin;
+    public boolean isIsAdmin() {
+        return isIsAdmin;
     }
 
     public void setAdmin(boolean admin) {
-        isAdmin = admin;
+        isIsAdmin = admin;
     }
 }
