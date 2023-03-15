@@ -3,19 +3,19 @@ package com.movies4rent.Servidor.DTO;
 public class LoginTokenDTO {
 
     private String token;
-    private boolean isIsAdmin;
+    private boolean isAdmin;
 
-    public LoginTokenDTO(String token, boolean isIsAdmin) {
+    public LoginTokenDTO(String token, boolean isAdmin) {
         this.token = token;
-        this.isIsAdmin = isIsAdmin;
+        this.isAdmin = isAdmin;
     }
 
-    public boolean isIsAdmin() {
-        return isIsAdmin;
+    public boolean getIsAdmin() {
+        return isAdmin;
     }
 
-    public void setIsAdmin(boolean admin) {
-        isIsAdmin = admin;
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public String getToken() {
