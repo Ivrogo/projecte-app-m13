@@ -11,7 +11,7 @@ public class GetUsuariDTO {
     private String apellidos;
     private String telefono;
     private String email;
-    private String dirección;
+    private String direccion;
 
 
     public UUID getId() {
@@ -54,12 +54,12 @@ public class GetUsuariDTO {
         this.email = email;
     }
 
-    public String getDirección() {
-        return dirección;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setDirección(String dirección) {
-        this.dirección = dirección;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
 
@@ -68,7 +68,7 @@ public class GetUsuariDTO {
         usuari.setNombre(getUsuariDTO.getNombre());
         usuari.setApellidos(getUsuariDTO.getApellidos());
         usuari.setEmail(getUsuariDTO.getEmail());
-        usuari.setDireccion(getUsuariDTO.getDirección());
+        usuari.setDireccion(getUsuariDTO.getDireccion());
         usuari.setTelefono(getUsuariDTO.getTelefono());
     }
 
@@ -79,7 +79,7 @@ public class GetUsuariDTO {
         getUsuariDTO.setNombre(usuari.getNombre());
         getUsuariDTO.setApellidos(usuari.getApellidos());
         getUsuariDTO.setEmail(usuari.getEmail());
-        getUsuariDTO.setDirección(usuari.getDireccion());
+        getUsuariDTO.setDireccion(usuari.getDireccion());
         getUsuariDTO.setTelefono(usuari.getTelefono());
 
         return getUsuariDTO;
