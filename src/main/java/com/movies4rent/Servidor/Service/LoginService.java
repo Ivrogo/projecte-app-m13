@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface LoginService {
 
-    ResponseEntity<ResponseDTO> login(String username, String password) throws Exception;
+    ResponseEntity<ResponseDTO> login(String username, String password) ;
 
     ResponseEntity<ResponseDTO> logout(String token);
 

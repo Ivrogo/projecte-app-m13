@@ -26,7 +26,7 @@ public class LoginServiceImpl implements LoginService {
     private TokenUtils tokenUtils;
 
     @Override
-    public ResponseEntity<ResponseDTO> login(String username, String password) throws Exception {
+    public ResponseEntity<ResponseDTO> login(String username, String password)  {
 
         ResponseDTO<LoginTokenDTO> responseDTO = new ResponseDTO();
         try {
