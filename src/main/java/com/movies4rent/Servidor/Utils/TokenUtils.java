@@ -89,7 +89,7 @@ public class TokenUtils {
     }
 
     private String saveToken(String username) {
-        String tokenString = getEncodedString(username);
+        String tokenString = getEncodedString();
 
         Token tokenToSave = new Token();
         tokenToSave.setToken(tokenString);
@@ -108,9 +108,9 @@ public class TokenUtils {
         return time <= 1;
     }
 
-    private static String getEncodedString(String username) {
+    private static String getEncodedString() {
         UUID tokenUUID = UUID.randomUUID();
-        String tokenToEncode = tokenUUID + " " + username;
+        String tokenToEncode = tokenUUID.toString().replace("-", "");
         return Base64.getEncoder().encodeToString(tokenToEncode.getBytes());
     }
 

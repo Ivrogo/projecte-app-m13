@@ -2,101 +2,45 @@ package com.movies4rent.Servidor.Service;
 
 import com.movies4rent.Servidor.DTO.RegisterUserDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
-import com.movies4rent.Servidor.Entities.Usuari;
+import com.movies4rent.Servidor.Entities.Token;
+import com.movies4rent.Servidor.Repository.TokenRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LoginServiceTest {
 
     @Autowired
     private LoginService loginService;
 
-    @MockBean
+
+    @Autowired
     private UsuariRepository usuariRepository;
 
-    @BeforeEach
-    void setUp() {
-        Usuari usuari = new Usuari();
-        usuari.setDireccion("demo");
-        usuari.setUsername("admin1");
-        usuari.setPassword("admin1");
-        usuari.setEmail("demo");
-        usuari.setNombre("demo");
-        usuari.setTelefono("123");
-        usuari.setApellidos("demo");
+    @Autowired
+    private TokenRepository tokenRepository;
 
-        Mockito.when(usuariRepository.findUserByUsername("admin1")).thenReturn(Optional.of(usuari));
-    }
+
     @Test
-    public void testLoginUserOk() {
-        String username = "admin1";
-        String password = "admin1";
+    @Order(0)
+    @DisplayName("Limpia las tablas")
+    public void CleanData() {
 
-        ResponseEntity<ResponseDTO> response = loginService.login(username, password);
-        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        System.out.println("ok");
-    }
-    @Test
-    public void testLoginUserError() {
-        String username = "admin1";
-        String password = "admin2";
-
-        ResponseEntity<ResponseDTO> response = loginService.login(username, password);
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        System.out.println("ok");
-    }
-    @Test
-    public void testLoginUserNull() {
-        String username = null;
-        String password = "admin1";
-
-        ResponseEntity<ResponseDTO> response = loginService.login(username, password);
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        System.out.println("Usuari null");
+        usuariRepository.deleteAll();
+        tokenRepository.deleteAll();
 
     }
+
     @Test
-    public void testLoginUserEmpty() {
-        String username = "";
-        String password = "admin1";
-
-        ResponseEntity<ResponseDTO> response = loginService.login(username, password);
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        System.out.println("Usuari empty");
-
-    }
-    @Test
-    public void testLoginUserNullPassword() {
-        String username = "admin1";
-        String password = null;
-
-         ResponseEntity<ResponseDTO> response = loginService.login(username, password);
-         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-         System.out.println("Password null");
-
-    }
-    @Test
-    public void testLoginUserEmptyPassword() {
-        String username = "admin1";
-        String password = "";
-
-        ResponseEntity<ResponseDTO> response = loginService.login(username, password);
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        System.out.println("Password empty");
-
-    }
-    @Test
+    @Order(1)
+    @DisplayName("Registra un usuario")
     public void registerUserOk() {
         RegisterUserDTO user = new RegisterUserDTO();
         user.setDireccion("demo");
@@ -107,16 +51,14 @@ class LoginServiceTest {
         user.setTelefono("123");
         user.setApellidos("demo");
 
-        try {
-            loginService.registerUsuari(user);
-            new ResponseEntity<>("success", HttpStatus.OK);
-            System.out.println("ok");
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+
     }
     @Test
+    @Order(2)
+    @DisplayName("Error registra un usuario")
     public void registerUserError() {
         RegisterUserDTO user = new RegisterUserDTO();
         user.setDireccion("demo");
@@ -127,28 +69,23 @@ class LoginServiceTest {
         user.setTelefono("123");
         user.setApellidos("demo");
 
-        try {
-            loginService.registerUsuari(user);
-            new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
-            System.out.println("usuari ja registrat");
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
+        Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+
     }
     @Test
+    @Order(3)
+    @DisplayName("Error registra un usuario: null user")
     public void registerUserNull() {
         RegisterUserDTO user = null;
-        try {
-            loginService.registerUsuari(user);
-            new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
-            System.out.println("user null");
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
+        Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     }
     @Test
+    @Order(4)
+    @DisplayName("Error registra un usuario: empty user")
     public void registerUserEmpty() {
         RegisterUserDTO user = new RegisterUserDTO();
         user.setDireccion("demo");
@@ -159,16 +96,12 @@ class LoginServiceTest {
         user.setTelefono("123");
         user.setApellidos("demo");
 
-        try {
-            loginService.registerUsuari(user);
-            new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
-            System.out.println("user empty");
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
     @Test
+    @Order(5)
+    @DisplayName("Error registra un usuario: null password")
     public void registerUserNullPassword() {
         RegisterUserDTO user = new RegisterUserDTO();
         user.setDireccion("demo");
@@ -179,16 +112,13 @@ class LoginServiceTest {
         user.setTelefono("123");
         user.setApellidos("demo");
 
-        try {
-            loginService.registerUsuari(user);
-            new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
-            System.out.println("password null");
+        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
+        Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
     @Test
+    @Order(6)
+    @DisplayName("Error registra un usuario: empty password")
     public void registerUserEmptyPassword() {
         RegisterUserDTO user = new RegisterUserDTO();
         user.setDireccion("demo");
@@ -199,17 +129,12 @@ class LoginServiceTest {
         user.setTelefono("123");
         user.setApellidos("demo");
 
-        try {
-            loginService.registerUsuari(user);
-            new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
-            System.out.println("password empty");
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
     @Test
+    @Order(7)
+    @DisplayName("Error registra un usuario: null email")
     public void registerUserNullEmail() {
         RegisterUserDTO user = new RegisterUserDTO();
         user.setDireccion("demo");
@@ -220,16 +145,12 @@ class LoginServiceTest {
         user.setTelefono("123");
         user.setApellidos("demo");
 
-        try {
-            loginService.registerUsuari(user);
-            new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
-            System.out.println("email null");
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
+        Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     }
     @Test
+    @Order(8)
+    @DisplayName("Error registra un usuario: empty email")
     public void registerUserEmptyEmail() {
         RegisterUserDTO user = new RegisterUserDTO();
         user.setDireccion("demo");
@@ -240,18 +161,102 @@ class LoginServiceTest {
         user.setTelefono("123");
         user.setApellidos("demo");
 
-        try {
-            loginService.registerUsuari(user);
-            new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
-            System.out.println("email empty");
+        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
+    @Test
+    @Order(9)
+    @DisplayName("loguea un usuario")
+    public void testLoginUserOk() {
+        String username = "demo";
+        String password = "demo";
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        ResponseEntity<ResponseDTO> response = loginService.login(username, password);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+    @Test
+    @Order(10)
+    @DisplayName("Error login user")
+    public void testLoginUserError() {
+        String username = "demo";
+        String password = "demo2";
+
+        ResponseEntity<ResponseDTO> response = loginService.login(username, password);
+        Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+    }
+    @Test
+    @Order(11)
+    @DisplayName("Error login: null user")
+    public void testLoginUserNull() {
+        String username = null;
+        String password = "admin1";
+
+        ResponseEntity<ResponseDTO> response = loginService.login(username, password);
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+    @Test
+    @Order(12)
+    @DisplayName("Error login: empty user")
+    public void testLoginUserEmpty() {
+        String username = "";
+        String password = "admin1";
+
+        ResponseEntity<ResponseDTO> response = loginService.login(username, password);
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+    }
+    @Test
+    @Order(13)
+    @DisplayName("Error login: null password")
+    public void testLoginUserNullPassword() {
+        String username = "admin1";
+        String password = null;
+
+         ResponseEntity<ResponseDTO> response = loginService.login(username, password);
+         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+    }
+    @Test
+    @Order(14)
+    @DisplayName("Error login: empty password")
+    public void testLoginUserEmptyPassword() {
+        String username = "admin1";
+        String password = "";
+
+        ResponseEntity<ResponseDTO> response = loginService.login(username, password);
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
     }
 
     @Test
+    @Order(15)
+    @DisplayName("logout")
     public void logoutUserOk() {
+        String username = "demo";
 
+        Optional<Token> token = tokenRepository.findByUsername(username);
+        ResponseEntity<ResponseDTO> response = loginService.logout(token.get().getToken());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @Order(17)
+    @DisplayName("Error logout: null token")
+    public void logoutNullTokenError() {
+        String username = "demo";
+
+        Optional<Token> token = tokenRepository.findByUsername(username);
+        ResponseEntity<ResponseDTO> response = loginService.logout(null);
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+    @Test
+    @Order(18)
+    @DisplayName("Error logout: empty token")
+    public void logoutEmptyTokenError() {
+        String username = "demo";
+
+        Optional<Token> token = tokenRepository.findByUsername(username);
+        ResponseEntity<ResponseDTO> response = loginService.logout("");
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 }

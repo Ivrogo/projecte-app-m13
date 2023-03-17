@@ -39,7 +39,7 @@ public class LoginServiceImpl implements LoginService {
                 boolean match = password.equals(usuari.get().getPassword());
                 if (!match) {
                     responseDTO.setMessage("La contraseña no coincide");
-                    return new ResponseEntity<>(responseDTO, HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(responseDTO, HttpStatus.CONFLICT);
                 }
             }
 
@@ -73,7 +73,7 @@ public class LoginServiceImpl implements LoginService {
 
         } catch (Exception ex) {
             response.setMessage("Sesión no existente");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -81,12 +81,19 @@ public class LoginServiceImpl implements LoginService {
     public ResponseEntity<ResponseDTO> registerUsuari(RegisterUserDTO userDTO) {
         ResponseDTO response = new ResponseDTO();
         try {
+            if(userDTO.getPassword().isEmpty() || userDTO.getUsername().isEmpty() || userDTO.getEmail().isEmpty()) {
+                response.setMessage("Los campos no pueden estar vacíos");
+                return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+            } else if (userDTO.getPassword() == null || userDTO.getUsername() == null || userDTO.getEmail() == null) {
+                response.setMessage("Los campos no pueden ser nulos");
+                return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            }
             usuariRepository.save(RegisterUserDTO.fromDTOToEntity(userDTO));
             response.setMessage("Usuario registrado correctamente");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            response.setMessage("Error excepció trobada");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("Usuari ja existeix");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
     }
 }
