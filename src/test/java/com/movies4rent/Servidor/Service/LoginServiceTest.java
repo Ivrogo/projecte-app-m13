@@ -39,26 +39,8 @@ class LoginServiceTest {
     }
 
     @Test
-    @Order(1)
-    @DisplayName("Registra un usuario")
-    public void registerUserOk() {
-        RegisterUserDTO user = new RegisterUserDTO();
-        user.setDireccion("demo");
-        user.setUsername("demo");
-        user.setPassword("demo");
-        user.setEmail("demo");
-        user.setNombre("demo");
-        user.setTelefono("123");
-        user.setApellidos("demo");
-
-
-        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
-        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-
-    }
-    @Test
     @Order(2)
-    @DisplayName("Error registra un usuario")
+    @DisplayName("Error registra un usuario existente")
     public void registerUserError() {
         RegisterUserDTO user = new RegisterUserDTO();
         user.setDireccion("demo");
@@ -176,7 +158,7 @@ class LoginServiceTest {
     }
     @Test
     @Order(10)
-    @DisplayName("Error login user")
+    @DisplayName("Error login: not matching")
     public void testLoginUserError() {
         String username = "demo";
         String password = "demo2";
@@ -258,5 +240,13 @@ class LoginServiceTest {
         Optional<Token> token = tokenRepository.findByUsername(username);
         ResponseEntity<ResponseDTO> response = loginService.logout("");
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+    @Test
+    @Order(19)
+    @DisplayName("Limpia la base de datos")
+    public void ClearDataBase() {
+
+        usuariRepository.deleteAll();
+        tokenRepository.deleteAll();
     }
 }

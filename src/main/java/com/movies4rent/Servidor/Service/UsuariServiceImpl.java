@@ -165,7 +165,7 @@ public class UsuariServiceImpl implements UsuariService {
     @Override
     public ResponseEntity<ResponseDTO> getUserByToken(String token) {
         ResponseDTO response = new ResponseDTO();
-
+        
         if(!tokenUtils.isTokenValid(token)){
             response.setMessage("Sesión no válida");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
