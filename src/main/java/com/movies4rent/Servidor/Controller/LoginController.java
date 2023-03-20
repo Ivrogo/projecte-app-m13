@@ -7,6 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * Classe Interficie per el controlador del login.
+ * @author Iván Rodríguez Gómez
+ */
 public interface LoginController {
 
     ResponseEntity<ResponseDTO> login(@RequestBody UserLoginDTO userLoginDTO) throws Exception;

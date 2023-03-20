@@ -8,12 +8,13 @@ import com.movies4rent.Servidor.Entities.Usuari;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 /**
- * @author Er_jo
+ * Classe Interficie que emmagatzema tots el metodes del repositori JPA referents als usuaris. Implementa les cerques específiques
+ * que utilitzen la classe usuariServei.
+ * @author Iván Rodríguez Gómez
  */
 @Repository
 public interface UsuariRepository extends JpaRepository<Usuari, UUID> {

@@ -3,6 +3,10 @@ package com.movies4rent.Servidor.DTO;
 
 import com.movies4rent.Servidor.Entities.Usuari;
 
+/**
+ * Classe DTO per obtenir la informació d'un usuari que es registra.
+ * @author Iván Rodríguez Gómez
+ */
 public class RegisterUserDTO {
 
     private String email;
@@ -14,6 +18,11 @@ public class RegisterUserDTO {
     private String direccion;
 
 
+    /**
+     * Metode per transformar un DTO a un objecte usuari
+     * @param userDTO DTO amb les dades de l'usuari a transformar
+     * @return objecte usuari
+     */
     public static Usuari fromDTOToEntity(RegisterUserDTO userDTO) {
 
         Usuari user = new Usuari();
@@ -29,6 +38,9 @@ public class RegisterUserDTO {
         return user;
     }
 
+    /**
+     * Getters i Setters
+     */
     public String getEmail() {
         return email;
     }

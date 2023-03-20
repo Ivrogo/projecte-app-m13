@@ -5,6 +5,11 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+
+/**
+ * Classe Entitat que inserta tota la informació relacionada amb els tokens de sessió
+ * @author Iván Rodríguez Gómez
+ */
 @Entity
 @Table(name = "Token")
 public class Token {
@@ -20,6 +25,9 @@ public class Token {
 
     LocalDateTime lastUsed;
 
+    /**
+     * Constructor
+     */
     public Token() {
     }
 
@@ -31,6 +39,9 @@ public class Token {
         this.lastUsed = lastUsed;
     }
 
+    /**
+     * Getters i setters
+     */
     public UUID getId() {
         return id;
     }

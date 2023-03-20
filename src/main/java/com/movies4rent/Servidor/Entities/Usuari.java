@@ -9,7 +9,8 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 /**
- * @author Er_jo
+ * Classe Entitat que emmagatzema tota la informació relaccionada amb els usuaris
+ * @author Iván Rodríguez Gómez
  */
 @Entity
 @Table(name = "usuaris")
@@ -49,10 +50,17 @@ public class Usuari {
         isIsAdmin = false;
     }
 
+    /**
+     * Constructor
+     * @param id
+     */
     public Usuari(UUID id) {
         this.id = id;
     }
 
+    /**
+     * Getters i setters
+     */
     public UUID getId() {
         return id;
     }

@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Classe que implementa els metodes utilitzats en el controller, realitzen les funcions login ,logout i register
+ * @author Ivan Rodriguez Gomez
+ */
 @Service
 public class LoginServiceImpl implements LoginService {
 
@@ -25,8 +29,17 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private TokenUtils tokenUtils;
 
+    /**
+     * Implementa el metode login, aquest rep un usuari i una contrasenya i retorna un token de sessió.
+     * Dins d'aquest metode es realitzen uns petits controls per evitar que persones que no esten registrades puguin accedir
+     * entre altres.
+     *
+     * @param username username del usuari
+     * @param password password del usuari
+     * @return un missatge de confirmació de login i un token de sessió
+     */
     @Override
-    public ResponseEntity<ResponseDTO> login(String username, String password)  {
+    public ResponseEntity<ResponseDTO> login(String username, String password) {
 
         ResponseDTO<LoginTokenDTO> responseDTO = new ResponseDTO();
         try {
@@ -56,6 +69,14 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
+    /**
+     * Implementa el metode logout, aquest rep un token i retorna un dto amb un missatge confirmant el fi de la sessió.
+     * Dins d'aquest metode es realitzen uns petits controls com per exemple, que el token no siguí vàlid o que la sessió no existi.
+     * Basicament aquest metode el que fa ès, si el token ès vàlid, elimina el token de la base de dades.
+     *
+     * @param token token de sessió de l'usuari.
+     * @return un dto amb un missatge confirmant el fi de la sessió.
+     */
     @Override
     public ResponseEntity<ResponseDTO> logout(String token) {
         ResponseDTO response = new ResponseDTO();
@@ -77,11 +98,19 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
+    /**
+     * Implementa el metode register, aquest rep un DTO amb la informació basica de l'usuari.
+     * Dins d'aquest metode es realitzen uns petits controls com per exemple, que els camps obligatoris com username, contrasenya i email
+     * no siguin ni null ni estiguin buits. Finalment aquest metode inserta el nou usuari dins de la base de dades.
+     *
+     * @param userDTO DTO amb la informació de l'usuari
+     * @return DTO amb un missatge confirmant que l'usuari ha estat registrat correctament
+     */
     @Override
     public ResponseEntity<ResponseDTO> registerUsuari(RegisterUserDTO userDTO) {
         ResponseDTO response = new ResponseDTO();
         try {
-            if(userDTO.getPassword().isEmpty() || userDTO.getUsername().isEmpty() || userDTO.getEmail().isEmpty()) {
+            if (userDTO.getPassword().isEmpty() || userDTO.getUsername().isEmpty() || userDTO.getEmail().isEmpty()) {
                 response.setMessage("Los campos no pueden estar vacíos");
                 return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
             } else if (userDTO.getPassword() == null || userDTO.getUsername() == null || userDTO.getEmail() == null) {

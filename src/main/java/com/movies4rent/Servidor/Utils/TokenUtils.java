@@ -13,6 +13,12 @@ import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 
+
+/**
+ * Classe Utilitat (es casi com un servei, per això està declarat com servei a Spring) que permet validar tokens, obtenir usuaris des de tokens,
+ * guardar tokens, entre altres.
+ * @author Iván Rodríguez Gómez
+ */
 @Service
 public class TokenUtils {
     @Autowired
@@ -20,6 +26,11 @@ public class TokenUtils {
     @Autowired
     UsuariRepository usuariRepository;
 
+    /**
+     * Metode que checkea el token d'un usuari
+     * @param username username del usuari
+     * @return retorna el token d'un usuari que s'ha afegit a la base de dades
+     */
     public String checkToken(String username) {
         Optional<Token> token = tokenRepository.findByUsername(username);
 
@@ -39,6 +50,11 @@ public class TokenUtils {
         }
     }
 
+    /**
+     * Metode que obté un usuari a partir d'un token de sessió
+     * @param token token de sessió de l'usuari
+     * @return un objecte usuari
+     */
     public Optional<Usuari> getUser(String token) {
         Optional<Token> tokenEntity = tokenRepository.findByToken(token);
 
@@ -63,6 +79,11 @@ public class TokenUtils {
         }
     }
 
+    /**
+     * Metode que valida el token d'un usuari
+     * @param token token de sessió de l'usuari
+     * @return True si el token és vàlid, False en cas contrari
+     */
     public boolean isTokenValid(String token) {
         Optional<Token> tokenEntity = tokenRepository.findByToken(token);
 
@@ -88,6 +109,11 @@ public class TokenUtils {
         }
     }
 
+    /**
+     * Metode que guarda un token d'un usuari
+     * @param username username del usuari
+     * @return token d'un usuari en format String
+     */
     private String saveToken(String username) {
         String tokenString = getEncodedString();
 
@@ -102,18 +128,32 @@ public class TokenUtils {
         return tokenString;
     }
 
+    /**
+     * Metode que valida el temps d'un token d'un usuari
+     * @param lastUsed parametre que indica l'última vegada que s'ha utilitzat el token
+     * @return el temps que ha de ser inferior a una hora
+     */
     private static boolean tokenValidity(LocalDateTime lastUsed) {
         LocalDateTime dateNow = LocalDateTime.now();
         long time = ChronoUnit.HOURS.between(lastUsed, dateNow);
         return time <= 1;
     }
 
+    /**
+     * Metode que obté un token en format String
+     * @return retorna el token en format String
+     */
     private static String getEncodedString() {
         UUID tokenUUID = UUID.randomUUID();
         String tokenToEncode = tokenUUID.toString().replace("-", "");
         return Base64.getEncoder().encodeToString(tokenToEncode.getBytes());
     }
 
+    /**
+     * Metode que Desencripta un token
+     * @param tokenToEncode token encriptat
+     * @return retorna el token desencriptat
+     */
     private static String getDecryptedString(String tokenToEncode) {
         return new String(Base64.getMimeDecoder().decode(tokenToEncode));
     }

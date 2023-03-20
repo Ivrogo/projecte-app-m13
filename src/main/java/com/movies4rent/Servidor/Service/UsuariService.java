@@ -11,7 +11,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.UUID;
 
 /**
- * @author Er_jo
+ * Classe interficie per els metodes de gestio de l'usuari
+ * @author Iván Rodríguez Gómez
  */
 public interface UsuariService {
 

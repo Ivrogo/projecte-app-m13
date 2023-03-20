@@ -39,6 +39,23 @@ class LoginServiceTest {
     }
 
     @Test
+    @Order(1)
+    @DisplayName("Registra un usuario")
+    public void TestRegisterUserOK() {
+        RegisterUserDTO user = new RegisterUserDTO();
+        user.setDireccion("demo");
+        user.setUsername("demo");
+        user.setPassword("demo");
+        user.setEmail("demo");
+        user.setNombre("demo");
+        user.setTelefono("123");
+        user.setApellidos("demo");
+
+        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
     @Order(2)
     @DisplayName("Error registra un usuario existente")
     public void registerUserError() {

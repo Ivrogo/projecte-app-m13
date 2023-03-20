@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Classe que executa els metodes cridats dins de la classe controller.
+ * @author Ivan Rodriguez Gomez
+ */
 @Service
 public class UsuariServiceImpl implements UsuariService {
 
@@ -26,6 +30,11 @@ public class UsuariServiceImpl implements UsuariService {
     @Autowired
     private TokenUtils tokenUtils;
 
+    /**
+     * Classe que llista tots els usuaris registrats en la base de dades.
+     * @param token token de sessió
+     * @return un DTO amb el value de l'objecte d'una llista d'usuaris
+     */
     @Override
     public ResponseEntity<ResponseDTO> findAll(String token) {
         ResponseDTO<List<GetUsuariDTO>> response = new ResponseDTO();
@@ -53,6 +62,12 @@ public class UsuariServiceImpl implements UsuariService {
         }
     }
 
+    /**
+     * Classe que troba un usuari especific en la base de dades.
+     * @param id id de l'usuari
+     * @param token token de sessió
+     * @return DTO amb el value de l'objecte que conté la informació de l'usuari
+     */
     @Override
     public ResponseEntity<ResponseDTO> findById(UUID id, String token) {
         ResponseDTO<GetUsuariDTO> response = new ResponseDTO();
@@ -64,7 +79,7 @@ public class UsuariServiceImpl implements UsuariService {
 
         try {
             Optional<Usuari> user = tokenUtils.getUser(token);
-            if (user == null ||!user.isPresent()) {
+            if (user == null || !user.isPresent()) {
                 response.setMessage("Sesión no válida");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
@@ -83,6 +98,12 @@ public class UsuariServiceImpl implements UsuariService {
         }
     }
 
+    /**
+     * Classe que actualitza un usuari en la base de dades.
+     * @param userUpdateDTO DTO amb la informació canviada de l'usuari
+     * @param token token de sessió
+     * @return DTO amb un missatge d'actualització
+     */
     @Override
     public ResponseEntity<ResponseDTO> updateUser(UserUpdateDTO userUpdateDTO, String token) {
         ResponseDTO response = new ResponseDTO();
@@ -110,6 +131,13 @@ public class UsuariServiceImpl implements UsuariService {
         }
     }
 
+    /**
+     * Classe que cambia el rol d'un usuari en la base de dades.
+     * @param admin boolean que indica si el usuari es administrador o no
+     * @param id id de l'usuari
+     * @param token token de sessió
+     * @return DTO amb un missatge d'actualització
+     */
     @Override
     public ResponseEntity<ResponseDTO> updateUserAdmin(boolean admin, UUID id, String token) {
         ResponseDTO response = new ResponseDTO();
@@ -137,7 +165,12 @@ public class UsuariServiceImpl implements UsuariService {
         }
     }
 
-
+    /**
+     * Classe que elimina un usuari en la base de dades.
+     * @param id id de l'usuari
+     * @param token token de sessió
+     * @return DTO amb un missatge de confirmació d'usuari esborrat
+     */
     @Override
     public ResponseEntity<ResponseDTO> deleteUser(UUID id, String token) {
         ResponseDTO response = new ResponseDTO();
@@ -162,23 +195,28 @@ public class UsuariServiceImpl implements UsuariService {
         }
     }
 
+    /**
+     * Classe que obté l'usuari al qual està assignat el token de sessió.
+     * @param token token de sessió
+     * @return DTO amb el value de l'objecte que conté la informació de l'usuari
+     */
     @Override
     public ResponseEntity<ResponseDTO> getUserByToken(String token) {
         ResponseDTO response = new ResponseDTO();
-        
-        if(!tokenUtils.isTokenValid(token)){
+
+        if (!tokenUtils.isTokenValid(token)) {
             response.setMessage("Sesión no válida");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
         try {
             Optional<Usuari> user = tokenUtils.getUser(token);
-            if (user == null ||!user.isPresent()) {
+            if (user == null || !user.isPresent()) {
                 response.setMessage("Sesión no válida");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
-                response.setValue(UserInfoDTO.fromEntityToDTO(user.get()));
-                return new ResponseEntity<>(response, HttpStatus.OK);
+            response.setValue(UserInfoDTO.fromEntityToDTO(user.get()));
+            return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {
             response.setMessage("Error.");

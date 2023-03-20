@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Classe Interficie que emmagatzema tots el metodes del repositori JPA referents als tokens. Implementa les cerques específiques
+ * que utilitzen la classe TokenUtils.
+ * @author Iván Rodríguez Gómez
+ */
 @Repository
 public interface TokenRepository extends JpaRepository<Token, UUID> {
 

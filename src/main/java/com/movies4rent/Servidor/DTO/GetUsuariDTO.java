@@ -4,6 +4,10 @@ import com.movies4rent.Servidor.Entities.Usuari;
 
 import java.util.UUID;
 
+/**
+ * Classe DTO per obtenir un usuari
+ * @author Iván Rodríguez Gómez
+ */
 public class GetUsuariDTO {
 
     private UUID id;
@@ -13,7 +17,9 @@ public class GetUsuariDTO {
     private String email;
     private String direccion;
 
-
+    /**
+     * Getters i Setters
+     */
     public UUID getId() {
         return id;
     }
@@ -62,7 +68,11 @@ public class GetUsuariDTO {
         this.direccion = direccion;
     }
 
-
+    /**
+     * Transforma el DTO a un objecte usuari
+     * @param getUsuariDTO DTO amb les dades de l'usuari a transformar
+     * @param usuari objecte usuari
+     */
     public static void fromDTOToEntity(GetUsuariDTO getUsuariDTO, Usuari usuari) {
 
         usuari.setNombre(getUsuariDTO.getNombre());
@@ -72,6 +82,11 @@ public class GetUsuariDTO {
         usuari.setTelefono(getUsuariDTO.getTelefono());
     }
 
+    /**
+     * Transforma un objecte usuari a un DTO
+     * @param usuari Objecte usuari de la base de dades
+     * @return un DTO amb la informació extraida de l'objecte usuari
+     */
     public static GetUsuariDTO fromEntityToDTO(Usuari usuari) {
         GetUsuariDTO getUsuariDTO = new GetUsuariDTO();
 

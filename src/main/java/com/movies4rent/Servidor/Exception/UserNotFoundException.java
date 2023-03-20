@@ -5,8 +5,8 @@
 package com.movies4rent.Servidor.Exception;
 
 /**
- *
- * @author Er_jo
+ * Classe Utilitat per si no s'ha trobat l'usuari
+ * @author Iván Rodríguez Gómez
  */
 public class UserNotFoundException extends RuntimeException{
 

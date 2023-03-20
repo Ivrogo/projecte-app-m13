@@ -4,6 +4,10 @@ import com.movies4rent.Servidor.Entities.Usuari;
 
 import java.util.UUID;
 
+/**
+ * Classe DTO que conte la informació d'un usuari
+ * @author Iván Rodríguez Gómez
+ */
 public class UserInfoDTO {
 
     private UUID id;
@@ -12,10 +16,12 @@ public class UserInfoDTO {
     private String email;
     private String direccion;
 
+    /**
+     * Getters i Setters
+     */
     public UUID getId() {
         return id;
     }
-
     public void setId(UUID id) {
         this.id = id;
     }
@@ -52,7 +58,11 @@ public class UserInfoDTO {
         this.direccion = direccion;
     }
 
-
+    /**
+     * Metode per transformar una entitat a un DTO
+     * @param usuari Objecte usuari
+     * @return DTO amb la informació extreta de l'objecte usuari
+     */
     public static UserInfoDTO fromEntityToDTO(Usuari usuari) {
         UserInfoDTO userInfo = new UserInfoDTO();
 

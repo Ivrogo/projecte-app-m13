@@ -5,8 +5,8 @@
 package com.movies4rent.Servidor.Exception;
 
 /**
- *
- * @author Er_jo
+ * Classe Utilitat per si no es troba algun objecte (no Implementat encara)
+ * @author Iván Rodríguez Gómez
  */
 public class ResourceNotFoundException extends RuntimeException {
     

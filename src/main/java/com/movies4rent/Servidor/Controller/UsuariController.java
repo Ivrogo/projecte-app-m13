@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
+/**
+ * Classe interficie per al controlador de l'usuari
+ * @author Iván Rodríguez Gómez
+ */
 public interface UsuariController {
 
     ResponseEntity<ResponseDTO> getUsuaris(@RequestParam(value = "token", required = true) String token);

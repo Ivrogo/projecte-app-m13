@@ -165,8 +165,8 @@ class UsuariServiceTest {
     public void TestUpdateUser() {
         UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
         userUpdateDTO.setApellidos("demodemo");
-        userUpdateDTO.setAddress("demodemo");
-        userUpdateDTO.setCorreo("demodemo");
+        userUpdateDTO.setDireccion("demodemo");
+        userUpdateDTO.setEmail("demodemo");
         userUpdateDTO.setNombre("demodemo");
         userUpdateDTO.setTelefono("12345667");
 
@@ -184,8 +184,8 @@ class UsuariServiceTest {
     public void TestUpdateUserTokenDontExist() {
         UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
         userUpdateDTO.setApellidos("demodemo");
-        userUpdateDTO.setAddress("demodemo");
-        userUpdateDTO.setCorreo("demodemo");
+        userUpdateDTO.setDireccion("demodemo");
+        userUpdateDTO.setEmail("demodemo");
         userUpdateDTO.setNombre("demodemo");
         userUpdateDTO.setTelefono("12345667");
 
