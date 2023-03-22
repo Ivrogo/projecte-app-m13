@@ -3,6 +3,10 @@ package com.movies4rent.Servidor.Utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+/**
+ * Classe Utilitats per no tener que escriure els HTTPStatus
+ * @author Iván Rodríguez Gómez
+ */
 public class Utils {
 
     public static boolean isNullOrEmpty(String param) {

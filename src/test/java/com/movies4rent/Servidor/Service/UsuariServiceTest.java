@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Clase que conte les proves unitaries per a la clase usuariService
+ */
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UsuariServiceTest {
@@ -31,7 +34,9 @@ class UsuariServiceTest {
     @Autowired
     private TokenRepository tokenRepository;
 
-
+    /**
+     * Neteja la base de dades
+     */
     @Test
     @Order(0)
     @DisplayName("Limpia la base de datos")
@@ -42,6 +47,9 @@ class UsuariServiceTest {
 
     }
 
+    /**
+     * Afegim un usuari a la base de dades
+     */
     @Test
     @Order(1)
     @DisplayName("Registra un usuario")
@@ -58,6 +66,9 @@ class UsuariServiceTest {
         usuariRepository.save(usuari);
     }
 
+    /**
+     * loguea un usuari
+     */
     @Test
     @Order(2)
     @DisplayName("Login")
@@ -69,6 +80,9 @@ class UsuariServiceTest {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
+    /**
+     * Troba a tots els usuaris registrats
+     */
     @Test
     @Order(3)
     @DisplayName("Encuentra todos los usuarios")
@@ -80,6 +94,10 @@ class UsuariServiceTest {
 
 
     }
+
+    /**
+     * Troba al usuari propietari del token
+     */
     @Test
     @Order(4)
     @DisplayName("Encuentra un usuario por token")
@@ -91,6 +109,9 @@ class UsuariServiceTest {
 
     }
 
+    /**
+     * Intenta trobar a un usuari per token, pero el token no existeix
+     */
     @Test
     @Order(5)
     @DisplayName("Encuentra un usuario por token: no existe token")
@@ -101,6 +122,9 @@ class UsuariServiceTest {
         System.out.println(response.getStatusCode());
     }
 
+    /**
+     * Troba un usuari per ID
+     */
     @Test
     @Order(6)
     @DisplayName("Encuentra un usuario por id")
@@ -123,6 +147,9 @@ class UsuariServiceTest {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
+    /**
+     * Intenta trobar a un usuari per id, pero l'id no existeix
+     */
     @Test
     @Order(7)
     @DisplayName("Encuentra un usuario por id: no existe usuario")
@@ -138,6 +165,9 @@ class UsuariServiceTest {
             System.out.println(response.getStatusCode());
     }
 
+    /**
+     * Intenta trobar a un usuari per id, pero el token no existeix
+     */
     @Test
     @Order(8)
     @DisplayName("Encuentra un usuario por id: no existe token")
@@ -159,6 +189,9 @@ class UsuariServiceTest {
         System.out.println(response.getStatusCode());
     }
 
+    /**
+     * Modifica un usuari
+     */
     @Test
     @Order(9)
     @DisplayName("Modifica un usuario")
@@ -178,6 +211,9 @@ class UsuariServiceTest {
 
     }
 
+    /**
+     * Intenta modificar un usuari pero el token no existeix
+     */
     @Test
     @Order(10)
     @DisplayName("Modifica un usuario: no existe token")
@@ -194,6 +230,9 @@ class UsuariServiceTest {
         System.out.println(response.getStatusCode());
     }
 
+    /**
+     * Modifica el rol d'un usuari per ser administrador
+     */
     @Test
     @Order(11)
     @DisplayName("Modifica un usuario para ser administrador")
@@ -218,6 +257,10 @@ class UsuariServiceTest {
         System.out.println(response.getStatusCode());
 
     }
+
+    /**
+     * Modifica el rol d'un admin per ser usuari
+     */
     @Test
     @Order(12)
     @DisplayName("Modifica un administrador para ser usuario")
@@ -231,6 +274,9 @@ class UsuariServiceTest {
 
     }
 
+    /**
+     * modifica el rol d'un usuari per ser admin pero el token no existeix.
+     */
     @Test
     @Order(13)
     @DisplayName("Modifica un usuario para ser administrador: no existe token")
@@ -243,6 +289,9 @@ class UsuariServiceTest {
 
     }
 
+    /**
+     * modifica el rol d'un admin per ser usuari pero el token no existeix.
+     */
     @Test
     @Order(14)
     @DisplayName("Modifica un administrador para ser usuario: no existe token")
@@ -254,6 +303,9 @@ class UsuariServiceTest {
         System.out.println(response.getStatusCode());
     }
 
+    /**
+     * modifica el rol d'un usuari per ser admin pero l'usuari no existeix.
+     */
     @Test
     @Order(15)
     @DisplayName("modifica un usuario para ser administrador: no existe usuario")
@@ -267,6 +319,9 @@ class UsuariServiceTest {
         System.out.println(response.getStatusCode());
     }
 
+    /**
+     * Esborra un usuari
+     */
     @Test
     @Order(16)
     @DisplayName("Borra un usuario")
@@ -279,6 +334,9 @@ class UsuariServiceTest {
         System.out.println(response.getStatusCode());
     }
 
+    /**
+     * Intenta esborrar un usuari pero el token no existeix
+     */
     @Test
     @Order(17)
     @DisplayName("Borra un usuario: no existe token")
@@ -290,6 +348,9 @@ class UsuariServiceTest {
         System.out.println(response.getStatusCode());
     }
 
+    /**
+     * Intenta esborrar un usuari pero el usuari no existeix
+     */
     @Test
     @Order(18)
     @DisplayName("Borra un usuario: no existe usuario")
@@ -303,12 +364,4 @@ class UsuariServiceTest {
         System.out.println(response.getStatusCode());
     }
 
-    @Test
-    @Order(19)
-    @DisplayName("Limpia la base de datos")
-    public void ClearDataBase() {
-
-        usuariRepository.deleteAll();
-        tokenRepository.deleteAll();
-    }
 }

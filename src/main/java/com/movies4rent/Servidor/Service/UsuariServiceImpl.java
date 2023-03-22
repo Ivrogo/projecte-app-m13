@@ -157,6 +157,7 @@ public class UsuariServiceImpl implements UsuariService {
             updatedUsuari.get().setAdmin(admin);
             usuariRepository.save(updatedUsuari.get());
 
+            response.setValue(updatedUsuari.get());
             response.setMessage("Usuario actualizado");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {

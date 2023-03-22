@@ -13,6 +13,10 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
+
+/**
+ * Classe que conte les proves unitaries per a la classe loginService
+ */
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LoginServiceTest {
@@ -27,7 +31,9 @@ class LoginServiceTest {
     @Autowired
     private TokenRepository tokenRepository;
 
-
+    /**
+     * Neteja les taules de la base de dades
+     */
     @Test
     @Order(0)
     @DisplayName("Limpia las tablas")
@@ -38,6 +44,9 @@ class LoginServiceTest {
 
     }
 
+    /**
+     * Insereix un usuario en la base de datos
+     */
     @Test
     @Order(1)
     @DisplayName("Registra un usuario")
@@ -55,6 +64,9 @@ class LoginServiceTest {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
+    /**
+     * Intenta inserir un usuari que existeix a la base de dades
+     */
     @Test
     @Order(2)
     @DisplayName("Error registra un usuario existente")
@@ -73,6 +85,10 @@ class LoginServiceTest {
         Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
     }
+
+    /**
+     * Intenta inserir un usuari null a la base de dades
+     */
     @Test
     @Order(3)
     @DisplayName("Error registra un usuario: null user")
@@ -82,6 +98,10 @@ class LoginServiceTest {
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
         Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     }
+
+    /**
+     * Intenta inserir un usuari empty a la base de dades
+     */
     @Test
     @Order(4)
     @DisplayName("Error registra un usuario: empty user")
@@ -98,6 +118,10 @@ class LoginServiceTest {
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
         Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
+
+    /**
+     * Intenta inserir un usuari con password null a la base de dades
+     */
     @Test
     @Order(5)
     @DisplayName("Error registra un usuario: null password")
@@ -115,6 +139,10 @@ class LoginServiceTest {
         Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
     }
+
+    /**
+     * Intenta inserir un usuari con password empty a la base de dades
+     */
     @Test
     @Order(6)
     @DisplayName("Error registra un usuario: empty password")
@@ -131,6 +159,10 @@ class LoginServiceTest {
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
         Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
+
+    /**
+     * Intenta inserir un usuari con email null a la base de dades
+     */
     @Test
     @Order(7)
     @DisplayName("Error registra un usuario: null email")
@@ -147,6 +179,10 @@ class LoginServiceTest {
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
         Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     }
+
+    /**
+     * Intenta inserir un usuari con email empty a la base de dades
+     */
     @Test
     @Order(8)
     @DisplayName("Error registra un usuario: empty email")
@@ -163,6 +199,10 @@ class LoginServiceTest {
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
         Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
+
+    /**
+     * Logueja a un usuari
+     */
     @Test
     @Order(9)
     @DisplayName("loguea un usuario")
@@ -173,6 +213,10 @@ class LoginServiceTest {
         ResponseEntity<ResponseDTO> response = loginService.login(username, password);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
+
+    /**
+     * Intenta loguear a un usuari amb password incorrecta
+     */
     @Test
     @Order(10)
     @DisplayName("Error login: not matching")
@@ -183,6 +227,10 @@ class LoginServiceTest {
         ResponseEntity<ResponseDTO> response = loginService.login(username, password);
         Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     }
+
+    /**
+     * Intenta loguear a un usuari amb username null
+     */
     @Test
     @Order(11)
     @DisplayName("Error login: null user")
@@ -193,6 +241,10 @@ class LoginServiceTest {
         ResponseEntity<ResponseDTO> response = loginService.login(username, password);
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
+
+    /**
+     * Intenta loguear a un usuari amb username empty
+     */
     @Test
     @Order(12)
     @DisplayName("Error login: empty user")
@@ -204,6 +256,10 @@ class LoginServiceTest {
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
     }
+
+    /**
+     * Intenta loguear a un usuari amb password null
+     */
     @Test
     @Order(13)
     @DisplayName("Error login: null password")
@@ -215,6 +271,10 @@ class LoginServiceTest {
          Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
     }
+
+    /**
+     * Intenta loguear a un usuari amb password empty
+     */
     @Test
     @Order(14)
     @DisplayName("Error login: empty password")
@@ -227,6 +287,9 @@ class LoginServiceTest {
 
     }
 
+    /**
+     * Realitza logout de un usuari
+     */
     @Test
     @Order(15)
     @DisplayName("logout")
@@ -238,6 +301,9 @@ class LoginServiceTest {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
+    /**
+     * Intenta logout de un usuari amb token null
+     */
     @Test
     @Order(17)
     @DisplayName("Error logout: null token")
@@ -248,6 +314,10 @@ class LoginServiceTest {
         ResponseEntity<ResponseDTO> response = loginService.logout(null);
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
+
+    /**
+     * Intenta logout de un usuari amb token empty
+     */
     @Test
     @Order(18)
     @DisplayName("Error logout: empty token")
@@ -258,12 +328,5 @@ class LoginServiceTest {
         ResponseEntity<ResponseDTO> response = loginService.logout("");
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
-    @Test
-    @Order(19)
-    @DisplayName("Limpia la base de datos")
-    public void ClearDataBase() {
 
-        usuariRepository.deleteAll();
-        tokenRepository.deleteAll();
-    }
 }
