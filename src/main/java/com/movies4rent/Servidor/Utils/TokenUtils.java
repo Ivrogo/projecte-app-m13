@@ -146,7 +146,7 @@ public class TokenUtils {
     private static String getEncodedString() {
         UUID tokenUUID = UUID.randomUUID();
         String tokenToEncode = tokenUUID.toString().replace("-", "");
-        return Base64.getEncoder().encodeToString(tokenToEncode.getBytes());
+        return tokenToEncode;
     }
 
     /**
