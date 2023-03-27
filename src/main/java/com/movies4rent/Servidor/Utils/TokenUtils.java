@@ -79,6 +79,11 @@ public class TokenUtils {
         }
     }
 
+    public boolean isUserAdmin(String token) {
+
+        return getUser(token).get().isIsAdmin();
+    }
+
     /**
      * Metode que valida el token d'un usuari
      * @param token token de sessió de l'usuari

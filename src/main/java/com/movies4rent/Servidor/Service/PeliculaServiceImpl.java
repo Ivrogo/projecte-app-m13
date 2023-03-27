@@ -28,6 +28,7 @@ public class PeliculaServiceImpl implements PeliculaService {
 
     @Override
     public ResponseEntity<ResponseDTO> findAll(String token) {
+
         ResponseDTO<List<GetPeliculaDTO>> response = new ResponseDTO();
 
         if (!tokenUtils.isTokenValid(token)){
@@ -55,6 +56,7 @@ public class PeliculaServiceImpl implements PeliculaService {
 
     @Override
     public ResponseEntity<ResponseDTO> findById(UUID id, String token) {
+
         ResponseDTO<GetPeliculaDTO> response = new ResponseDTO();
 
         if(!tokenUtils.isTokenValid(token)){
@@ -79,10 +81,14 @@ public class PeliculaServiceImpl implements PeliculaService {
 
     @Override
     public ResponseEntity<ResponseDTO> addPelicula(String token, RegisterPeliculaDTO peliculaDTO) {
+
         ResponseDTO response = new ResponseDTO();
         if (!tokenUtils.isTokenValid(token)) {
             response.setMessage("Sesion no valida");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } else if (tokenUtils.isUserAdmin(token) == false) {
+            response.setMessage("No tienes permisos para realizar esta acción");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
         try {

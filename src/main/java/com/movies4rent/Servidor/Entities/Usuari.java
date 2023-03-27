@@ -47,7 +47,7 @@ public class Usuari {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "usuario_pelicula",
+            name = "usuari_pelicula",
             joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "pelicula_id", referencedColumnName = "id"))
     private List<Pelicula> peliculas;

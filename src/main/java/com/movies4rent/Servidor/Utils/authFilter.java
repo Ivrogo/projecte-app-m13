@@ -1,4 +1,4 @@
-package com.movies4rent.Servidor.Utils;
+/*package com.movies4rent.Servidor.Utils;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,4 +61,4 @@ public class authFilter implements Filter {
 
         }
     }
-}
+}*/
