@@ -6,6 +6,7 @@ package com.movies4rent.Servidor.Entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -41,9 +42,15 @@ public class Usuari {
     @Column(nullable = false)
     private String password;
 
-
     @Column(nullable = false)
     private boolean isIsAdmin;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "usuario_pelicula",
+            joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "pelicula_id", referencedColumnName = "id"))
+    private List<Pelicula> peliculas;
 
     public Usuari() {
         super();
@@ -125,6 +132,13 @@ public class Usuari {
         this.password = password;
     }
 
+    public List<Pelicula> getPeliculas() {
+        return peliculas;
+    }
+
+    public void setPeliculas(List<Pelicula> peliculas) {
+        this.peliculas = peliculas;
+    }
 
     @Override
     public String toString() {
