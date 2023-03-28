@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface AlquilerService {
 
     ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuarioId, String token, CreaAlquilerDTO crearAlquilerDTO);
+
+    ResponseEntity<ResponseDTO> findAlquilerByUser(UUID usuarioId, String token);
 }

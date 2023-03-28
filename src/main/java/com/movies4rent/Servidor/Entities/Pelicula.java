@@ -35,15 +35,13 @@ public class Pelicula {
     @ManyToMany(mappedBy = "peliculas")
     private List<Usuari> usuaris;
 
-    @OneToMany(mappedBy= "pelicula")
-    private List<Alquiler> alquileres;
 
 
     public Pelicula() {
         super();
     }
 
-    public Pelicula(UUID id, String titulo, String genero, String director, int año, BigDecimal precio, List<Usuari> usuaris, List<Alquiler> alquileres) {
+    public Pelicula(UUID id, String titulo, String genero, String director, int año, BigDecimal precio, List<Usuari> usuaris) {
         this.id = id;
         this.titulo = titulo;
         this.genero = genero;
@@ -51,7 +49,7 @@ public class Pelicula {
         this.año = año;
         this.precio = precio;
         this.usuaris = usuaris;
-        this.alquileres = alquileres;
+
     }
 
     public UUID getId() {
@@ -118,11 +116,4 @@ public class Pelicula {
         this.duracion = duracion;
     }
 
-    public List<Alquiler> getAlquileres() {
-        return alquileres;
-    }
-
-    public void setAlquileres(List<Alquiler> alquileres) {
-        this.alquileres = alquileres;
-    }
 }

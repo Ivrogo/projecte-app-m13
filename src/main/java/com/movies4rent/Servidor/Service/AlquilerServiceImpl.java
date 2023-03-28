@@ -2,6 +2,8 @@ package com.movies4rent.Servidor.Service;
 
 import com.movies4rent.Servidor.DTO.CreaAlquilerDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
+import com.movies4rent.Servidor.Entities.Alquiler;
+import com.movies4rent.Servidor.Entities.Pelicula;
 import com.movies4rent.Servidor.Repository.AlquilerRepository;
 import com.movies4rent.Servidor.Repository.PeliculaRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
@@ -13,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -44,11 +49,11 @@ public class AlquilerServiceImpl implements AlquilerService {
                 response.setMessage("Los campos no pueden ser nulos");
                 return new ResponseEntity<>(response, HttpStatus.CONFLICT);
             }
-            crearAlquilerDTO.setPelicula(peliculaRepository.findById(peliculaId).get());
-            crearAlquilerDTO.setUsuari(usuariRepository.findById(usuarioId).get());
+            crearAlquilerDTO.setPelicula(peliculaRepository.findById(peliculaId).get().getId());
+            crearAlquilerDTO.setUsuari(usuariRepository.findById(usuarioId).get().getId());
             crearAlquilerDTO.setFechaInicio(LocalDate.now());
             crearAlquilerDTO.setFechaFin(crearAlquilerDTO.getFechaInicio().plusMonths(1));
-            crearAlquilerDTO.setPrecio(crearAlquilerDTO.getPelicula().getPrecio());
+            crearAlquilerDTO.setPrecio(crearAlquilerDTO.getPrecio());
             crearAlquilerDTO.setEstado(EstadoAlquiler.EN_CURSO);
 
             alquilerRepository.save(CreaAlquilerDTO.fromDTOToEntity(crearAlquilerDTO));
@@ -59,5 +64,24 @@ public class AlquilerServiceImpl implements AlquilerService {
             return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> findAlquilerByUser(UUID usuarioId, String token) {
+
+        ResponseDTO response = new ResponseDTO();
+
+
+        try {
+            List<Alquiler> alquieres = alquilerRepository.findByUsuari(usuarioId);
+            List<Pelicula> peliculas = new ArrayList<>();
+
+            for (Alquiler alquiler : alquieres) {
+                Optional<Pelicula> pelicula = peliculaRepository.findById(alquiler.getPelicula());
+                if (pelicula.isPresent()) {
+                    peliculas.add(pelicula.get());
+                }
+            }
+        }
     }
 }

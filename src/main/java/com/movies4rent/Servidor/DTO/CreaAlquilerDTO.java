@@ -1,8 +1,6 @@
 package com.movies4rent.Servidor.DTO;
 
 import com.movies4rent.Servidor.Entities.Alquiler;
-import com.movies4rent.Servidor.Entities.Pelicula;
-import com.movies4rent.Servidor.Entities.Usuari;
 import com.movies4rent.Servidor.Repository.PeliculaRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
 import com.movies4rent.Servidor.Utils.EstadoAlquiler;
@@ -10,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class CreaAlquilerDTO {
 
@@ -17,8 +16,10 @@ public class CreaAlquilerDTO {
     private static PeliculaRepository peliculaRepository;
     @Autowired
     private static UsuariRepository usuariRepository;
-    private Pelicula pelicula;
-    private Usuari usuari;
+
+    private UUID id;
+    private UUID pelicula;
+    private UUID usuari;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private EstadoAlquiler estado;
@@ -48,19 +49,19 @@ public class CreaAlquilerDTO {
         this.estado = estado;
     }
 
-    public Pelicula getPelicula() {
+    public UUID getPelicula() {
         return pelicula;
     }
 
-    public void setPelicula(Pelicula pelicula) {
+    public void setPelicula(UUID pelicula) {
         this.pelicula = pelicula;
     }
 
-    public Usuari getUsuari() {
+    public UUID getUsuari() {
         return usuari;
     }
 
-    public void setUsuari(Usuari usuari) {
+    public void setUsuari(UUID usuari) {
         this.usuari = usuari;
     }
 
@@ -72,15 +73,24 @@ public class CreaAlquilerDTO {
         this.precio = precio;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public static Alquiler fromDTOToEntity(CreaAlquilerDTO creaAlquilerDTO) {
 
         Alquiler alquiler = new Alquiler();
-        alquiler.setPelicula(peliculaRepository.findById(creaAlquilerDTO.pelicula.getId()).get());
-        alquiler.setUsuari(usuariRepository.findById(creaAlquilerDTO.getUsuari().getId()).get());
+        alquiler.setId(creaAlquilerDTO.getId());
+        alquiler.setPelicula(creaAlquilerDTO.getPelicula());
+        alquiler.setUsuari(creaAlquilerDTO.getUsuari());
         alquiler.setFechaInicio(creaAlquilerDTO.getFechaInicio());
         alquiler.setFechaFin(creaAlquilerDTO.getFechaFin());
         alquiler.setEstado(creaAlquilerDTO.getEstado());
-        alquiler.setPrecio(peliculaRepository.findById(creaAlquilerDTO.pelicula.getId()).get().getPrecio());
+        alquiler.setPrecio(creaAlquilerDTO.getPrecio());
 
         return alquiler;
     }

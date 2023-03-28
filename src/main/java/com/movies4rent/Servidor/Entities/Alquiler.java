@@ -15,13 +15,11 @@ public class Alquiler {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "pelicula_id")
-    private Pelicula pelicula;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuari usuari;
+    private UUID pelicula;
+
+
+    private UUID usuari;
 
     @Column
     private LocalDate fechaInicio;
@@ -36,7 +34,7 @@ public class Alquiler {
     @Column
     private EstadoAlquiler estado;
 
-    public Alquiler(UUID id, Pelicula pelicula, Usuari usuari, LocalDate fechaInicio, LocalDate fechaFin, BigDecimal precio, EstadoAlquiler estado) {
+    public Alquiler(UUID id, UUID pelicula, UUID usuari, LocalDate fechaInicio, LocalDate fechaFin, BigDecimal precio, EstadoAlquiler estado) {
         this.id = id;
         this.pelicula = pelicula;
         this.usuari = usuari;
@@ -57,19 +55,19 @@ public class Alquiler {
         this.id = id;
     }
 
-    public Pelicula getPelicula() {
+    public UUID getPelicula() {
         return pelicula;
     }
 
-    public void setPelicula(Pelicula pelicula) {
+    public void setPelicula(UUID pelicula) {
         this.pelicula = pelicula;
     }
 
-    public Usuari getUsuari() {
+    public UUID getUsuari() {
         return usuari;
     }
 
-    public void setUsuari(Usuari usuari) {
+    public void setUsuari(UUID usuari) {
         this.usuari = usuari;
     }
 
