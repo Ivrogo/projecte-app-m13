@@ -52,6 +52,9 @@ public class Usuari {
             inverseJoinColumns = @JoinColumn(name = "pelicula_id", referencedColumnName = "id"))
     private List<Pelicula> peliculas;
 
+    @OneToMany(mappedBy = "usuari")
+    private List<Alquiler> alquileres;
+
     public Usuari() {
         super();
         isIsAdmin = false;
@@ -140,17 +143,20 @@ public class Usuari {
         this.peliculas = peliculas;
     }
 
-    @Override
-    public String toString() {
-        return "Usuari{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", email=" + email + ", address=" + direccion + ", username=" + username + ", password=" + password + ", isAdmin=" + isIsAdmin + '}';
-    }
-
-
     public boolean isIsAdmin() {
         return isIsAdmin;
     }
 
-    public void setAdmin(boolean admin) {
+    public void setIsAdmin(boolean admin) {
         isIsAdmin = admin;
+    }
+
+
+    public List<Alquiler> getAlquileres() {
+        return alquileres;
+    }
+
+    public void setAlquileres(List<Alquiler> alquileres) {
+        this.alquileres = alquileres;
     }
 }

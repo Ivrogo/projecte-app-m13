@@ -2,6 +2,7 @@ package com.movies4rent.Servidor.Entities;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,30 +24,34 @@ public class Pelicula {
     private String director;
 
     @Column
-    private Double duracion;
+    private Integer duracion;
 
     @Column
-    private Double rating;
+    private Integer año;
 
     @Column
-    private Double precio;
+    private BigDecimal precio;
 
     @ManyToMany(mappedBy = "peliculas")
     private List<Usuari> usuaris;
+
+    @OneToMany(mappedBy= "pelicula")
+    private List<Alquiler> alquileres;
 
 
     public Pelicula() {
         super();
     }
 
-    public Pelicula(UUID id, String titulo, String genero, String director, Double rating, Double precio, List<Usuari> usuaris) {
+    public Pelicula(UUID id, String titulo, String genero, String director, int año, BigDecimal precio, List<Usuari> usuaris, List<Alquiler> alquileres) {
         this.id = id;
         this.titulo = titulo;
         this.genero = genero;
         this.director = director;
-        this.rating = rating;
+        this.año = año;
         this.precio = precio;
         this.usuaris = usuaris;
+        this.alquileres = alquileres;
     }
 
     public UUID getId() {
@@ -81,19 +86,19 @@ public class Pelicula {
         this.director = director;
     }
 
-    public Double getRating() {
-        return rating;
+    public Integer getAño() {
+        return año;
     }
 
-    public void setRating(Double rating) {
-        this.rating = rating;
+    public void setAño(Integer año) {
+        this.año = año;
     }
 
-    public Double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 
@@ -105,12 +110,19 @@ public class Pelicula {
         this.usuaris = usuaris;
     }
 
-    public Double getDuracion() {
+    public Integer getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(Double duracion) {
+    public void setDuracion(Integer duracion) {
         this.duracion = duracion;
     }
 
+    public List<Alquiler> getAlquileres() {
+        return alquileres;
+    }
+
+    public void setAlquileres(List<Alquiler> alquileres) {
+        this.alquileres = alquileres;
+    }
 }

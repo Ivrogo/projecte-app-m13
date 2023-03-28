@@ -251,7 +251,7 @@ class UsuariServiceTest {
         loginService.login(usuari.getUsername(), usuari.getPassword());
 
         Optional<Token> token = tokenRepository.findByUsername("admin");
-        usuari.setAdmin(true);
+        usuari.setIsAdmin(true);
         ResponseEntity<ResponseDTO> response = usuariService.updateUserAdmin(usuari.isIsAdmin(), usuari.getId(), token.get().getToken());
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         System.out.println(response.getStatusCode());

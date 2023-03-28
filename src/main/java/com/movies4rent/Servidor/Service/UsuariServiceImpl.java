@@ -53,9 +53,10 @@ public class UsuariServiceImpl implements UsuariService {
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
+            response.setMessage("Mostrando los usuarios registrados");
             response.setValue(usuarisDTO);
-
             return new ResponseEntity<>(response, HttpStatus.OK);
+
         } catch (Exception e) {
             response.setMessage("Error.");
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -92,9 +93,11 @@ public class UsuariServiceImpl implements UsuariService {
                 response.setMessage("Usuario no encontrado");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
-            response.setValue(GetUsuariDTO.fromEntityToDTO(foundUsuari.get()));
 
+            response.setMessage("Mostrando la información del usuario");
+            response.setValue(GetUsuariDTO.fromEntityToDTO(foundUsuari.get()));
             return new ResponseEntity<>(response, HttpStatus.OK);
+
         } catch (Exception e) {
             response.setMessage("Error.");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -126,8 +129,10 @@ public class UsuariServiceImpl implements UsuariService {
             UserUpdateDTO.updateEntityFromDTO(user.get(), userUpdateDTO);
             usuariRepository.save(user.get());
 
+            response.setValue(user.get());
             response.setMessage("Usuario actualizado");
             return new ResponseEntity<>(response, HttpStatus.OK);
+
         } catch (Exception e) {
             response.setMessage("Error.");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -160,7 +165,7 @@ public class UsuariServiceImpl implements UsuariService {
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
-            updatedUsuari.get().setAdmin(admin);
+            updatedUsuari.get().setIsAdmin(admin);
             usuariRepository.save(updatedUsuari.get());
 
             response.setValue(updatedUsuari.get());

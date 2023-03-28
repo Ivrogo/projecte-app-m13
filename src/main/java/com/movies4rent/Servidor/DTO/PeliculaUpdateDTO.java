@@ -2,6 +2,8 @@ package com.movies4rent.Servidor.DTO;
 
 import com.movies4rent.Servidor.Entities.Pelicula;
 
+import java.math.BigDecimal;
+
 public class PeliculaUpdateDTO {
 
     private String titulo;
@@ -10,9 +12,11 @@ public class PeliculaUpdateDTO {
 
     private String genero;
 
-    private Double duracion;
+    private Integer duracion;
 
-    private Double precio;
+    private Integer año;
+
+    private BigDecimal precio;
 
     public String getTitulo() {
         return titulo;
@@ -38,19 +42,27 @@ public class PeliculaUpdateDTO {
         this.genero = genero;
     }
 
-    public Double getDuracion() {
+    public Integer getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(Double duracion) {
+    public void setDuracion(Integer duracion) {
         this.duracion = duracion;
     }
 
-    public Double getPrecio() {
+    public Integer getAño() {
+        return año;
+    }
+
+    public void setAño(Integer año) {
+        this.año = año;
+    }
+
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 

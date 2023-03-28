@@ -27,7 +27,7 @@ public class RegisterUserDTO {
 
         Usuari user = new Usuari();
         user.setUsername(userDTO.getUsername());
-        user.setAdmin(false);
+        user.setIsAdmin(false);
         user.setPassword(userDTO.getPassword());
         user.setEmail(userDTO.getEmail());
         user.setNombre(userDTO.getNombre());

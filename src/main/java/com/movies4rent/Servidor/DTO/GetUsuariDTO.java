@@ -16,7 +16,6 @@ public class GetUsuariDTO {
     private String telefono;
     private String email;
     private String direccion;
-
     private boolean isIsAdmin;
 
     /**
@@ -90,7 +89,7 @@ public class GetUsuariDTO {
         usuari.setEmail(getUsuariDTO.getEmail());
         usuari.setDireccion(getUsuariDTO.getDireccion());
         usuari.setTelefono(getUsuariDTO.getTelefono());
-        usuari.setAdmin(getUsuariDTO.isIsAdmin());
+        usuari.setIsAdmin(getUsuariDTO.isIsAdmin());
     }
 
     /**
