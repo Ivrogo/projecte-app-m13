@@ -3,6 +3,7 @@ package com.movies4rent.Servidor.Entities;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class Pelicula {
     private Integer duracion;
 
     @Column
-    private Integer año;
+    private LocalDate año;
 
     @Column
     private BigDecimal precio;
@@ -41,7 +42,7 @@ public class Pelicula {
         super();
     }
 
-    public Pelicula(UUID id, String titulo, String genero, String director, int año, BigDecimal precio, List<Usuari> usuaris) {
+    public Pelicula(UUID id, String titulo, String genero, String director, LocalDate año, BigDecimal precio, List<Usuari> usuaris) {
         this.id = id;
         this.titulo = titulo;
         this.genero = genero;
@@ -84,11 +85,11 @@ public class Pelicula {
         this.director = director;
     }
 
-    public Integer getAño() {
+    public LocalDate getAño() {
         return año;
     }
 
-    public void setAño(Integer año) {
+    public void setAño(LocalDate año) {
         this.año = año;
     }
 

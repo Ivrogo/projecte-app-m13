@@ -15,10 +15,10 @@ public class Alquiler {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-
+    @Column
     private UUID pelicula;
 
-
+    @Column
     private UUID usuari;
 
     @Column

@@ -5,6 +5,7 @@ import com.movies4rent.Servidor.DTO.GetPeliculaDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.Entities.Alquiler;
 import com.movies4rent.Servidor.Entities.Pelicula;
+import com.movies4rent.Servidor.Entities.Usuari;
 import com.movies4rent.Servidor.Repository.AlquilerRepository;
 import com.movies4rent.Servidor.Repository.PeliculaRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
@@ -37,7 +38,7 @@ public class AlquilerServiceImpl implements AlquilerService {
     private TokenUtils tokenUtils;
 
     @Override
-    public ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuarioId, String token, CreaAlquilerDTO crearAlquilerDTO) {
+    public ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuariId, String token, CreaAlquilerDTO crearAlquilerDTO) {
 
         ResponseDTO response = new ResponseDTO();
 
@@ -46,18 +47,26 @@ public class AlquilerServiceImpl implements AlquilerService {
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
         try {
-            if (peliculaId == null || usuarioId == null) {
+            if (peliculaId == null || usuariId == null) {
                 response.setMessage("Los campos no pueden ser nulos");
                 return new ResponseEntity<>(response, HttpStatus.CONFLICT);
             }
-            crearAlquilerDTO.setPelicula(peliculaRepository.findById(peliculaId).get().getId());
-            crearAlquilerDTO.setUsuari(usuariRepository.findById(usuarioId).get().getId());
+
+            Optional<Pelicula> foundPelicula = peliculaRepository.findById(peliculaId);
+            Optional<Usuari> foundUsuari = usuariRepository.findById(usuariId);
+            if (!foundPelicula.isPresent() ||!foundUsuari.isPresent()) {
+                response.setMessage("La pelicula o el usuario no existe");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+
             crearAlquilerDTO.setFechaInicio(LocalDate.now());
-            crearAlquilerDTO.setFechaFin(crearAlquilerDTO.getFechaInicio().plusMonths(1));
+            crearAlquilerDTO.setFechaFin(LocalDate.now().plusMonths(1));
             crearAlquilerDTO.setPrecio(crearAlquilerDTO.getPrecio());
             crearAlquilerDTO.setEstado(EstadoAlquiler.EN_CURSO);
 
-            alquilerRepository.save(CreaAlquilerDTO.fromDTOToEntity(crearAlquilerDTO));
+            Alquiler alquiler = CreaAlquilerDTO.fromDTOToEntity(crearAlquilerDTO);
+            alquiler.setPelicula(foundPelicula.get().getId());
+            alquiler.setUsuari(foundUsuari.get().getId());
             response.setMessage("Alquiler creado correctamente");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
@@ -78,14 +87,16 @@ public class AlquilerServiceImpl implements AlquilerService {
         }
 
         try {
-            List<Alquiler> alquieres = alquilerRepository.findByUsuari(usuarioId);
+            List<Alquiler> alquileres = alquilerRepository.findByUsuari(usuarioId);
             List<Pelicula> peliculas = new ArrayList<>();
 
-            for (Alquiler alquiler : alquieres) {
+            for (Alquiler alquiler : alquileres) {
                 Optional<Pelicula> pelicula = peliculaRepository.findById(alquiler.getPelicula());
-                if (pelicula.isPresent()) {
-                    peliculas.add(pelicula.get());
+                if (!pelicula.isPresent()) {
+                    response.setMessage("No se encontro ningun pelicula");
+                    return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
                 }
+                peliculas.add(pelicula.get());
             }
             List<GetPeliculaDTO> peliculaDTO = peliculas.stream().map(GetPeliculaDTO::fromEntityToDTO).toList();
             response.setValue(peliculaDTO);

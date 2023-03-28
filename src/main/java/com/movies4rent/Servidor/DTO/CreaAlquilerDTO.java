@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 public class CreaAlquilerDTO {
 
@@ -16,10 +15,6 @@ public class CreaAlquilerDTO {
     private static PeliculaRepository peliculaRepository;
     @Autowired
     private static UsuariRepository usuariRepository;
-
-    private UUID id;
-    private UUID pelicula;
-    private UUID usuari;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private EstadoAlquiler estado;
@@ -49,21 +44,6 @@ public class CreaAlquilerDTO {
         this.estado = estado;
     }
 
-    public UUID getPelicula() {
-        return pelicula;
-    }
-
-    public void setPelicula(UUID pelicula) {
-        this.pelicula = pelicula;
-    }
-
-    public UUID getUsuari() {
-        return usuari;
-    }
-
-    public void setUsuari(UUID usuari) {
-        this.usuari = usuari;
-    }
 
     public BigDecimal getPrecio() {
         return precio;
@@ -73,20 +53,10 @@ public class CreaAlquilerDTO {
         this.precio = precio;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public static Alquiler fromDTOToEntity(CreaAlquilerDTO creaAlquilerDTO) {
 
         Alquiler alquiler = new Alquiler();
-        alquiler.setId(creaAlquilerDTO.getId());
-        alquiler.setPelicula(creaAlquilerDTO.getPelicula());
-        alquiler.setUsuari(creaAlquilerDTO.getUsuari());
         alquiler.setFechaInicio(creaAlquilerDTO.getFechaInicio());
         alquiler.setFechaFin(creaAlquilerDTO.getFechaFin());
         alquiler.setEstado(creaAlquilerDTO.getEstado());
