@@ -67,6 +67,8 @@ public class AlquilerServiceImpl implements AlquilerService {
             Alquiler alquiler = CreaAlquilerDTO.fromDTOToEntity(crearAlquilerDTO);
             alquiler.setPelicula(foundPelicula.get().getId());
             alquiler.setUsuari(foundUsuari.get().getId());
+
+            alquilerRepository.save(alquiler);
             response.setMessage("Alquiler creado correctamente");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
