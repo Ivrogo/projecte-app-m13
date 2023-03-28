@@ -6,6 +6,7 @@ import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.Service.AlquilerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,5 +24,11 @@ public class AlquilerControllerImpl implements AlquilerController {
     @PostMapping("/nuevo")
     public ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuarioId, String token, CreaAlquilerDTO creaAlquilerDTO) {
         return alquilerService.crearAlquiler(peliculaId, usuarioId, token, creaAlquilerDTO);
+    }
+
+    @Override
+    @GetMapping
+    public ResponseEntity<ResponseDTO> findAlquilerByUsuari(UUID usuarioId, String token) {
+        return alquilerService.findAlquilerByUser(usuarioId, token);
     }
 }

@@ -1,6 +1,7 @@
 package com.movies4rent.Servidor.Service;
 
 import com.movies4rent.Servidor.DTO.CreaAlquilerDTO;
+import com.movies4rent.Servidor.DTO.GetPeliculaDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.Entities.Alquiler;
 import com.movies4rent.Servidor.Entities.Pelicula;
@@ -71,6 +72,10 @@ public class AlquilerServiceImpl implements AlquilerService {
 
         ResponseDTO response = new ResponseDTO();
 
+        if (!tokenUtils.isTokenValid(token)){
+            response.setMessage("Sesion no valida");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
 
         try {
             List<Alquiler> alquieres = alquilerRepository.findByUsuari(usuarioId);
@@ -82,6 +87,13 @@ public class AlquilerServiceImpl implements AlquilerService {
                     peliculas.add(pelicula.get());
                 }
             }
+            List<GetPeliculaDTO> peliculaDTO = peliculas.stream().map(GetPeliculaDTO::fromEntityToDTO).toList();
+            response.setValue(peliculaDTO);
+            response.setMessage("Peliculas encontradas");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.setMessage("Error");
+            return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

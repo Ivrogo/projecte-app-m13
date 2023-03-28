@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface AlquilerController {
 
     ResponseEntity<ResponseDTO> crearAlquiler(@PathVariable UUID peliculaId, @PathVariable UUID usuarioId, @RequestParam(value = "token") String token, @RequestBody CreaAlquilerDTO creaAlquilerDTO);
+
+    ResponseEntity<ResponseDTO> findAlquilerByUsuari (@PathVariable UUID usuarioId, @RequestParam(value = "token") String token);
 }
