@@ -5,6 +5,7 @@
 package com.movies4rent.Servidor.Service;
 
 import com.movies4rent.Servidor.DTO.ResponseDTO;
+import com.movies4rent.Servidor.DTO.UserChangePasswordDTO;
 import com.movies4rent.Servidor.DTO.UserUpdateDTO;
 import org.springframework.http.ResponseEntity;
 
@@ -27,4 +28,6 @@ public interface UsuariService {
     ResponseEntity<ResponseDTO> deleteUser(UUID id, String token);
 
     ResponseEntity<ResponseDTO> getUserByToken(String token);
+
+    ResponseEntity<ResponseDTO> changeUsuariPassword(String token, UserChangePasswordDTO userChangePasswordDTO);
 }

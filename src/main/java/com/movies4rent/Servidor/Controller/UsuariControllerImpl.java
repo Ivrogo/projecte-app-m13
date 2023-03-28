@@ -2,6 +2,7 @@ package com.movies4rent.Servidor.Controller;
 
 
 import com.movies4rent.Servidor.DTO.ResponseDTO;
+import com.movies4rent.Servidor.DTO.UserChangePasswordDTO;
 import com.movies4rent.Servidor.DTO.UserUpdateDTO;
 import com.movies4rent.Servidor.Service.UsuariService;
 import jakarta.websocket.server.PathParam;
@@ -90,6 +91,12 @@ public class UsuariControllerImpl implements UsuariController {
     @GetMapping("/info")
     public ResponseEntity<ResponseDTO> getInfoUsuariByToken(String token) {
         return usuariService.getUserByToken(token);
+    }
+
+    @Override
+    @PutMapping("/changepassword")
+    public ResponseEntity<ResponseDTO> changeUsuariPassword(String token, UserChangePasswordDTO userChangePasswordDTO) {
+        return usuariService.changeUsuariPassword(token, userChangePasswordDTO);
     }
 
 }

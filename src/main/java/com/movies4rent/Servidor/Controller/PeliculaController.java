@@ -1,5 +1,6 @@
 package com.movies4rent.Servidor.Controller;
 
+import com.movies4rent.Servidor.DTO.PeliculaUpdateDTO;
 import com.movies4rent.Servidor.DTO.RegisterPeliculaDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
 import org.springframework.http.ResponseEntity;
@@ -16,4 +17,8 @@ public interface PeliculaController {
     ResponseEntity<ResponseDTO> getPelicula(@PathVariable UUID id, @RequestParam(value = "token", required = true) String token);
 
     ResponseEntity<ResponseDTO>  addPelicula(@RequestParam(value = "token", required = true) String token, @RequestBody RegisterPeliculaDTO peliculaDTO);
+
+    ResponseEntity<ResponseDTO> updatePelicula(@RequestBody PeliculaUpdateDTO peliculaUpdateDTO, @PathVariable UUID id, @RequestParam(value = "token", required = true) String token);
+
+    ResponseEntity<ResponseDTO> deletePelicula(@PathVariable UUID id, @RequestParam(value = "token", required = true) String token);
 }

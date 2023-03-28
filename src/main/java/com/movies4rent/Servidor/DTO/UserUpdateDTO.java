@@ -59,20 +59,6 @@ public class UserUpdateDTO {
     }
 
     /**
-     * Metode DTO que s'encarrega de transformar un DTO a un Usuari (no Implementat)
-     * @param userUpdateDTO DTO amb la informació actualitzada
-     * @param usuari objecte usuari que rep la informació actualitzada
-     */
-    public static void fromDTOToEntityUpdate(UserUpdateDTO userUpdateDTO, Usuari usuari) {
-
-        usuari.setNombre(userUpdateDTO.getNombre());
-        usuari.setApellidos(userUpdateDTO.getApellidos());
-        usuari.setEmail(userUpdateDTO.getEmail());
-        usuari.setDireccion(userUpdateDTO.getDireccion());
-        usuari.setTelefono(userUpdateDTO.getTelefono());
-    }
-
-    /**
      * Metode que s'encarrega d'actualitzar l'entitat a través d'un DTO
      * @param userEntity objecte usuari que rep la informació actualitzada
      * @param userDTO DTO amb la informació actualitzada

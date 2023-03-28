@@ -2,6 +2,7 @@ package com.movies4rent.Servidor.Service;
 
 
 import com.movies4rent.Servidor.DTO.GetPeliculaDTO;
+import com.movies4rent.Servidor.DTO.PeliculaUpdateDTO;
 import com.movies4rent.Servidor.DTO.RegisterPeliculaDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.Entities.Pelicula;
@@ -105,6 +106,69 @@ public class PeliculaServiceImpl implements PeliculaService {
         } catch (Exception e) {
             response.setMessage("Pelicula ya existe");
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        }
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> updatePelicula(PeliculaUpdateDTO peliculaUpdateDTO, UUID id, String token) {
+        ResponseDTO response = new ResponseDTO();
+
+        if (!tokenUtils.isTokenValid(token)) {
+            response.setMessage("Sesion no valida");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } else if (tokenUtils.isUserAdmin(token) == false) {
+            response.setMessage("No tienes permisos para realizar esta acción");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        try{
+            if (peliculaUpdateDTO.getDirector().isEmpty() || peliculaUpdateDTO.getGenero().isEmpty() || peliculaUpdateDTO.getTitulo().isEmpty()) {
+                response.setMessage("Los campos no pueden estar vacios");
+                return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+            } else if (peliculaUpdateDTO.getDuracion() == null || peliculaUpdateDTO.getPrecio() == null){
+                response.setMessage("Los campos no pueden ser nulos");
+                return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            }
+            Optional<Pelicula> updatedPelicula = peliculaRepository.findById(id);
+            if (!updatedPelicula.isPresent()){
+                response.setMessage("Pelicula no encontrada");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+            peliculaRepository.save(updatedPelicula.get());
+            response.setMessage("Pelicula actualizada correctamente");
+            response.setValue(updatedPelicula.get());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch(Exception e) {
+            response.setMessage("Error");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> deletePelicula(UUID id, String token) {
+        ResponseDTO response = new ResponseDTO();
+
+        if (!tokenUtils.isTokenValid(token)) {
+            response.setMessage("Sesion no valida");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } else if (tokenUtils.isUserAdmin(token) == false) {
+            response.setMessage("No tienes permisos para realizar esta acción");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            Optional<Pelicula> foundPelicula = peliculaRepository.findById(id);
+            if (!foundPelicula.isPresent()) {
+                response.setMessage("Pelicula no encontrada");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+
+            peliculaRepository.deleteById(id);
+            response.setMessage("Pelicula eliminada correctamente");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.setMessage("Error");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

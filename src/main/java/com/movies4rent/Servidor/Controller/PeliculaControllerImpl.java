@@ -1,14 +1,12 @@
 package com.movies4rent.Servidor.Controller;
 
+import com.movies4rent.Servidor.DTO.PeliculaUpdateDTO;
 import com.movies4rent.Servidor.DTO.RegisterPeliculaDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.Service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -36,4 +34,17 @@ public class PeliculaControllerImpl implements PeliculaController{
     public ResponseEntity<ResponseDTO> addPelicula(String token, RegisterPeliculaDTO peliculaDTO) {
         return peliculaService.addPelicula(token, peliculaDTO);
     }
+
+    @Override
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponseDTO> updatePelicula(PeliculaUpdateDTO peliculaUpdateDTO, UUID id, String token) {
+        return peliculaService.updatePelicula(peliculaUpdateDTO, id, token);
+    }
+
+    @Override
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseDTO> deletePelicula(UUID id, String token) {
+        return peliculaService.deletePelicula(id, token);
+    }
+
 }
