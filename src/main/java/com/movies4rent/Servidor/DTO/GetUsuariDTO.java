@@ -17,6 +17,8 @@ public class GetUsuariDTO {
     private String email;
     private String direccion;
 
+    private boolean isIsAdmin;
+
     /**
      * Getters i Setters
      */
@@ -68,6 +70,14 @@ public class GetUsuariDTO {
         this.direccion = direccion;
     }
 
+    public boolean isIsAdmin() {
+        return isIsAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        isIsAdmin = isAdmin;
+    }
+
     /**
      * Transforma el DTO a un objecte usuari
      * @param getUsuariDTO DTO amb les dades de l'usuari a transformar
@@ -80,6 +90,7 @@ public class GetUsuariDTO {
         usuari.setEmail(getUsuariDTO.getEmail());
         usuari.setDireccion(getUsuariDTO.getDireccion());
         usuari.setTelefono(getUsuariDTO.getTelefono());
+        usuari.setAdmin(getUsuariDTO.isIsAdmin());
     }
 
     /**
@@ -96,6 +107,7 @@ public class GetUsuariDTO {
         getUsuariDTO.setEmail(usuari.getEmail());
         getUsuariDTO.setDireccion(usuari.getDireccion());
         getUsuariDTO.setTelefono(usuari.getTelefono());
+        getUsuariDTO.setIsAdmin(usuari.isIsAdmin());
 
         return getUsuariDTO;
     }
