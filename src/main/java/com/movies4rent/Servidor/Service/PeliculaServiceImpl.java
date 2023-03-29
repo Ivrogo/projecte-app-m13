@@ -96,7 +96,7 @@ public class PeliculaServiceImpl implements PeliculaService {
             if (peliculaDTO.getTitulo().isEmpty() || peliculaDTO.getDirector().isEmpty() || peliculaDTO.getGenero().isEmpty()) {
                 response.setMessage("Los campos no pueden estar vacios");
                 return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-            } else if (peliculaDTO.getDuracion() == null || peliculaDTO.getPrecio() == null) {
+            } else if (peliculaDTO.getPrecio() == null) {
                 response.setMessage("los campos no pueden ser nulos");
                 return new ResponseEntity<>(response, HttpStatus.CONFLICT);
             }
@@ -125,7 +125,7 @@ public class PeliculaServiceImpl implements PeliculaService {
             if (peliculaUpdateDTO.getDirector().isEmpty() || peliculaUpdateDTO.getGenero().isEmpty() || peliculaUpdateDTO.getTitulo().isEmpty()) {
                 response.setMessage("Los campos no pueden estar vacios");
                 return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-            } else if (peliculaUpdateDTO.getDuracion() == null || peliculaUpdateDTO.getPrecio() == null){
+            } else if (peliculaUpdateDTO.getPrecio() == null){
                 response.setMessage("Los campos no pueden ser nulos");
                 return new ResponseEntity<>(response, HttpStatus.CONFLICT);
             }

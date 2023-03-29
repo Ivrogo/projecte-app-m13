@@ -25,7 +25,7 @@ public class Pelicula {
     private String director;
 
     @Column
-    private Integer duracion;
+    private int duracion;
 
     @Column
     private LocalDate año;
@@ -42,11 +42,12 @@ public class Pelicula {
         super();
     }
 
-    public Pelicula(UUID id, String titulo, String genero, String director, LocalDate año, BigDecimal precio, List<Usuari> usuaris) {
+    public Pelicula(UUID id, String titulo, String genero, String director, int duración, LocalDate año, BigDecimal precio, List<Usuari> usuaris) {
         this.id = id;
         this.titulo = titulo;
         this.genero = genero;
         this.director = director;
+        this.duracion = duracion;
         this.año = año;
         this.precio = precio;
         this.usuaris = usuaris;
@@ -109,11 +110,11 @@ public class Pelicula {
         this.usuaris = usuaris;
     }
 
-    public Integer getDuracion() {
+    public int getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(Integer duracion) {
+    public void setDuracion(int duracion) {
         this.duracion = duracion;
     }
 

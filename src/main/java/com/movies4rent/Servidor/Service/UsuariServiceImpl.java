@@ -38,7 +38,7 @@ public class UsuariServiceImpl implements UsuariService {
 
         if (!tokenUtils.isTokenValid(token)) {
             response.setMessage("Sesión no válida");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         } else if (tokenUtils.isUserAdmin(token) == false) {
             response.setMessage("No tienes permisos para realizar esta accion");
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
@@ -149,7 +149,7 @@ public class UsuariServiceImpl implements UsuariService {
 
         if (!tokenUtils.isTokenValid(token)) {
             response.setMessage("Sesión no válida");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         } else if (tokenUtils.isUserAdmin(token) == false) {
             response.setMessage("No tienes permisos para realizar esta accion");
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
