@@ -16,7 +16,7 @@ public class GetPeliculaDTO {
 
     private String director;
 
-    private Integer duracion;
+    private int duracion;
 
     private LocalDate año;
 
@@ -54,11 +54,11 @@ public class GetPeliculaDTO {
         this.director = director;
     }
 
-    public Integer getDuracion() {
+    public int getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(Integer duracion) {
+    public void setDuracion(int duracion) {
         this.duracion = duracion;
     }
 
