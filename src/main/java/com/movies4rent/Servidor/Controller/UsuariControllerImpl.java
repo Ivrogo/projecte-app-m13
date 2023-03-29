@@ -5,7 +5,6 @@ import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.DTO.UserChangePasswordDTO;
 import com.movies4rent.Servidor.DTO.UserUpdateDTO;
 import com.movies4rent.Servidor.Service.UsuariService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +65,7 @@ public class UsuariControllerImpl implements UsuariController {
      * @return metode updateUserAdmin de usuariService
      */
     @PutMapping("/update/{id}/{admin}")
-    public ResponseEntity<ResponseDTO> updateUsuariAdmin(@PathParam("admin") boolean admin, @PathVariable("id") UUID id, @RequestParam(value = "token", required = true) String token) {
+    public ResponseEntity<ResponseDTO> updateUsuariAdmin(@PathVariable("admin") boolean admin, @PathVariable("id") UUID id, @RequestParam(value = "token", required = true) String token) {
         return usuariService.updateUserAdmin(admin, id, token);
     }
 
