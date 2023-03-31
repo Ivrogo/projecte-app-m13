@@ -16,6 +16,9 @@ import java.util.UUID;
  */
 public interface UsuariController {
 
+    ResponseEntity<ResponseDTO> getUsuarisPaged(@RequestParam int page, @RequestParam int pageSize, @RequestParam(value = "token", required = true) String token);
+
+
     ResponseEntity<ResponseDTO> getUsuaris(@RequestParam(value = "token", required = true) String token);
 
     ResponseEntity<ResponseDTO> getUsuari(@PathVariable UUID id, @RequestParam(value = "token", required = true) String token);

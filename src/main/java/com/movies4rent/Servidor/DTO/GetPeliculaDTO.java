@@ -2,8 +2,6 @@ package com.movies4rent.Servidor.DTO;
 
 import com.movies4rent.Servidor.Entities.Pelicula;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.UUID;
 
 public class GetPeliculaDTO {
@@ -18,9 +16,9 @@ public class GetPeliculaDTO {
 
     private int duracion;
 
-    private LocalDate año;
+    private int año;
 
-    private BigDecimal precio;
+    private int precio;
 
     public UUID getId() {
         return id;
@@ -62,19 +60,19 @@ public class GetPeliculaDTO {
         this.duracion = duracion;
     }
 
-    public LocalDate getAño() {
+    public int getAño() {
         return año;
     }
 
-    public void setAño(LocalDate año) {
+    public void setAño(int año) {
         this.año = año;
     }
 
-    public BigDecimal getPrecio() {
+    public int getPrecio() {
         return precio;
     }
 
-    public void setPrecio(BigDecimal precio) {
+    public void setPrecio(int precio) {
         this.precio = precio;
     }
 

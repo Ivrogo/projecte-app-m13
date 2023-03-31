@@ -3,9 +3,13 @@ package com.movies4rent.Servidor.Service;
 
 import com.movies4rent.Servidor.DTO.*;
 import com.movies4rent.Servidor.Entities.Usuari;
+import com.movies4rent.Servidor.Repository.UsuariPagingRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
 import com.movies4rent.Servidor.Utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,9 @@ public class UsuariServiceImpl implements UsuariService {
 
     @Autowired
     private UsuariRepository usuariRepository;
+
+    @Autowired
+    private UsuariPagingRepository usuariPagingRepository;
     @Autowired
     private TokenUtils tokenUtils;
 
@@ -61,6 +68,34 @@ public class UsuariServiceImpl implements UsuariService {
             response.setMessage("Error.");
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> findAllPaged(int page, int pageSize, String token) {
+        ResponseDTO<Page<Usuari>> response = new ResponseDTO();
+        PageRequest pr = PageRequest.of(page, pageSize, Sort.by("nombre").descending());
+
+        if (!tokenUtils.isTokenValid(token)) {
+            response.setMessage("Sesion no valida");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        } else if (tokenUtils.isUserAdmin(token) == false) {
+            response.setMessage("No tienes permisos para realizar esta accion");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            Page<Usuari> usuaris = usuariPagingRepository.findAll(pr);
+
+
+            response.setMessage("Mostrando usuarios...");
+            response.setValue(usuaris);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (Exception e) {
+            response.setMessage("Error");
+            new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**

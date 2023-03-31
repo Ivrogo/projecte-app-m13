@@ -96,9 +96,6 @@ public class PeliculaServiceImpl implements PeliculaService {
             if (peliculaDTO.getTitulo().isEmpty() || peliculaDTO.getDirector().isEmpty() || peliculaDTO.getGenero().isEmpty()) {
                 response.setMessage("Los campos no pueden estar vacios");
                 return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-            } else if (peliculaDTO.getPrecio() == null) {
-                response.setMessage("los campos no pueden ser nulos");
-                return new ResponseEntity<>(response, HttpStatus.CONFLICT);
             }
             peliculaRepository.save(RegisterPeliculaDTO.fromDTOToEntity(peliculaDTO));
             response.setMessage("Pelicula añadida correctamente");
@@ -125,10 +122,8 @@ public class PeliculaServiceImpl implements PeliculaService {
             if (peliculaUpdateDTO.getDirector().isEmpty() || peliculaUpdateDTO.getGenero().isEmpty() || peliculaUpdateDTO.getTitulo().isEmpty()) {
                 response.setMessage("Los campos no pueden estar vacios");
                 return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-            } else if (peliculaUpdateDTO.getPrecio() == null){
-                response.setMessage("Los campos no pueden ser nulos");
-                return new ResponseEntity<>(response, HttpStatus.CONFLICT);
             }
+
             Optional<Pelicula> updatedPelicula = peliculaRepository.findById(id);
             if (!updatedPelicula.isPresent()){
                 response.setMessage("Pelicula no encontrada");
