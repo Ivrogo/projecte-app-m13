@@ -72,8 +72,9 @@ public class UsuariServiceImpl implements UsuariService {
 
     @Override
     public ResponseEntity<ResponseDTO> findAllPaged(int page, int pageSize, String token) {
+
         ResponseDTO<Page<Usuari>> response = new ResponseDTO();
-        PageRequest pr = PageRequest.of(page, pageSize, Sort.by("nombre").descending());
+        PageRequest pr = PageRequest.of(page, pageSize, Sort.by("nombre").ascending());
 
         if (!tokenUtils.isTokenValid(token)) {
             response.setMessage("Sesion no valida");
@@ -86,7 +87,10 @@ public class UsuariServiceImpl implements UsuariService {
         try {
             Page<Usuari> usuaris = usuariPagingRepository.findAll(pr);
 
-
+            if(usuaris.isEmpty()){
+                response.setMessage("No hay usuarios");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
             response.setMessage("Mostrando usuarios...");
             response.setValue(usuaris);
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -95,7 +99,7 @@ public class UsuariServiceImpl implements UsuariService {
             response.setMessage("Error");
             new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
