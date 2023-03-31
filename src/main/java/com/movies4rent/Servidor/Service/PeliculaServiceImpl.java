@@ -134,6 +134,8 @@ public class PeliculaServiceImpl implements PeliculaService {
                 response.setMessage("Pelicula no encontrada");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
+
+            PeliculaUpdateDTO.updateEntityFromDTO(updatedPelicula.get(), peliculaUpdateDTO);
             peliculaRepository.save(updatedPelicula.get());
             response.setMessage("Pelicula actualizada correctamente");
             response.setValue(updatedPelicula.get());

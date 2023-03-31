@@ -67,12 +67,13 @@ public class PeliculaUpdateDTO {
         this.precio = precio;
     }
 
-    public static void fromDTOToEntityUpdate (PeliculaUpdateDTO peliculaUpdateDTO, Pelicula pelicula) {
+    public static void updateEntityFromDTO(Pelicula userEntity, PeliculaUpdateDTO peliculaDTO) {
 
-        pelicula.setTitulo(peliculaUpdateDTO.getTitulo());
-        pelicula.setDirector(peliculaUpdateDTO.getDirector());
-        pelicula.setGenero(peliculaUpdateDTO.getGenero());
-        pelicula.setDuracion(peliculaUpdateDTO.getDuracion());
-        pelicula.setPrecio(peliculaUpdateDTO.getPrecio());
+        userEntity.setTitulo(peliculaDTO.getTitulo());
+        userEntity.setDirector(peliculaDTO.getDirector());
+        userEntity.setGenero(peliculaDTO.getGenero());
+        userEntity.setDuracion(peliculaDTO.getDuracion());
+        userEntity.setAño(peliculaDTO.getAño());
+        userEntity.setPrecio(peliculaDTO.getPrecio());
     }
 }
