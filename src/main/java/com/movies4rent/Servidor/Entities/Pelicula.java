@@ -2,7 +2,6 @@ package com.movies4rent.Servidor.Entities;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -31,18 +30,16 @@ public class Pelicula {
     @Column
     private int precio;
 
-    @ManyToMany(mappedBy = "peliculas")
-    private List<Usuari> usuaris;
+    public Pelicula() {
+    }
 
-    public Pelicula(String titulo, String genero, String director, int duracion, int año, int precio) {
+    public Pelicula( String titulo, String genero, String director, int duracion, int año, int precio) {
         this.titulo = titulo;
         this.genero = genero;
         this.director = director;
         this.duracion = duracion;
         this.año = año;
         this.precio = precio;
-
-
     }
 
     public UUID getId() {
@@ -93,13 +90,6 @@ public class Pelicula {
         this.precio = precio;
     }
 
-    public List<Usuari> getUsuaris() {
-        return usuaris;
-    }
-
-    public void setUsuaris(List<Usuari> usuaris) {
-        this.usuaris = usuaris;
-    }
 
     public int getDuracion() {
         return duracion;

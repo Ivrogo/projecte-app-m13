@@ -6,9 +6,12 @@ import com.movies4rent.Servidor.DTO.PeliculaUpdateDTO;
 import com.movies4rent.Servidor.DTO.RegisterPeliculaDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.Entities.Pelicula;
+import com.movies4rent.Servidor.Repository.PeliculaPagingRepository;
 import com.movies4rent.Servidor.Repository.PeliculaRepository;
 import com.movies4rent.Servidor.Utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,9 @@ public class PeliculaServiceImpl implements PeliculaService {
 
     @Autowired
     private PeliculaRepository peliculaRepository;
+
+    @Autowired
+    private PeliculaPagingRepository peliculaPagingRepository;
 
     @Autowired
     private TokenUtils tokenUtils;
@@ -47,13 +53,46 @@ public class PeliculaServiceImpl implements PeliculaService {
             }
 
             response.setValue(peliculaDTOS);
-
             return new ResponseEntity<>(response, HttpStatus.OK);
+
         } catch (Exception e) {
             response.setMessage("Error");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public ResponseEntity<ResponseDTO> findAllPaged(int page, int pageSize, String token) {
+
+        ResponseDTO<Page<Pelicula>> response = new ResponseDTO();
+        PageRequest pr = PageRequest.of(page, pageSize);
+
+        if (!tokenUtils.isTokenValid(token)) {
+            response.setMessage("Sesion no valida");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        } else if (tokenUtils.isUserAdmin(token) == false) {
+            response.setMessage("No tienes permisos para realizar esta accion");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            Page<Pelicula> peliculas = peliculaPagingRepository.findAll(pr);
+
+            if(peliculas.isEmpty()){
+                response.setMessage("No hay usuarios");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+            response.setMessage("Mostrando usuarios...");
+            response.setValue(peliculas);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (Exception e) {
+            response.setMessage("Error");
+            new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
     @Override
     public ResponseEntity<ResponseDTO> findById(UUID id, String token) {
@@ -129,6 +168,7 @@ public class PeliculaServiceImpl implements PeliculaService {
                 response.setMessage("Pelicula no encontrada");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
+            PeliculaUpdateDTO.fromDTOToEntityUpdate(peliculaUpdateDTO, updatedPelicula.get());
             peliculaRepository.save(updatedPelicula.get());
             response.setMessage("Pelicula actualizada correctamente");
             response.setValue(updatedPelicula.get());
