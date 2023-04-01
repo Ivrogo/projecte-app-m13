@@ -88,9 +88,9 @@ public class PeliculaServiceImpl implements PeliculaService {
 
         } catch (Exception e) {
             response.setMessage("Error");
-            new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
 
