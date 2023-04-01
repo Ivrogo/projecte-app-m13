@@ -2,8 +2,6 @@ package com.movies4rent.Servidor.DTO;
 
 import com.movies4rent.Servidor.Entities.Pelicula;
 
-import java.util.Date;
-
 public class PeliculaUpdateDTO {
 
     private String titulo;
@@ -14,7 +12,7 @@ public class PeliculaUpdateDTO {
 
     private int duracion;
 
-    private Date año;
+    private int año;
 
     private int precio;
 
@@ -50,11 +48,11 @@ public class PeliculaUpdateDTO {
         this.duracion = duracion;
     }
 
-    public Date getAño() {
+    public int getAño() {
         return año;
     }
 
-    public void setAño(Date año) {
+    public void setAño(int año) {
         this.año = año;
     }
 
