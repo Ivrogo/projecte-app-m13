@@ -14,6 +14,8 @@ public interface PeliculaController {
 
     ResponseEntity<ResponseDTO> getPeliculas(@RequestParam(value = "token", required = true) String token);
 
+    ResponseEntity<ResponseDTO> getPeliculasPaged(@RequestParam int page, @RequestParam int pageSize, @RequestParam(value = "token", required = true) String token);
+
     ResponseEntity<ResponseDTO> getPelicula(@PathVariable UUID id, @RequestParam(value = "token", required = true) String token);
 
     ResponseEntity<ResponseDTO>  addPelicula(@RequestParam(value = "token", required = true) String token, @RequestBody RegisterPeliculaDTO peliculaDTO);

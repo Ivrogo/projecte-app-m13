@@ -2,9 +2,6 @@ package com.movies4rent.Servidor.Entities;
 
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -28,30 +25,21 @@ public class Pelicula {
     private int duracion;
 
     @Column
-    private LocalDate año;
+    private int año;
 
     @Column
-    private BigDecimal precio;
-
-    @ManyToMany(mappedBy = "peliculas")
-    private List<Usuari> usuaris;
-
-
+    private int precio;
 
     public Pelicula() {
-        super();
     }
 
-    public Pelicula(UUID id, String titulo, String genero, String director, int duración, LocalDate año, BigDecimal precio, List<Usuari> usuaris) {
-        this.id = id;
+    public Pelicula( String titulo, String genero, String director, int duracion, int año, int precio) {
         this.titulo = titulo;
         this.genero = genero;
         this.director = director;
         this.duracion = duracion;
         this.año = año;
         this.precio = precio;
-        this.usuaris = usuaris;
-
     }
 
     public UUID getId() {
@@ -86,29 +74,22 @@ public class Pelicula {
         this.director = director;
     }
 
-    public LocalDate getAño() {
+    public int getAño() {
         return año;
     }
 
-    public void setAño(LocalDate año) {
+    public void setAño(int año) {
         this.año = año;
     }
 
-    public BigDecimal getPrecio() {
+    public int getPrecio() {
         return precio;
     }
 
-    public void setPrecio(BigDecimal precio) {
+    public void setPrecio(int precio) {
         this.precio = precio;
     }
 
-    public List<Usuari> getUsuaris() {
-        return usuaris;
-    }
-
-    public void setUsuaris(List<Usuari> usuaris) {
-        this.usuaris = usuaris;
-    }
 
     public int getDuracion() {
         return duracion;

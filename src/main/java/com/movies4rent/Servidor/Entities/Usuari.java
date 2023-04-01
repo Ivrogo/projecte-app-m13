@@ -6,7 +6,6 @@ package com.movies4rent.Servidor.Entities;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,19 +20,19 @@ public class Usuari {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column
+
     private String nombre;
 
-    @Column
+
     private String apellidos;
 
-    @Column
+
     private String telefono;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column
+
     private String direccion;
 
     @Column(nullable = false, unique = true)
@@ -45,24 +44,22 @@ public class Usuari {
     @Column(nullable = false)
     private boolean isIsAdmin;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "usuari_pelicula",
-            joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "pelicula_id", referencedColumnName = "id"))
-    private List<Pelicula> peliculas;
-
     public Usuari() {
-        super();
-        isIsAdmin = false;
     }
 
     /**
      * Constructor
-     * @param id
+     * @param nombre, apellidos, telefono, email, direccion, username, password, isIsAdmin
      */
-    public Usuari(UUID id) {
-        this.id = id;
+    public Usuari(String nombre, String apellidos, String telefono, String email, String direccion, String username, String password, boolean isIsAdmin) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.telefono = telefono;
+        this.email = email;
+        this.direccion = direccion;
+        this.username = username;
+        this.password = password;
+        this.isIsAdmin = isIsAdmin;
     }
 
     /**
@@ -131,15 +128,6 @@ public class Usuari {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public List<Pelicula> getPeliculas() {
-        return peliculas;
-    }
-
-    public void setPeliculas(List<Pelicula> peliculas) {
-        this.peliculas = peliculas;
-    }
-
     public boolean isIsAdmin() {
         return isIsAdmin;
     }

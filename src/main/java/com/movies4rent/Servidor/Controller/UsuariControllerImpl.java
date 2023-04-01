@@ -4,6 +4,7 @@ package com.movies4rent.Servidor.Controller;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.DTO.UserChangePasswordDTO;
 import com.movies4rent.Servidor.DTO.UserUpdateDTO;
+import com.movies4rent.Servidor.Repository.UsuariPagingRepository;
 import com.movies4rent.Servidor.Service.UsuariService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,16 @@ public class UsuariControllerImpl implements UsuariController {
 
     @Autowired
     private UsuariService usuariService;
+
+    @Autowired
+    private UsuariPagingRepository usuariPagingRepository;
+
+
+    @Override
+    @GetMapping("/")
+    public ResponseEntity<ResponseDTO> getUsuarisPaged(int page, int pageSize, String token) {
+        return usuariService.findAllPaged(page, pageSize, token);
+    }
 
     /**
      * Rep un token de sessió i retorna una llista amb tots els usuaris
