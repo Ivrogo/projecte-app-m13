@@ -6,7 +6,6 @@ import com.movies4rent.Servidor.Repository.UsuariRepository;
 import com.movies4rent.Servidor.Utils.EstadoAlquiler;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class CreaAlquilerDTO {
@@ -19,7 +18,7 @@ public class CreaAlquilerDTO {
     private LocalDate fechaFin;
     private EstadoAlquiler estado;
 
-    private BigDecimal precio;
+    private double precio;
     public LocalDate getFechaInicio() {
         return fechaInicio;
     }
@@ -45,11 +44,11 @@ public class CreaAlquilerDTO {
     }
 
 
-    public BigDecimal getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(BigDecimal precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 

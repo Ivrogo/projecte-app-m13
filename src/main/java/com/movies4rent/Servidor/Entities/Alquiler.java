@@ -3,7 +3,6 @@ package com.movies4rent.Servidor.Entities;
 import com.movies4rent.Servidor.Utils.EstadoAlquiler;
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -28,13 +27,13 @@ public class Alquiler {
     private LocalDate fechaFin;
 
     @Column
-    private BigDecimal precio;
+    private double precio;
 
     @Enumerated(EnumType.STRING)
     @Column
     private EstadoAlquiler estado;
 
-    public Alquiler(UUID id, UUID pelicula, UUID usuari, LocalDate fechaInicio, LocalDate fechaFin, BigDecimal precio, EstadoAlquiler estado) {
+    public Alquiler(UUID id, UUID pelicula, UUID usuari, LocalDate fechaInicio, LocalDate fechaFin, double precio, EstadoAlquiler estado) {
         this.id = id;
         this.pelicula = pelicula;
         this.usuari = usuari;
@@ -87,11 +86,11 @@ public class Alquiler {
         this.fechaFin = fechaFin;
     }
 
-    public BigDecimal getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(BigDecimal precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 

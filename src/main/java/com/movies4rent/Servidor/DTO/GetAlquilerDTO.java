@@ -3,7 +3,6 @@ package com.movies4rent.Servidor.DTO;
 import com.movies4rent.Servidor.Entities.Alquiler;
 import com.movies4rent.Servidor.Utils.EstadoAlquiler;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -19,7 +18,7 @@ public class GetAlquilerDTO {
 
     private LocalDate fechaFin;
 
-    private BigDecimal precio;
+    private double precio;
 
     private EstadoAlquiler estado;
 
@@ -63,11 +62,11 @@ public class GetAlquilerDTO {
         this.fechaFin = fechaFin;
     }
 
-    public BigDecimal getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(BigDecimal precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 

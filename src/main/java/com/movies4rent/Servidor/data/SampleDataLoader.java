@@ -67,8 +67,8 @@ public class SampleDataLoader implements CommandLineRunner {
         List<Pelicula> peliculasOfSameDirector = IntStream.rangeClosed(1,10)
                 .mapToObj(i -> new Pelicula(
                         faker.name().title(),
+                        "demo director",
                         faker.book().genre(),
-                        "demo Director",
                         faker.number().numberBetween(50, 180),
                         faker.number().numberBetween(1990,2023),
                         faker.number().numberBetween(1,20)
@@ -82,8 +82,8 @@ public class SampleDataLoader implements CommandLineRunner {
         List<Pelicula> peliculas = IntStream.rangeClosed(1, 50)
                 .mapToObj(i -> new Pelicula(
                         faker.name().title(),
-                        faker.book().genre(),
                         faker.name().fullName(),
+                        faker.book().genre(),
                         faker.number().numberBetween(50, 180),
                         faker.number().numberBetween(1990, 2023),
                         faker.number().numberBetween(1, 20)

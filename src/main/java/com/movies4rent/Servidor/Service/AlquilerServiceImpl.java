@@ -1,6 +1,5 @@
 package com.movies4rent.Servidor.Service;
 
-import com.movies4rent.Servidor.DTO.CreaAlquilerDTO;
 import com.movies4rent.Servidor.DTO.GetAlquilerDTO;
 import com.movies4rent.Servidor.DTO.GetPeliculaDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
@@ -39,7 +38,7 @@ public class AlquilerServiceImpl implements AlquilerService {
     private TokenUtils tokenUtils;
 
     @Override
-    public ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuariId, String token, CreaAlquilerDTO crearAlquilerDTO) {
+    public ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuariId, String token) {
 
         ResponseDTO response = new ResponseDTO();
 
@@ -60,17 +59,17 @@ public class AlquilerServiceImpl implements AlquilerService {
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
-            crearAlquilerDTO.setFechaInicio(LocalDate.now());
-            crearAlquilerDTO.setFechaFin(LocalDate.now().plusMonths(1));
-            crearAlquilerDTO.setPrecio(crearAlquilerDTO.getPrecio());
-            crearAlquilerDTO.setEstado(EstadoAlquiler.EN_CURSO);
-
-            Alquiler alquiler = CreaAlquilerDTO.fromDTOToEntity(crearAlquilerDTO);
+            Alquiler alquiler = new Alquiler();
+            alquiler.setFechaInicio(LocalDate.now());
+            alquiler.setFechaFin(LocalDate.now().plusMonths(1));
+            alquiler.setEstado(EstadoAlquiler.EN_CURSO);
+            alquiler.setPrecio(5.00);
             alquiler.setPelicula(foundPelicula.get().getId());
             alquiler.setUsuari(foundUsuari.get().getId());
 
             alquilerRepository.save(alquiler);
             response.setMessage("Alquiler creado correctamente");
+            response.setValue(alquiler);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             response.setMessage("Error");

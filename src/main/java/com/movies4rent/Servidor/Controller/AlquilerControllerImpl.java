@@ -1,7 +1,6 @@
 package com.movies4rent.Servidor.Controller;
 
 
-import com.movies4rent.Servidor.DTO.CreaAlquilerDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.Service.AlquilerService;
 import com.movies4rent.Servidor.Utils.EstadoAlquiler;
@@ -20,8 +19,8 @@ public class AlquilerControllerImpl implements AlquilerController {
 
     @Override
     @PostMapping("/nuevo")
-    public ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuarioId, String token, CreaAlquilerDTO creaAlquilerDTO) {
-        return alquilerService.crearAlquiler(peliculaId, usuarioId, token, creaAlquilerDTO);
+    public ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuarioId, String token) {
+        return alquilerService.crearAlquiler(peliculaId, usuarioId, token);
     }
 
     @Override

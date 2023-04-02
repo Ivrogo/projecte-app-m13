@@ -10,9 +10,10 @@ public class GetPeliculaDTO {
 
     private String titulo;
 
+    private String director;
+
     private String genero;
 
-    private String director;
 
     private int duracion;
 
@@ -36,6 +37,14 @@ public class GetPeliculaDTO {
         this.titulo = titulo;
     }
 
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
     public String getGenero() {
         return genero;
     }
@@ -44,13 +53,6 @@ public class GetPeliculaDTO {
         this.genero = genero;
     }
 
-    public String getDirector() {
-        return director;
-    }
-
-    public void setDirector(String director) {
-        this.director = director;
-    }
 
     public int getDuracion() {
         return duracion;
