@@ -16,10 +16,10 @@ public class Pelicula {
     private String titulo;
 
     @Column
-    private String genero;
+    private String director;
 
     @Column
-    private String director;
+    private String genero;
 
     @Column
     private int duracion;
@@ -33,10 +33,10 @@ public class Pelicula {
     public Pelicula() {
     }
 
-    public Pelicula( String titulo, String genero, String director, int duracion, int año, int precio) {
+    public Pelicula( String titulo, String director, String genero, int duracion, int año, int precio) {
         this.titulo = titulo;
-        this.genero = genero;
         this.director = director;
+        this.genero = genero;
         this.duracion = duracion;
         this.año = año;
         this.precio = precio;
