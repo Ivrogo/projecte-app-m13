@@ -24,6 +24,12 @@ public class AlquilerControllerImpl implements AlquilerController {
     }
 
     @Override
+    @GetMapping("/")
+    public ResponseEntity<ResponseDTO> findAlquilerPaged(int page, int pageSize, String token) {
+        return alquilerService.findAlquilerPaged(page, pageSize, token);
+    }
+
+    @Override
     @GetMapping
     public ResponseEntity<ResponseDTO> findAlquiler(String token) {
         return alquilerService.findAlquiler(token);

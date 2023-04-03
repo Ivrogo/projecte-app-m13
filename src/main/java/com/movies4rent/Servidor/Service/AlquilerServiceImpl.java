@@ -6,12 +6,15 @@ import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.Entities.Alquiler;
 import com.movies4rent.Servidor.Entities.Pelicula;
 import com.movies4rent.Servidor.Entities.Usuari;
+import com.movies4rent.Servidor.Repository.AlquilerPagingRepository;
 import com.movies4rent.Servidor.Repository.AlquilerRepository;
 import com.movies4rent.Servidor.Repository.PeliculaRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
 import com.movies4rent.Servidor.Utils.EstadoAlquiler;
 import com.movies4rent.Servidor.Utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,9 @@ public class AlquilerServiceImpl implements AlquilerService {
 
     @Autowired
     private PeliculaRepository peliculaRepository;
+
+    @Autowired
+    private AlquilerPagingRepository alquilerPagingRepository;
 
     @Autowired
     private UsuariRepository usuariRepository;
@@ -74,6 +80,38 @@ public class AlquilerServiceImpl implements AlquilerService {
         } catch (Exception e) {
             response.setMessage("Error");
             return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> findAlquilerPaged(int page, int pageSize, String token) {
+
+        ResponseDTO<Page<Alquiler>> response = new ResponseDTO();
+        PageRequest pr = PageRequest.of(page, pageSize);
+
+        if (!tokenUtils.isTokenValid(token)) {
+            response.setMessage("Sesion no valida");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        } else if (tokenUtils.isUserAdmin(token) == false) {
+            response.setMessage("No tienes permisos para realizar esta accion");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            Page<Alquiler> alquilers = alquilerPagingRepository.findAll(pr);
+
+            if(alquilers.isEmpty()){
+                response.setMessage("No hay usuarios");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+            response.setMessage("Mostrando usuarios...");
+            response.setValue(alquilers);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (Exception e) {
+            response.setMessage("Error");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

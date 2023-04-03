@@ -10,6 +10,8 @@ public interface AlquilerService {
 
     ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuarioId, String token);
 
+    ResponseEntity<ResponseDTO> findAlquilerPaged(int page, int pageSize, String token);
+
     ResponseEntity<ResponseDTO> findAlquiler(String token);
 
     ResponseEntity<ResponseDTO> findAlquilerByUser(UUID usuarioId, String token);

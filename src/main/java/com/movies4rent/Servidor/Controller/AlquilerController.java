@@ -11,6 +11,8 @@ public interface AlquilerController {
 
     ResponseEntity<ResponseDTO> crearAlquiler(@RequestParam(value = "peliculaId") UUID peliculaId, @RequestParam(value = "usuariId") UUID usuariId, @RequestParam(value = "token") String token);
 
+    ResponseEntity<ResponseDTO> findAlquilerPaged(@RequestParam int page, @RequestParam int pageSize, @RequestParam(value = "token", required = true) String token);
+
     ResponseEntity<ResponseDTO> findAlquiler(@RequestParam(value = "token") String token);
 
     ResponseEntity<ResponseDTO> findAlquilerByUsuari (@RequestParam UUID usuarioId, @RequestParam(value = "token") String token);
