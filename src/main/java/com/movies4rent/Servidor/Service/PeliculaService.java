@@ -11,7 +11,9 @@ public interface PeliculaService {
 
     ResponseEntity<ResponseDTO> findAll(String token);
 
-    ResponseEntity<ResponseDTO> findAllPaged(int page, int pageSize, String token);
+    ResponseEntity<ResponseDTO> findAllPaged(int page, int pageSize, String token, String orden);
+
+    ResponseEntity<ResponseDTO> findPeliculasFiltred(int page, int pageSize, String director, String genero, Integer año, Integer vecesAlquilada, String token, String orden);
 
     ResponseEntity<ResponseDTO> findById(UUID id, String token);
 

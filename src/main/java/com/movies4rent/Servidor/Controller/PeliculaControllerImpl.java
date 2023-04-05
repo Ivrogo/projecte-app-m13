@@ -25,9 +25,16 @@ public class PeliculaControllerImpl implements PeliculaController{
 
     @Override
     @GetMapping("/")
-    public ResponseEntity<ResponseDTO> getPeliculasPaged(int page, int pageSize, String token) {
-        return peliculaService.findAllPaged(page, pageSize, token);
+    public ResponseEntity<ResponseDTO> getPeliculasPaged(int page, int pageSize, String token, String orden) {
+        return peliculaService.findAllPaged(page, pageSize, token, orden);
     }
+
+    @Override
+    @GetMapping("/filterby")
+    public ResponseEntity<ResponseDTO> getPeliculasByFilter(int page, int pageSize, String director, String genero, Integer año, Integer vecesAlquilada, String token, String orden) {
+        return peliculaService.findPeliculasFiltred(page, pageSize, director, genero, año, vecesAlquilada, token, orden);
+    }
+
 
     @Override
     @GetMapping("/{id}")
