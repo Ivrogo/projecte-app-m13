@@ -66,9 +66,6 @@ public class PeliculaServiceImpl implements PeliculaService {
         if (!tokenUtils.isTokenValid(token)) {
             response.setMessage("Sesion no valida");
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        } else if (tokenUtils.isUserAdmin(token) == false) {
-            response.setMessage("No tienes permisos para realizar esta accion");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
         try {
@@ -76,39 +73,47 @@ public class PeliculaServiceImpl implements PeliculaService {
 
 
             if(foundPeliculas.isEmpty()){
-                response.setMessage("No hay usuarios");
+                response.setMessage("No hay peliculas");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
-            Comparator<Pelicula> comparator = null;
-            switch (orden) {
-                case "vecesAlquiladaAsc":
-                    comparator = Comparator.comparing(Pelicula::getVecesAlquilada);
-                    break;
-                case "vecesAlquiladaDesc":
-                    comparator = Comparator.comparing(Pelicula::getVecesAlquilada).reversed();
-                    break;
-                case "duracionAsc":
-                    comparator = Comparator.comparing(Pelicula::getDuracion);
-                    break;
-                case "duracionDesc":
-                    comparator = Comparator.comparing(Pelicula::getDuracion).reversed();
-                    break;
-                case "añoAsc":
-                    comparator = Comparator.comparing(Pelicula::getAño);
-                    break;
-                case "añoDesc":
-                    comparator = Comparator.comparing(Pelicula::getAño).reversed();
-                default:
-                    break;
+            if (orden == null || orden.isEmpty()) {
+                response.setMessage("Mostrando peliculas...");
+                response.setValue(foundPeliculas);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+
+            } else {
+
+                Comparator<Pelicula> comparator = null;
+                switch (orden) {
+                    case "vecesAlquiladaAsc":
+                        comparator = Comparator.comparing(Pelicula::getVecesAlquilada);
+                        break;
+                    case "vecesAlquiladaDesc":
+                        comparator = Comparator.comparing(Pelicula::getVecesAlquilada).reversed();
+                        break;
+                    case "duracionAsc":
+                        comparator = Comparator.comparing(Pelicula::getDuracion);
+                        break;
+                    case "duracionDesc":
+                        comparator = Comparator.comparing(Pelicula::getDuracion).reversed();
+                        break;
+                    case "añoAsc":
+                        comparator = Comparator.comparing(Pelicula::getAño);
+                        break;
+                    case "añoDesc":
+                        comparator = Comparator.comparing(Pelicula::getAño).reversed();
+                    default:
+                        break;
+                }
+
+                List<Pelicula> peliculasFinal = foundPeliculas.stream().sorted(comparator).collect(Collectors.toList());
+                Page<Pelicula> peliculas = new PageImpl<>(peliculasFinal, pr, peliculasFinal.size());
+
+                response.setMessage("Mostrando peliculas...");
+                response.setValue(peliculas);
+                return new ResponseEntity<>(response, HttpStatus.OK);
             }
-
-            List<Pelicula> peliculasFinal = foundPeliculas.stream().sorted(comparator).collect(Collectors.toList());
-            Page<Pelicula> peliculas = new PageImpl<>(peliculasFinal, pr, peliculasFinal.size());
-
-            response.setMessage("Mostrando usuarios...");
-            response.setValue(peliculas);
-            return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {
             response.setMessage("Error");

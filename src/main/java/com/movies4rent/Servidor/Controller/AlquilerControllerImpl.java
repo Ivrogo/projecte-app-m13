@@ -54,7 +54,7 @@ public class AlquilerControllerImpl implements AlquilerController {
     }
 
     @Override
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{alquilerId}")
     public ResponseEntity<ResponseDTO> deleteAlquiler(UUID alquilerId, String token) {
         return alquilerService.deleteAlquiler(alquilerId, token);
     }
