@@ -17,6 +17,8 @@ public class RegisterPeliculaDTO {
     private int precio;
 
 
+
+
     public String getTitulo() {
         return titulo;
     }
@@ -67,14 +69,13 @@ public class RegisterPeliculaDTO {
 
     public static Pelicula fromDTOToEntity(RegisterPeliculaDTO peliculaDTO){
 
-        Pelicula pelicula = new Pelicula(
-                peliculaDTO.getTitulo(),
-                peliculaDTO.getDirector(),
-                peliculaDTO.getGenero(),
-                peliculaDTO.getDuracion(),
-                peliculaDTO.getAño(),
-                peliculaDTO.getPrecio()
-        );
+        Pelicula pelicula = new Pelicula();
+        pelicula.setTitulo(peliculaDTO.getTitulo());
+        pelicula.setDirector(pelicula.getDirector());
+        pelicula.setGenero(peliculaDTO.getGenero());
+        pelicula.setDuracion(peliculaDTO.getDuracion());
+        pelicula.setAño(peliculaDTO.getAño());
+        pelicula.setPrecio(peliculaDTO.getPrecio());
 
         return pelicula;
     }

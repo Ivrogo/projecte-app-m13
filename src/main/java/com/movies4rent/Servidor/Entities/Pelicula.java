@@ -29,17 +29,20 @@ public class Pelicula {
 
     @Column
     private int precio;
+    @Column
+    private int vecesAlquilada;
 
     public Pelicula() {
     }
 
-    public Pelicula( String titulo, String director, String genero, int duracion, int año, int precio) {
+    public Pelicula( String titulo, String director, String genero, int duracion, int año, int precio, int vecesAlquilada) {
         this.titulo = titulo;
         this.director = director;
         this.genero = genero;
         this.duracion = duracion;
         this.año = año;
         this.precio = precio;
+        this.vecesAlquilada = vecesAlquilada;
     }
 
     public UUID getId() {
@@ -99,4 +102,11 @@ public class Pelicula {
         this.duracion = duracion;
     }
 
+    public int getVecesAlquilada() {
+        return vecesAlquilada;
+    }
+
+    public void setVecesAlquilada(int vecesAlquilada) {
+        this.vecesAlquilada = vecesAlquilada;
+    }
 }
