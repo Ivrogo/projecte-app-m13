@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
+/**
+ * Repositorio de Peliculas paginadas.
+ */
 public interface PeliculaPagingRepository extends PagingAndSortingRepository<Pelicula, UUID> {
 
     @Query("SELECT p FROM Pelicula p WHERE p.director = :director")
