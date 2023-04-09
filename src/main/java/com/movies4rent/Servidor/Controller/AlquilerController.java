@@ -16,9 +16,9 @@ public interface AlquilerController {
 
     ResponseEntity<ResponseDTO> findAlquiler(@RequestParam(value = "token") String token);
 
-    ResponseEntity<ResponseDTO> findAlquilerByUsuari (@RequestParam UUID usuarioId, @RequestParam(value = "token") String token);
+    ResponseEntity<ResponseDTO> findAlquilerByUsuari (@PathVariable UUID usuarioId, @RequestParam(value = "token") String token);
 
-    ResponseEntity<ResponseDTO> findAlquilerById (@RequestParam UUID alquilerId, @RequestParam(value = "token") String token);
+    ResponseEntity<ResponseDTO> findAlquilerById (@PathVariable UUID alquilerId, @RequestParam(value = "token") String token);
 
     ResponseEntity<ResponseDTO> updateAlquilerEstado(@RequestParam EstadoAlquiler estadoAlquiler, @RequestParam UUID alquilerId, @RequestParam(value = "token") String token);
 

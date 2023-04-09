@@ -36,13 +36,13 @@ public class AlquilerControllerImpl implements AlquilerController {
     }
 
     @Override
-    @GetMapping("/alquilerByUser")
+    @GetMapping("/alquilerByUser/{usuarioId}")
     public ResponseEntity<ResponseDTO> findAlquilerByUsuari(UUID usuarioId, String token) {
         return alquilerService.findAlquilerByUser(usuarioId, token);
     }
 
     @Override
-    @GetMapping("/{id}")
+    @GetMapping("/{alquilerId}")
     public ResponseEntity<ResponseDTO> findAlquilerById(UUID alquilerId, String token) {
         return alquilerService.findAlquilerById(alquilerId, token);
     }
