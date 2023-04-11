@@ -4,6 +4,7 @@ import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.Utils.EstadoAlquiler;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public interface AlquilerService {
@@ -11,6 +12,8 @@ public interface AlquilerService {
     ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuarioId, String token);
 
     ResponseEntity<ResponseDTO> findAlquilerPaged(int page, int pageSize, String token);
+
+    ResponseEntity<ResponseDTO> findAlquilerFiltered(int page, int pageSize, UUID peliculaId, UUID usuariId, LocalDate fechaInicio, LocalDate fechaFin, Integer precio, String orden, String token);
 
     ResponseEntity<ResponseDTO> findAlquiler(String token);
 

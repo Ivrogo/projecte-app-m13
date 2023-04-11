@@ -18,7 +18,7 @@ public class CreaAlquilerDTO {
     private LocalDate fechaFin;
     private EstadoAlquiler estado;
 
-    private double precio;
+    private Integer precio;
     public LocalDate getFechaInicio() {
         return fechaInicio;
     }
@@ -44,11 +44,11 @@ public class CreaAlquilerDTO {
     }
 
 
-    public double getPrecio() {
+    public Integer getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(Integer precio) {
         this.precio = precio;
     }
 

@@ -1,5 +1,6 @@
 package com.movies4rent.Servidor.Service;
 
+import com.movies4rent.Servidor.DTO.AlquilerFilterDTO;
 import com.movies4rent.Servidor.DTO.GetAlquilerDTO;
 import com.movies4rent.Servidor.DTO.GetPeliculaDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
@@ -14,16 +15,15 @@ import com.movies4rent.Servidor.Utils.EstadoAlquiler;
 import com.movies4rent.Servidor.Utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AlquilerServiceImpl implements AlquilerService {
@@ -48,7 +48,7 @@ public class AlquilerServiceImpl implements AlquilerService {
 
         ResponseDTO response = new ResponseDTO();
 
-        if (!tokenUtils.isTokenValid(token)){
+        if (!tokenUtils.isTokenValid(token)) {
             response.setMessage("Sesion no valida");
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
@@ -60,7 +60,7 @@ public class AlquilerServiceImpl implements AlquilerService {
 
             Optional<Pelicula> foundPelicula = peliculaRepository.findById(peliculaId);
             Optional<Usuari> foundUsuari = usuariRepository.findById(usuariId);
-            if (!foundPelicula.isPresent() ||!foundUsuari.isPresent()) {
+            if (!foundPelicula.isPresent() || !foundUsuari.isPresent()) {
                 response.setMessage("La pelicula o el usuario no existe");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
@@ -69,7 +69,7 @@ public class AlquilerServiceImpl implements AlquilerService {
             alquiler.setFechaInicio(LocalDate.now());
             alquiler.setFechaFin(LocalDate.now().plusMonths(1));
             alquiler.setEstado(EstadoAlquiler.EN_CURSO);
-            alquiler.setPrecio(5.00);
+            alquiler.setPrecio(Math.random() < 0.5 ? (int) (Math.random() * 4) + 3 : 5);
             alquiler.setPelicula(foundPelicula.get().getId());
             alquiler.setUsuari(foundUsuari.get().getId());
 
@@ -79,7 +79,7 @@ public class AlquilerServiceImpl implements AlquilerService {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             response.setMessage("Error");
-            return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -101,7 +101,7 @@ public class AlquilerServiceImpl implements AlquilerService {
         try {
             Page<Alquiler> alquilers = alquilerPagingRepository.findAll(pr);
 
-            if(alquilers.isEmpty()){
+            if (alquilers.isEmpty()) {
                 response.setMessage("No hay usuarios");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
@@ -114,6 +114,91 @@ public class AlquilerServiceImpl implements AlquilerService {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> findAlquilerFiltered(int page, int pageSize, UUID peliculaId, UUID usuariId, LocalDate fechaInicio, LocalDate fechaFin, Integer precio, String orden, String token) {
+
+        ResponseDTO<Page<Alquiler>> response = new ResponseDTO();
+        PageRequest pr = PageRequest.of(page, pageSize);
+
+        if (!tokenUtils.isTokenValid(token)) {
+            response.setMessage("Sesion no valida");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            Page<Alquiler> foundAlquileres = alquilerPagingRepository.findAll(pr);
+            AlquilerFilterDTO filter = new AlquilerFilterDTO(peliculaId, usuariId, fechaInicio, fechaFin, precio);
+
+            if (foundAlquileres.isEmpty()) {
+                response.setMessage("No hay alquileres");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+            //Comprobamos si existe un orden o no
+            if (orden == null || orden.isEmpty()) {
+                //Comprobamos si existe algun filtro o no
+                if (peliculaId == null && usuariId == null && fechaInicio == null && fechaFin == null && precio == null){
+                    response.setMessage("Mostrando alquileres...");
+                    response.setValue(foundAlquileres);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                }
+                List<Alquiler> alquileresFiltradosSinOrdenar = foundAlquileres.stream().filter(filter.getPredicate()).collect(Collectors.toList());
+                Page<Alquiler> alquileresFiltradosUnsorted = new PageImpl<>(alquileresFiltradosSinOrdenar, pr, alquileresFiltradosSinOrdenar.size());
+
+                response.setMessage("Mostrando los alquileres filtrados y sin ordenar...");
+                response.setValue(alquileresFiltradosUnsorted);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+
+            }else{
+
+                Comparator<Alquiler> comparator = null;
+                switch (orden) {
+                    case "peliculaIdAsc":
+                        comparator = Comparator.comparing(Alquiler::getPelicula);
+                        break;
+                    case "peliculaIdDesc":
+                        comparator = Comparator.comparing(Alquiler::getPelicula).reversed();
+                        break;
+                    case "usuariIdAsc":
+                        comparator = Comparator.comparing(Alquiler::getUsuari);
+                        break;
+                    case "usuariIdDesc":
+                        comparator = Comparator.comparing(Alquiler::getUsuari).reversed();
+                        break;
+                    case "fechaInicioAsc":
+                        comparator = Comparator.comparing(Alquiler::getFechaInicio);
+                        break;
+                    case "fechaInicioDesc":
+                        comparator = Comparator.comparing(Alquiler::getFechaInicio).reversed();
+                        break;
+                    case "fechaFinAsc":
+                        comparator = Comparator.comparing(Alquiler::getFechaFin);
+                        break;
+                    case "fechaFinDesc":
+                        comparator = Comparator.comparing(Alquiler::getFechaFin).reversed();
+                        break;
+                    case "precioAsc":
+                        comparator = Comparator.comparing(Alquiler::getPrecio);
+                        break;
+                    case "precioDesc":
+                        comparator = Comparator.comparing(Alquiler::getPrecio).reversed();
+                        break;
+                    default:
+                        break;
+                }
+                List<Alquiler> alquileresFinal = foundAlquileres.stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
+                Page<Alquiler> alquileres = new PageImpl<>(alquileresFinal, pr, alquileresFinal.size());
+
+                response.setMessage("mostrando alquileres segun los filtros y el orden indicados");
+                response.setValue(alquileres);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+
+        } catch (Exception e) {
+            response.setMessage("Error");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
@@ -151,7 +236,7 @@ public class AlquilerServiceImpl implements AlquilerService {
 
         ResponseDTO response = new ResponseDTO();
 
-        if (!tokenUtils.isTokenValid(token)){
+        if (!tokenUtils.isTokenValid(token)) {
             response.setMessage("Sesion no valida");
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
@@ -174,7 +259,7 @@ public class AlquilerServiceImpl implements AlquilerService {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             response.setMessage("Error");
-            return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -183,14 +268,14 @@ public class AlquilerServiceImpl implements AlquilerService {
 
         ResponseDTO<GetAlquilerDTO> response = new ResponseDTO();
 
-        if (!tokenUtils.isTokenValid(token)){
+        if (!tokenUtils.isTokenValid(token)) {
             response.setMessage("Sesion no valida");
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
         try {
             Optional<Alquiler> foundAlquiler = alquilerRepository.findById(alquilerId);
-            if (!foundAlquiler.isPresent()){
+            if (!foundAlquiler.isPresent()) {
                 response.setMessage("Alquiler no encontrado");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
@@ -238,7 +323,7 @@ public class AlquilerServiceImpl implements AlquilerService {
     public ResponseEntity<ResponseDTO> deleteAlquiler(UUID alquilerId, String token) {
         ResponseDTO response = new ResponseDTO();
 
-        if(!tokenUtils.isTokenValid(token)) {
+        if (!tokenUtils.isTokenValid(token)) {
             response.setMessage("Sesion no valida");
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }

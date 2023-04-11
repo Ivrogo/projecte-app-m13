@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
@@ -27,6 +28,12 @@ public class AlquilerControllerImpl implements AlquilerController {
     @GetMapping("/")
     public ResponseEntity<ResponseDTO> findAlquilerPaged(int page, int pageSize, String token) {
         return alquilerService.findAlquilerPaged(page, pageSize, token);
+    }
+
+    @Override
+    @GetMapping("/filterby")
+    public ResponseEntity<ResponseDTO> findAlquilerByFilter(int page, int pageSize, UUID peliculaId, UUID usuariId, LocalDate fechaInicio, LocalDate fechaFin, Integer precio,String orden,  String token) {
+        return alquilerService.findAlquilerFiltered(page, pageSize, peliculaId, usuariId, fechaInicio, fechaFin, precio, orden, token);
     }
 
     @Override
