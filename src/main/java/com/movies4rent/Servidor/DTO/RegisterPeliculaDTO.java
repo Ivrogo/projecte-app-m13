@@ -71,7 +71,7 @@ public class RegisterPeliculaDTO {
 
         Pelicula pelicula = new Pelicula();
         pelicula.setTitulo(peliculaDTO.getTitulo());
-        pelicula.setDirector(pelicula.getDirector());
+        pelicula.setDirector(peliculaDTO.getDirector());
         pelicula.setGenero(peliculaDTO.getGenero());
         pelicula.setDuracion(peliculaDTO.getDuracion());
         pelicula.setAño(peliculaDTO.getAño());
