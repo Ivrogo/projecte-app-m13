@@ -69,10 +69,12 @@ public class AlquilerServiceImpl implements AlquilerService {
             alquiler.setFechaInicio(LocalDate.now());
             alquiler.setFechaFin(LocalDate.now().plusMonths(1));
             alquiler.setEstado(EstadoAlquiler.EN_CURSO);
-            alquiler.setPrecio(Math.random() < 0.5 ? (int) (Math.random() * 4) + 3 : 5);
+            alquiler.setPrecio(foundPelicula.get().getPrecio());
             alquiler.setPelicula(foundPelicula.get().getId());
+            foundPelicula.get().setVecesAlquilada(foundPelicula.get().getVecesAlquilada() + 1);
             alquiler.setUsuari(foundUsuari.get().getId());
 
+            peliculaRepository.save(foundPelicula.get());
             alquilerRepository.save(alquiler);
             response.setMessage("Alquiler creado correctamente");
             response.setValue(alquiler);
