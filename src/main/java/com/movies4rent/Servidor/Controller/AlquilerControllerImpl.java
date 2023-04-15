@@ -25,21 +25,9 @@ public class AlquilerControllerImpl implements AlquilerController {
     }
 
     @Override
-    @GetMapping("/")
-    public ResponseEntity<ResponseDTO> findAlquilerPaged(int page, int pageSize, String token) {
-        return alquilerService.findAlquilerPaged(page, pageSize, token);
-    }
-
-    @Override
-    @GetMapping("/filterby")
-    public ResponseEntity<ResponseDTO> findAlquilerByFilter(int page, int pageSize, UUID peliculaId, UUID usuariId, LocalDate fechaInicio, LocalDate fechaFin, Integer precio,String orden,  String token) {
-        return alquilerService.findAlquilerFiltered(page, pageSize, peliculaId, usuariId, fechaInicio, fechaFin, precio, orden, token);
-    }
-
-    @Override
     @GetMapping
-    public ResponseEntity<ResponseDTO> findAlquiler(String token) {
-        return alquilerService.findAlquiler(token);
+    public ResponseEntity<ResponseDTO> findAlquilerFiltered(int page, int pageSize, UUID peliculaId, UUID usuariId, LocalDate fechaInicio, LocalDate fechaFin, Integer precio,String orden,  String token) {
+        return alquilerService.findAlquilerFiltered(page, pageSize, peliculaId, usuariId, fechaInicio, fechaFin, precio, orden, token);
     }
 
     @Override

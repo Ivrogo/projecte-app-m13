@@ -30,7 +30,7 @@ public class UsuariControllerImpl implements UsuariController {
     @Override
     @GetMapping
     public ResponseEntity<ResponseDTO> getUsuarisFiltered(int page, int pageSize, String nombre, String apellidos, String username, String orden, String token) {
-        return usuariService.findUsuariByFilter(page, pageSize, nombre, apellidos, username, orden, token);
+        return usuariService.findUsuariFiltered(page, pageSize, nombre, apellidos, username, orden, token);
     }
 
     /**

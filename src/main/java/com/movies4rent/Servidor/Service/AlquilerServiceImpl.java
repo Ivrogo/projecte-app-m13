@@ -87,38 +87,6 @@ public class AlquilerServiceImpl implements AlquilerService {
     }
 
     @Override
-    public ResponseEntity<ResponseDTO> findAlquilerPaged(int page, int pageSize, String token) {
-
-        ResponseDTO<Page<Alquiler>> response = new ResponseDTO();
-        PageRequest pr = PageRequest.of(page, pageSize);
-
-        if (!tokenUtils.isTokenValid(token)) {
-            response.setMessage("Sesion no valida");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        } else if (tokenUtils.isUserAdmin(token) == false) {
-            response.setMessage("No tienes permisos para realizar esta accion");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
-
-        try {
-            Page<Alquiler> alquilers = alquilerPagingRepository.findAll(pr);
-
-            if (alquilers.isEmpty()) {
-                response.setMessage("No hay usuarios");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-            response.setMessage("Mostrando usuarios...");
-            response.setValue(alquilers);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-
-        } catch (Exception e) {
-            response.setMessage("Error");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
-    @Override
     public ResponseEntity<ResponseDTO> findAlquilerFiltered(int page, int pageSize, UUID peliculaId, UUID usuariId, LocalDate fechaInicio, LocalDate fechaFin, Integer precio, String orden, String token) {
 
         ResponseDTO<Page<Alquiler>> response = new ResponseDTO();
@@ -202,36 +170,6 @@ public class AlquilerServiceImpl implements AlquilerService {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @Override
-    public ResponseEntity<ResponseDTO> findAlquiler(String token) {
-
-        ResponseDTO<List<GetAlquilerDTO>> response = new ResponseDTO();
-
-        if (!tokenUtils.isTokenValid(token)) {
-            response.setMessage("Sesion no valida");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
-
-        try {
-            List<Alquiler> alquileres = alquilerRepository.findAll();
-            List<GetAlquilerDTO> alquileresDTO = new ArrayList<>();
-            alquileres.forEach(x -> alquileresDTO.add(GetAlquilerDTO.fromEntityToDTO(x)));
-            if (alquileres.size() <= 0) {
-                response.setMessage("No hay alquileres");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-
-            response.setMessage("Mostrando todos los alquileres registrados");
-            response.setValue(alquileresDTO);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-
-        } catch (Exception e) {
-            response.setMessage("Error");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 
     @Override
     public ResponseEntity<ResponseDTO> findAlquilerByUser(UUID usuarioId, String token) {

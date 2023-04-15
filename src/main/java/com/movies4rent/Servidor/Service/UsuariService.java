@@ -17,7 +17,7 @@ import java.util.UUID;
  */
 public interface UsuariService {
 
-    ResponseEntity<ResponseDTO> findUsuariByFilter(int page, int pageSize, String nombre, String apellidos, String username, String orden, String token);
+    ResponseEntity<ResponseDTO> findUsuariFiltered(int page, int pageSize, String nombre, String apellidos, String username, String orden, String token);
 
     ResponseEntity<ResponseDTO> findById(UUID id, String token);
 

@@ -41,7 +41,7 @@ public class UsuariServiceImpl implements UsuariService {
      * @return un DTO amb el value de l'objecte d'una llista d'usuaris
      */
     @Override
-    public ResponseEntity<ResponseDTO> findUsuariByFilter(int page, int pageSize, String nombre, String apellidos, String username, String orden, String token) {
+    public ResponseEntity<ResponseDTO> findUsuariFiltered(int page, int pageSize, String nombre, String apellidos, String username, String orden, String token) {
 
         ResponseDTO<Page<Usuari>> response = new ResponseDTO();
         PageRequest pr = PageRequest.of(page, pageSize);
