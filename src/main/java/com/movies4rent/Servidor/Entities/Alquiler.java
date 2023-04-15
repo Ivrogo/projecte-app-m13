@@ -27,13 +27,13 @@ public class Alquiler {
     private LocalDate fechaFin;
 
     @Column
-    private double precio;
+    private Integer precio;
 
     @Enumerated(EnumType.STRING)
     @Column
     private EstadoAlquiler estado;
 
-    public Alquiler(UUID id, UUID pelicula, UUID usuari, LocalDate fechaInicio, LocalDate fechaFin, double precio, EstadoAlquiler estado) {
+    public Alquiler(UUID id, UUID pelicula, UUID usuari, LocalDate fechaInicio, LocalDate fechaFin, Integer precio, EstadoAlquiler estado) {
         this.id = id;
         this.pelicula = pelicula;
         this.usuari = usuari;
@@ -86,11 +86,11 @@ public class Alquiler {
         this.fechaFin = fechaFin;
     }
 
-    public double getPrecio() {
+    public Integer getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(Integer precio) {
         this.precio = precio;
     }
 

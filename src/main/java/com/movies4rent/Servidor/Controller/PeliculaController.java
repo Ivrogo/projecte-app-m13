@@ -12,12 +12,7 @@ import java.util.UUID;
 
 public interface PeliculaController {
 
-    ResponseEntity<ResponseDTO> getPeliculas(@RequestParam(value = "token", required = true) String token);
-
-    ResponseEntity<ResponseDTO> getPeliculasPaged(@RequestParam int page, @RequestParam int pageSize, @RequestParam(value = "token", required = true) String token,
-                                                  @RequestParam(value = "vecesAlquiladaAsc, vecesAlquiladaDesc, duracionAsc, duracionDesc, añoAsc, añoDesc", required = false) String orden);
-
-    ResponseEntity<ResponseDTO> getPeliculasByFilter(@RequestParam int page, @RequestParam int pageSize, @RequestParam(required = false) String director, @RequestParam(required = false) String genero,
+    ResponseEntity<ResponseDTO> getPeliculasFiltered(@RequestParam int page, @RequestParam int pageSize, @RequestParam(required = false) String director, @RequestParam(required = false) String genero,
                                                      @RequestParam(required = false) Integer año, @RequestParam(required = false) Integer vecesAlquildada, @RequestParam(value = "token", required = true) String token,
                                                      @RequestParam(value = "vecesAlquiladaAsc, vecesAlquiladaDesc, duracionAsc, duracionDesc, añoAsc, añoDesc", required = false) String orden);
 

@@ -8,16 +8,17 @@ import com.movies4rent.Servidor.Repository.UsuariRepository;
 import com.movies4rent.Servidor.Utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Classe que executa els metodes cridats dins de la classe controller.
@@ -40,41 +41,10 @@ public class UsuariServiceImpl implements UsuariService {
      * @return un DTO amb el value de l'objecte d'una llista d'usuaris
      */
     @Override
-    public ResponseEntity<ResponseDTO> findAll(String token) {
-        ResponseDTO<List<GetUsuariDTO>> response = new ResponseDTO();
-
-        if (!tokenUtils.isTokenValid(token)) {
-            response.setMessage("Sesión no válida");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        } else if (tokenUtils.isUserAdmin(token) == false) {
-            response.setMessage("No tienes permisos para realizar esta accion");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
-
-        try {
-            List<Usuari> usuaris = usuariRepository.findAll();
-            List<GetUsuariDTO> usuarisDTO = new ArrayList<>();
-            usuaris.forEach(x -> usuarisDTO.add(GetUsuariDTO.fromEntityToDTO(x)));
-            if (usuaris.size() <= 0) {
-                response.setMessage("No hay usuarios");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-
-            response.setMessage("Mostrando los usuarios registrados");
-            response.setValue(usuarisDTO);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-
-        } catch (Exception e) {
-            response.setMessage("Error.");
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Override
-    public ResponseEntity<ResponseDTO> findAllPaged(int page, int pageSize, String token) {
+    public ResponseEntity<ResponseDTO> findUsuariFiltered(int page, int pageSize, String nombre, String apellidos, String username, String orden, String token) {
 
         ResponseDTO<Page<Usuari>> response = new ResponseDTO();
-        PageRequest pr = PageRequest.of(page, pageSize, Sort.by("nombre").ascending());
+        PageRequest pr = PageRequest.of(page, pageSize);
 
         if (!tokenUtils.isTokenValid(token)) {
             response.setMessage("Sesion no valida");
@@ -85,20 +55,64 @@ public class UsuariServiceImpl implements UsuariService {
         }
 
         try {
-            Page<Usuari> usuaris = usuariPagingRepository.findAll(pr);
+            Page<Usuari> foundUsuaris = usuariPagingRepository.findAll(pr);
+            UserFilterDTO filter = new UserFilterDTO(nombre, apellidos, username);
 
-            if(usuaris.isEmpty()){
+            if (foundUsuaris.isEmpty()){
                 response.setMessage("No hay usuarios");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
-            response.setMessage("Mostrando usuarios...");
-            response.setValue(usuaris);
-            return new ResponseEntity<>(response, HttpStatus.OK);
 
+            if (orden == null || orden.isEmpty()) {
+                if (nombre == null && apellidos == null && username == null) {
+                    response.setMessage("Mostrando usuarios...");
+                    response.setValue(foundUsuaris);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                }
+                List<Usuari> usuarisFiltradosSinOrdenar = foundUsuaris.stream().filter(filter.getPredicate()).collect(Collectors.toList());
+                Page<Usuari> usuarisFiltradosUnsorted = new PageImpl<>(usuarisFiltradosSinOrdenar, pr, usuarisFiltradosSinOrdenar.size());
+
+                response.setMessage("Mostrando usuarios filtrados y sin ordenar...");
+                response.setValue(usuarisFiltradosUnsorted);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+
+            }else{
+
+                Comparator<Usuari> comparator = null;
+                switch (orden) {
+                    case "nombreAsc":
+                        comparator = Comparator.comparing(Usuari::getNombre);
+                        break;
+                    case "nombreDesc":
+                        comparator = Comparator.comparing(Usuari::getNombre).reversed();
+                        break;
+                    case "apellidosAsc":
+                        comparator = Comparator.comparing(Usuari::getApellidos);
+                        break;
+                    case "apellidosDesc":
+                        comparator = Comparator.comparing(Usuari::getApellidos).reversed();
+                        break;
+                    case "usernameAsc":
+                        comparator = Comparator.comparing(Usuari::getUsername);
+                        break;
+                    case "usernameDesc":
+                        comparator = Comparator.comparing(Usuari::getUsername).reversed();
+                        break;
+                    default:
+                        break;
+                }
+                List<Usuari> usuarisFinal = foundUsuaris.stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
+                Page<Usuari> usuaris = new PageImpl<>(usuarisFinal, pr, usuarisFinal.size());
+
+                response.setMessage("Mostrando usuarios filtrados y ordenados...");
+                response.setValue(usuaris);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
         } catch (Exception e) {
             response.setMessage("Error");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
     /**

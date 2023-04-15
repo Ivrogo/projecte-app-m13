@@ -14,7 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,35 +33,7 @@ public class PeliculaServiceImpl implements PeliculaService {
     private TokenUtils tokenUtils;
 
     @Override
-    public ResponseEntity<ResponseDTO> findAll(String token) {
-
-        ResponseDTO<List<GetPeliculaDTO>> response = new ResponseDTO();
-
-        if (!tokenUtils.isTokenValid(token)){
-            response.setMessage("Sesion no valida");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
-
-        try {
-            List<Pelicula> peliculas = peliculaRepository.findAll();
-            List<GetPeliculaDTO> peliculaDTOS = new ArrayList<>();
-            peliculas.forEach(x -> peliculaDTOS.add(GetPeliculaDTO.fromEntityToDTO(x)));
-            if (peliculas.size() <= 0) {
-                response.setMessage("No hay peliculas");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-
-            response.setValue(peliculaDTOS);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-
-        } catch (Exception e) {
-            response.setMessage("Error");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Override
-    public ResponseEntity<ResponseDTO> findAllPaged(int page, int pageSize, String token, String orden) {
+    public ResponseEntity<ResponseDTO> findPeliculasFiltered(int page, int pageSize, String director, String genero, Integer año, Integer vecesAlquilada, String token, String orden) {
 
         ResponseDTO<Page<Pelicula>> response = new ResponseDTO();
         PageRequest pr = PageRequest.of(page, pageSize);
@@ -70,16 +45,24 @@ public class PeliculaServiceImpl implements PeliculaService {
 
         try {
             Page<Pelicula> foundPeliculas = peliculaPagingRepository.findAll(pr);
+            PeliculaFilterDTO filter = new PeliculaFilterDTO(director, genero, año, vecesAlquilada);
 
-
-            if(foundPeliculas.isEmpty()){
+            if (foundPeliculas.isEmpty()) {
                 response.setMessage("No hay peliculas");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
             if (orden == null || orden.isEmpty()) {
-                response.setMessage("Mostrando peliculas...");
-                response.setValue(foundPeliculas);
+                if (director == null && genero == null && año == null && vecesAlquilada == null) {
+                    response.setMessage("Mostrando peliculas...");
+                    response.setValue(foundPeliculas);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                }
+                List<Pelicula> peliculasFiltradasSinOrdenar = foundPeliculas.stream().filter(filter.getPredicate()).collect(Collectors.toList());
+                Page<Pelicula> peliculasFiltradasUnsorted = new PageImpl<>(peliculasFiltradasSinOrdenar, pr, peliculasFiltradasSinOrdenar.size());
+
+                response.setMessage("Mostrando peliculas filtradas y sin ordenar");
+                response.setValue(peliculasFiltradasUnsorted);
                 return new ResponseEntity<>(response, HttpStatus.OK);
 
             } else {
@@ -106,66 +89,13 @@ public class PeliculaServiceImpl implements PeliculaService {
                     default:
                         break;
                 }
-
-                List<Pelicula> peliculasFinal = foundPeliculas.stream().sorted(comparator).collect(Collectors.toList());
+                List<Pelicula> peliculasFinal = foundPeliculas.stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
                 Page<Pelicula> peliculas = new PageImpl<>(peliculasFinal, pr, peliculasFinal.size());
 
-                response.setMessage("Mostrando peliculas...");
+                response.setMessage("Mostrando peliculas segun los filtros indicados");
                 response.setValue(peliculas);
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }
-
-        } catch (Exception e) {
-            response.setMessage("Error");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
-    @Override
-    public ResponseEntity<ResponseDTO> findPeliculasFiltred(int page, int pageSize, String director, String genero, Integer año, Integer vecesAlquilada, String token, String orden) {
-
-        ResponseDTO<Page<Pelicula>> response = new ResponseDTO();
-        PageRequest pr = PageRequest.of(page, pageSize);
-
-        if (!tokenUtils.isTokenValid(token)) {
-            response.setMessage("Sesion no valida");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
-
-        try {
-            List<Pelicula> peliculasFiltradas = peliculaRepository.findAll();
-            PeliculaFilterDTO filter = new PeliculaFilterDTO(director, genero, año, vecesAlquilada);
-
-            Comparator<Pelicula> comparator = null;
-            switch (orden) {
-                case "vecesAlquiladaAsc":
-                    comparator = Comparator.comparing(Pelicula::getVecesAlquilada);
-                    break;
-                case "vecesAlquiladaDesc":
-                    comparator = Comparator.comparing(Pelicula::getVecesAlquilada).reversed();
-                    break;
-                case "duracionAsc":
-                    comparator = Comparator.comparing(Pelicula::getDuracion);
-                    break;
-                case "duracionDesc":
-                    comparator = Comparator.comparing(Pelicula::getDuracion).reversed();
-                    break;
-                case "añoAsc":
-                    comparator = Comparator.comparing(Pelicula::getAño);
-                    break;
-                case "añoDesc":
-                    comparator = Comparator.comparing(Pelicula::getAño).reversed();
-                default:
-                    break;
-            }
-            List<Pelicula> peliculasFinal = peliculasFiltradas.stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
-
-            Page<Pelicula> peliculas = new PageImpl<>(peliculasFinal, pr, peliculasFinal.size());
-
-            response.setMessage("Mostrando peliculas segun los filtros indicados");
-            response.setValue(peliculas);
-            return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {
             response.setMessage("Error");

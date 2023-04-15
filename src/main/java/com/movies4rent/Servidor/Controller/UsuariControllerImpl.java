@@ -28,20 +28,9 @@ public class UsuariControllerImpl implements UsuariController {
 
 
     @Override
-    @GetMapping("/")
-    public ResponseEntity<ResponseDTO> getUsuarisPaged(int page, int pageSize, String token) {
-        return usuariService.findAllPaged(page, pageSize, token);
-    }
-
-    /**
-     * Rep un token de sessió i retorna una llista amb tots els usuaris
-     * @param token token de sessió
-     * @return metode findAll de usuariService
-     */
-    @Override
     @GetMapping
-    public ResponseEntity<ResponseDTO> getUsuaris(@RequestParam(value = "token", required = true) String token) {
-        return usuariService.findAll(token);
+    public ResponseEntity<ResponseDTO> getUsuarisFiltered(int page, int pageSize, String nombre, String apellidos, String username, String orden, String token) {
+        return usuariService.findUsuariFiltered(page, pageSize, nombre, apellidos, username, orden, token);
     }
 
     /**
