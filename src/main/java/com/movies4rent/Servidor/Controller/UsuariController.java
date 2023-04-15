@@ -16,11 +16,8 @@ import java.util.UUID;
  */
 public interface UsuariController {
 
-    ResponseEntity<ResponseDTO> getUsuarisPaged(@RequestParam int page, @RequestParam int pageSize, @RequestParam(value = "token", required = true) String token);
-
-
-    ResponseEntity<ResponseDTO> getUsuaris(@RequestParam(value = "token", required = true) String token);
-
+    ResponseEntity<ResponseDTO> getUsuarisFiltered(@RequestParam int page, @RequestParam int pageSize, @RequestParam(required = false) String nombre, @RequestParam(required = false) String apellidos, @RequestParam(required = false) String username,
+                                                   @RequestParam(required = false) String orden, @RequestParam(value = "token", required = true) String token);
     ResponseEntity<ResponseDTO> getUsuari(@PathVariable UUID id, @RequestParam(value = "token", required = true) String token);
 
     ResponseEntity<ResponseDTO> updateUsuari(@RequestBody UserUpdateDTO userUpdateDTO, @RequestParam(value = "token", required = true) String token);
