@@ -44,7 +44,8 @@ public class PeliculaServiceImpl implements PeliculaService {
         }
 
         try {
-            Page<Pelicula> foundPeliculas = peliculaPagingRepository.findAll(pr);
+            List<Pelicula> foundPeliculas = peliculaRepository.findAll();
+            Page<Pelicula> peliculasSinFiltroNiOrden = new PageImpl<>(foundPeliculas, pr, foundPeliculas.size());
             PeliculaFilterDTO filter = new PeliculaFilterDTO(director, genero, año, vecesAlquilada);
 
             if (foundPeliculas.isEmpty()) {
@@ -55,7 +56,7 @@ public class PeliculaServiceImpl implements PeliculaService {
             if (orden == null || orden.isEmpty()) {
                 if (director == null && genero == null && año == null && vecesAlquilada == null) {
                     response.setMessage("Mostrando peliculas...");
-                    response.setValue(foundPeliculas);
+                    response.setValue(peliculasSinFiltroNiOrden);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 }
                 List<Pelicula> peliculasFiltradasSinOrdenar = foundPeliculas.stream().filter(filter.getPredicate()).collect(Collectors.toList());

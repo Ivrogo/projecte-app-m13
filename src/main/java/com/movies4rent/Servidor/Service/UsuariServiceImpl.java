@@ -42,7 +42,7 @@ public class UsuariServiceImpl implements UsuariService {
      * @param nombre variable nombre que filtra la llista segons el nom
      * @param apellidos variable apellidos que filtra la llista segons els cognoms
      * @param username variable username que filtra la llista segons el nom d'usuari.
-     * @param orden organitza la llista segons la variable introduida.
+     * @param orden variable que serveix per organitzar la llista.
      * @param token token de sessió
      * @return un DTO amb el value de l'objecte d'una llista d'usuaris
      */
@@ -61,7 +61,8 @@ public class UsuariServiceImpl implements UsuariService {
         }
 
         try {
-            Page<Usuari> foundUsuaris = usuariPagingRepository.findAll(pr);
+            List<Usuari> foundUsuaris = usuariRepository.findAll();
+            Page<Usuari> usuariosSinFiltroNiOrden = new PageImpl<>(foundUsuaris, pr, foundUsuaris.size());
             UserFilterDTO filter = new UserFilterDTO(nombre, apellidos, username);
 
             if (foundUsuaris.isEmpty()){
@@ -72,7 +73,7 @@ public class UsuariServiceImpl implements UsuariService {
             if (orden == null || orden.isEmpty()) {
                 if (nombre == null && apellidos == null && username == null) {
                     response.setMessage("Mostrando usuarios...");
-                    response.setValue(foundUsuaris);
+                    response.setValue(usuariosSinFiltroNiOrden);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 }
                 List<Usuari> usuarisFiltradosSinOrdenar = foundUsuaris.stream().filter(filter.getPredicate()).collect(Collectors.toList());

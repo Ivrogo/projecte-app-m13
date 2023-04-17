@@ -104,7 +104,8 @@ public class AlquilerServiceImpl implements AlquilerService {
         }
 
         try {
-            Page<Alquiler> foundAlquileres = alquilerPagingRepository.findAll(pr);
+            List<Alquiler> foundAlquileres = alquilerRepository.findAll();
+            Page<Alquiler> alquileresSinFiltroNiOrden = new PageImpl<>(foundAlquileres, pr, foundAlquileres.size());
             AlquilerFilterDTO filter = new AlquilerFilterDTO(peliculaId, usuariId, fechaInicio, fechaFin, precio);
 
             if (foundAlquileres.isEmpty()) {
@@ -116,7 +117,7 @@ public class AlquilerServiceImpl implements AlquilerService {
                 //Comprobamos si existe algun filtro o no
                 if (peliculaId == null && usuariId == null && fechaInicio == null && fechaFin == null && precio == null){
                     response.setMessage("Mostrando alquileres...");
-                    response.setValue(foundAlquileres);
+                    response.setValue(alquileresSinFiltroNiOrden);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 }
                 List<Alquiler> alquileresFiltradosSinOrdenar = foundAlquileres.stream().filter(filter.getPredicate()).collect(Collectors.toList());

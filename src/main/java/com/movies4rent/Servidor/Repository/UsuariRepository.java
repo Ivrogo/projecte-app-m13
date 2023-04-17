@@ -5,6 +5,8 @@
 package com.movies4rent.Servidor.Repository;
 
 import com.movies4rent.Servidor.Entities.Usuari;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +20,8 @@ import java.util.UUID;
  */
 @Repository
 public interface UsuariRepository extends JpaRepository<Usuari, UUID> {
+
+    Page<Usuari> findAll(Pageable pageable);
 
     public Optional<Usuari> findUserByUsername(String username);
 
