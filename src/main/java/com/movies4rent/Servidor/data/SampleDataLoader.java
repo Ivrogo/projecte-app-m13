@@ -37,7 +37,7 @@ public class SampleDataLoader implements CommandLineRunner {
         usuari.setNombre("admin");
         usuari.setApellidos("admin admin");
         usuari.setTelefono("12345678");
-        usuari.setEmail("demo@demo.com");
+        usuari.setEmail("saoyara@gmail.com");
         usuari.setDireccion("demo");
         usuari.setUsername("admin");
         usuari.setPassword("admin");

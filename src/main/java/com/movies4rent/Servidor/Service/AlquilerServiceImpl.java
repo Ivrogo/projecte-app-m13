@@ -43,6 +43,9 @@ public class AlquilerServiceImpl implements AlquilerService {
     @Autowired
     private TokenUtils tokenUtils;
 
+    @Autowired
+    private EmailService emailService;
+
     @Override
     public ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuariId, String token) {
 
@@ -76,6 +79,9 @@ public class AlquilerServiceImpl implements AlquilerService {
 
             peliculaRepository.save(foundPelicula.get());
             alquilerRepository.save(alquiler);
+
+            emailService.sendEmail(alquiler, foundUsuari.get().getEmail());
+
             response.setMessage("Alquiler creado correctamente");
             response.setValue(alquiler);
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -241,13 +247,21 @@ public class AlquilerServiceImpl implements AlquilerService {
 
         try {
             Optional<Alquiler> updatedAlquiler = alquilerRepository.findById(alquilerId);
+            Optional<Usuari> foundUsuari = usuariRepository.findById(updatedAlquiler.get().getUsuari());
             if (!updatedAlquiler.isPresent()) {
                 response.setMessage("Alquiler no trobat");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
+            if (updatedAlquiler.get().getFechaFin() == LocalDate.now()) {
+                updatedAlquiler.get().setEstado(EstadoAlquiler.FINALIZADO);
+            }
 
             updatedAlquiler.get().setEstado(estado);
             alquilerRepository.save(updatedAlquiler.get());
+
+            if (updatedAlquiler.get().getEstado() == EstadoAlquiler.FINALIZADO) {
+                emailService.sendEmailFinalizacion(updatedAlquiler.get(), foundUsuari.get().getEmail());
+            }
 
             response.setValue(updatedAlquiler.get());
             response.setMessage("Estado del alquiler actualizado");

@@ -36,7 +36,13 @@ public class UsuariServiceImpl implements UsuariService {
     private TokenUtils tokenUtils;
 
     /**
-     * Classe que llista tots els usuaris registrats en la base de dades.
+     * Classe que llista tots els usuaris registrats en la base de dades paginats i amb la possibilitat de filtrarlos.
+     * @param page numero de la pagina
+     * @param pageSize quantitat de elements per pagina
+     * @param nombre variable nombre que filtra la llista segons el nom
+     * @param apellidos variable apellidos que filtra la llista segons els cognoms
+     * @param username variable username que filtra la llista segons el nom d'usuari.
+     * @param orden organitza la llista segons la variable introduida.
      * @param token token de sessió
      * @return un DTO amb el value de l'objecte d'una llista d'usuaris
      */
