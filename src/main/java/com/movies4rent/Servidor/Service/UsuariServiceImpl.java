@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -61,60 +62,54 @@ public class UsuariServiceImpl implements UsuariService {
         }
 
         try {
-            List<Usuari> foundUsuaris = usuariRepository.findAll();
-            Page<Usuari> usuariosSinFiltroNiOrden = new PageImpl<>(foundUsuaris, pr, foundUsuaris.size());
             UserFilterDTO filter = new UserFilterDTO(nombre, apellidos, username);
 
-            if (foundUsuaris.isEmpty()){
-                response.setMessage("No hay usuarios");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
+            Page<Usuari> foundUsuaris;
 
             if (orden == null || orden.isEmpty()) {
                 if (nombre == null && apellidos == null && username == null) {
                     response.setMessage("Mostrando usuarios...");
-                    response.setValue(usuariosSinFiltroNiOrden);
+                    foundUsuaris = usuariRepository.findAll(pr);
+                    response.setValue(foundUsuaris);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                } else {
+                    List<Usuari> usuarisFiltradosSinOrdenar = usuariRepository.findAll().stream().filter(filter.getPredicate()).collect(Collectors.toList());
+                    foundUsuaris = PageableExecutionUtils.getPage(usuarisFiltradosSinOrdenar, pr, usuarisFiltradosSinOrdenar::size);
+                    response.setMessage("Mostrando usuarios filtrados y sin ordenar...");
+                    response.setValue(foundUsuaris);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 }
-                List<Usuari> usuarisFiltradosSinOrdenar = foundUsuaris.stream().filter(filter.getPredicate()).collect(Collectors.toList());
-                Page<Usuari> usuarisFiltradosUnsorted = new PageImpl<>(usuarisFiltradosSinOrdenar, pr, usuarisFiltradosSinOrdenar.size());
-
-                response.setMessage("Mostrando usuarios filtrados y sin ordenar...");
-                response.setValue(usuarisFiltradosUnsorted);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-
-            }else{
-
+            } else {
                 Comparator<Usuari> comparator = null;
                 switch (orden) {
                     case "nombreAsc":
                         comparator = Comparator.comparing(Usuari::getNombre);
                         break;
                     case "nombreDesc":
-                        comparator = Comparator.comparing(Usuari::getNombre).reversed();
+                        comparator = Comparator.comparing(Usuari::getNombre, Comparator.reverseOrder());
                         break;
                     case "apellidosAsc":
                         comparator = Comparator.comparing(Usuari::getApellidos);
                         break;
                     case "apellidosDesc":
-                        comparator = Comparator.comparing(Usuari::getApellidos).reversed();
+                        comparator = Comparator.comparing(Usuari::getApellidos, Comparator.reverseOrder());
                         break;
                     case "usernameAsc":
                         comparator = Comparator.comparing(Usuari::getUsername);
                         break;
                     case "usernameDesc":
-                        comparator = Comparator.comparing(Usuari::getUsername).reversed();
+                        comparator = Comparator.comparing(Usuari::getUsername, Comparator.reverseOrder());
                         break;
                     default:
                         break;
                 }
-                List<Usuari> usuarisFinal = foundUsuaris.stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
-                Page<Usuari> usuaris = new PageImpl<>(usuarisFinal, pr, usuarisFinal.size());
-
+                Page<Usuari> foundUsuarisFiltered = usuariRepository.findAll(pr);
+                foundUsuaris = new PageImpl<>(comparator != null ? foundUsuarisFiltered.getContent().stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList()) : foundUsuarisFiltered.getContent(), pr, foundUsuarisFiltered.getTotalElements());
                 response.setMessage("Mostrando usuarios filtrados y ordenados...");
-                response.setValue(usuaris);
+                response.setValue(foundUsuaris);
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }
+
         } catch (Exception e) {
             response.setMessage("Error");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
