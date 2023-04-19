@@ -123,7 +123,7 @@ public class UsuariServiceImpl implements UsuariService {
     }
 
     /**
-     * Classe que troba un usuari especific en la base de dades.
+     * Metode que troba un usuari especific en la base de dades.
      * @param id id de l'usuari
      * @param token token de sessió
      * @return DTO amb el value de l'objecte que conté la informació de l'usuari
@@ -161,7 +161,7 @@ public class UsuariServiceImpl implements UsuariService {
     }
 
     /**
-     * Classe que actualitza un usuari en la base de dades.
+     * Metode que actualitza un usuari en la base de dades.
      * @param userUpdateDTO DTO amb la informació canviada de l'usuari
      * @param token token de sessió
      * @return DTO amb un missatge d'actualització
@@ -196,7 +196,7 @@ public class UsuariServiceImpl implements UsuariService {
     }
 
     /**
-     * Classe que cambia el rol d'un usuari en la base de dades.
+     * Metode que cambia el rol d'un usuari en la base de dades.
      * @param admin boolean que indica si el usuari es administrador o no
      * @param id id de l'usuari
      * @param token token de sessió
@@ -234,7 +234,7 @@ public class UsuariServiceImpl implements UsuariService {
     }
 
     /**
-     * Classe que elimina un usuari en la base de dades.
+     * Metode que elimina un usuari en la base de dades.
      * @param id id de l'usuari
      * @param token token de sessió
      * @return DTO amb un missatge de confirmació d'usuari esborrat
@@ -264,7 +264,7 @@ public class UsuariServiceImpl implements UsuariService {
     }
 
     /**
-     * Classe que obté l'usuari al qual està assignat el token de sessió.
+     * Metode que obté l'usuari al qual està assignat el token de sessió.
      * @param token token de sessió
      * @return DTO amb el value de l'objecte que conté la informació de l'usuari
      */
@@ -292,6 +292,12 @@ public class UsuariServiceImpl implements UsuariService {
         }
     }
 
+    /**
+     * Metode que actualitza la contrasenya d'un usuari en la base de dades
+     * @param token
+     * @param userChangePasswordDTO
+     * @return un responseEntity amb la confirmació de la contrasenya actualitzada.
+     */
     @Override
     public ResponseEntity<ResponseDTO> changeUsuariPassword(String token, UserChangePasswordDTO userChangePasswordDTO) {
         ResponseDTO response = new ResponseDTO();

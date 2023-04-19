@@ -25,6 +25,10 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Classe que executa els metodes cridats dins de la classe controller.
+ * @author Ivan Rodriguez Gomez
+ */
 @Service
 public class AlquilerServiceImpl implements AlquilerService {
 
@@ -46,6 +50,13 @@ public class AlquilerServiceImpl implements AlquilerService {
     @Autowired
     private EmailService emailService;
 
+    /**
+     * Metode que crea un lloguer dins de la base de dades.
+     * @param peliculaId
+     * @param usuariId
+     * @param token
+     * @return un responseEntity amb un body amb les dades del lloguer i confirmant la insercció de les dades del lloguer dins la BDD.
+     */
     @Override
     public ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuariId, String token) {
 
@@ -91,7 +102,19 @@ public class AlquilerServiceImpl implements AlquilerService {
         }
 
     }
-
+    /**
+     * Metode que llista tots els usuaris registrats en la base de dades paginats i amb la possibilitat de filtrarlos.
+     * @param page numero de la pagina
+     * @param pageSize quantitat de elements per pagina
+     * @param peliculaId variable id que filtra la llista segons el la id de la pelicula
+     * @param usuariId variable id que filtra la llista segons els la id de l'usuari
+     * @param fechaInicio variable date que filtra la llista segons la data d'inici.
+     * @param fechaFin variable date que filtra la llista segons la data d'final.
+     * @param  precio variable integer que filtra la llista segons el preu.
+     * @param orden variable que serveix per organitzar la llista.
+     * @param token token de sessió
+     * @return un DTO amb el value de l'objecte d'una llista de lloguers
+     */
     @Override
     public ResponseEntity<ResponseDTO> findAlquilerFiltered(int page, int pageSize, UUID peliculaId, UUID usuariId, LocalDate fechaInicio, LocalDate fechaFin, Integer precio, String orden, String token) {
 
@@ -178,6 +201,12 @@ public class AlquilerServiceImpl implements AlquilerService {
         }
     }
 
+    /**
+     * Metode que llista els lloguers d'un usuari especific dins de la base de dades.
+     * @param usuarioId
+     * @param token
+     * @return un responseEntity amb tots els lloguers realitzats d'un usuari especific dins de la base de dades.
+     */
     @Override
     public ResponseEntity<ResponseDTO> findAlquilerByUser(UUID usuarioId, String token) {
 
@@ -210,6 +239,12 @@ public class AlquilerServiceImpl implements AlquilerService {
         }
     }
 
+    /**
+     * Metode que troba un lloguer en especific segons la seva id.
+     * @param alquilerId
+     * @param token
+     * @return un responseEntity amb el lloguer en especific.
+     */
     @Override
     public ResponseEntity<ResponseDTO> findAlquilerById(UUID alquilerId, String token) {
 
@@ -237,6 +272,13 @@ public class AlquilerServiceImpl implements AlquilerService {
         }
     }
 
+    /**
+     * Metode que actualiza el estado del lloguer dins de la base de dades.
+     * @param estado
+     * @param alquilerId
+     * @param token
+     * @return un responseEntity amb la confirmació del canvi de estado del lloguer dins de la base de dades.
+     */
     @Override
     public ResponseEntity<ResponseDTO> updateAlquilerEstado(EstadoAlquiler estado, UUID alquilerId, String token) {
         ResponseDTO response = new ResponseDTO();
@@ -274,6 +316,12 @@ public class AlquilerServiceImpl implements AlquilerService {
         }
     }
 
+    /**
+     * Metode que elimina un lloguer dins de la base de dades.
+     * @param alquilerId
+     * @param token
+     * @return un responseEntity amb la confirmació de la eliminació del lloguer dins de la base de dades.
+     */
     @Override
     public ResponseEntity<ResponseDTO> deleteAlquiler(UUID alquilerId, String token) {
         ResponseDTO response = new ResponseDTO();

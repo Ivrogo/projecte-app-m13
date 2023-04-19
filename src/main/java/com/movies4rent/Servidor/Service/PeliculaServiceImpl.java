@@ -20,6 +20,10 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Classe que executa els metodes cridats dins de la classe controller.
+ * @author Ivan Rodriguez Gomez
+ */
 @Service
 public class PeliculaServiceImpl implements PeliculaService {
 
@@ -32,6 +36,18 @@ public class PeliculaServiceImpl implements PeliculaService {
     @Autowired
     private TokenUtils tokenUtils;
 
+    /**
+     * Metode que llista totes les pelicules amb filtres i sorting.
+     * @param page
+     * @param pageSize
+     * @param director
+     * @param genero
+     * @param año
+     * @param vecesAlquilada
+     * @param token
+     * @param orden
+     * @return un responseEntity amb una llista de peliculas.
+     */
     @Override
     public ResponseEntity<ResponseDTO> findPeliculasFiltered(int page, int pageSize, String director, String genero, Integer año, Integer vecesAlquilada, String token, String orden) {
 
@@ -104,6 +120,12 @@ public class PeliculaServiceImpl implements PeliculaService {
         }
     }
 
+    /**
+     * Metode que troba una pelicula especifica.
+     * @param id
+     * @param token
+     * @return un responseEntity amb una pelicula.
+     */
     @Override
     public ResponseEntity<ResponseDTO> findById(UUID id, String token) {
 
@@ -129,6 +151,12 @@ public class PeliculaServiceImpl implements PeliculaService {
         }
     }
 
+    /**
+     * Metode que afegeix una pelicula.
+     * @param token
+     * @param peliculaDTO
+     * @return un responseEntity amb la confirmació de que la pelicula ha estat afegida.
+     */
     @Override
     public ResponseEntity<ResponseDTO> addPelicula(String token, RegisterPeliculaDTO peliculaDTO) {
 
@@ -155,6 +183,13 @@ public class PeliculaServiceImpl implements PeliculaService {
         }
     }
 
+    /**
+     * Metode que actualiza una pelicula.
+     * @param peliculaUpdateDTO
+     * @param id
+     * @param token
+     * @return un responseEntity amb la confirmació de que la pelicula ha estat actualizada i les seves dades actualitzades.
+     */
     @Override
     public ResponseEntity<ResponseDTO> updatePelicula(PeliculaUpdateDTO peliculaUpdateDTO, UUID id, String token) {
         ResponseDTO response = new ResponseDTO();
@@ -191,6 +226,12 @@ public class PeliculaServiceImpl implements PeliculaService {
         }
     }
 
+    /**
+     * Metode que elimina una pelicula.
+     * @param id
+     * @param token
+     * @return un responseEntity amb la confirmació de que la pelicula ha estat eliminada.
+     */
     @Override
     public ResponseEntity<ResponseDTO> deletePelicula(UUID id, String token) {
         ResponseDTO response = new ResponseDTO();
