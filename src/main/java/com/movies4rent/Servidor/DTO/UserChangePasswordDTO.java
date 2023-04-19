@@ -3,6 +3,10 @@ package com.movies4rent.Servidor.DTO;
 import com.movies4rent.Servidor.Entities.Usuari;
 import org.springframework.data.annotation.Transient;
 
+/**
+ * Clase DTO para cambiar la contraseña de un usuario
+ * @author Ivan Rodriguez Gomez
+ */
 public class UserChangePasswordDTO {
 
     private String password;

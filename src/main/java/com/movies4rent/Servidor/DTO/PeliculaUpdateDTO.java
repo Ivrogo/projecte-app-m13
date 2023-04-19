@@ -2,6 +2,10 @@ package com.movies4rent.Servidor.DTO;
 
 import com.movies4rent.Servidor.Entities.Pelicula;
 
+/**
+ * Clase DTO para actualizar pelicula.
+ * @author Ivan Rodriguez Gomez
+ */
 public class PeliculaUpdateDTO {
 
     private String titulo;

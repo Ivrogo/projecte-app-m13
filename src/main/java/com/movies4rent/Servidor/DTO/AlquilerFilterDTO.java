@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+/**
+ * Clase que contiene los filtros de los alquileres
+ */
 public class AlquilerFilterDTO {
 
     private UUID pelicula;
@@ -27,6 +30,10 @@ public class AlquilerFilterDTO {
         this.precio = precio;
     }
 
+    /**
+     * Metode que permite filtrar los alquileres
+     * @return predicate.
+     */
     public Predicate<Alquiler> getPredicate() {
         Predicate<Alquiler> predicate = alquiler-> true;
         if (pelicula != null) {

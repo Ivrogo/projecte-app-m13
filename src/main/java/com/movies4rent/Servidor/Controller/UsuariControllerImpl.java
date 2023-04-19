@@ -35,6 +35,7 @@ public class UsuariControllerImpl implements UsuariController {
 
     /**
      * Rep un token de sessió i una id d'usuari i retorna un usuari específic
+     * @method GET
      * @param id de l'usuari
      * @param token token de sessió
      * @return metode findById de usuariService
@@ -47,6 +48,7 @@ public class UsuariControllerImpl implements UsuariController {
 
     /**
      * Rep un DTO amb els canvis de la informació de l'usuari i un token de sessió, i retorna un missatge confirmant els canvis.
+     * @method PUT
      * @param userUpdateDTO DTO amb els canvis de la informació de l'usuari
      * @param token token de sessió
      * @return metode update de usuariService
@@ -59,6 +61,7 @@ public class UsuariControllerImpl implements UsuariController {
 
     /**
      * Rep un boolean admin, una id d'usuari i un token de sessió, i retorna un missatge de confirmació amb els canvis.
+     * @method PUT
      * @param admin per saber si es admin o no
      * @param id de l'usuari
      * @param token token de sessió
@@ -71,6 +74,7 @@ public class UsuariControllerImpl implements UsuariController {
 
     /**
      * Rep un token de sessió i una id d'usuari i retorna un missatge de confirmant que s'ha esborrat l'usuari.
+     * @method DELETE
      * @param id de l'usuari
      * @param token token de sessió
      * @return metode deleteUser de usuariService
@@ -83,6 +87,7 @@ public class UsuariControllerImpl implements UsuariController {
 
     /**
      * Rep un token de sessió i retorna la informació de l'usuari d'aquest token.
+     * @method GET
      * @param token token de sessió
      * @return metode findByToken de usuariService
      */
@@ -92,6 +97,12 @@ public class UsuariControllerImpl implements UsuariController {
         return usuariService.getUserByToken(token);
     }
 
+    /**
+     * Rep un token de sessió i una id d'usuari i retorna un missatge confirmant el canvi de contrasenya.'
+     * @param token
+     * @param userChangePasswordDTO
+     * @return metode changeUsuariPassword de usuariService
+     */
     @Override
     @PutMapping("/changepassword")
     public ResponseEntity<ResponseDTO> changeUsuariPassword(String token, UserChangePasswordDTO userChangePasswordDTO) {

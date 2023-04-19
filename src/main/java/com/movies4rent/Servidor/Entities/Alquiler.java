@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * Clase entidad con los alquileres de la base de datos.
+ */
 @Entity
 @Table(name = "lloguers")
 public class Alquiler {

@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * Clase interficie del controlador de lloguers.
+ * @author Ivan Rodriguez Gomez.
+ */
 public interface AlquilerController {
 
     ResponseEntity<ResponseDTO> crearAlquiler(@RequestParam(value = "peliculaId") UUID peliculaId, @RequestParam(value = "usuariId") UUID usuariId, @RequestParam(value = "token") String token);

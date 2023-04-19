@@ -4,6 +4,10 @@ import com.movies4rent.Servidor.Entities.Usuari;
 
 import java.util.function.Predicate;
 
+/**
+ * Clase DTO para filtrar los usuarios.
+ * @author Ivan Rodriguez Gomez
+ */
 public class UserFilterDTO {
 
     private String nombre;

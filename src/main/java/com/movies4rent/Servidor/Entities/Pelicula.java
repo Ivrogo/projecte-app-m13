@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 
 import java.util.UUID;
 
+/**
+ * Clase entidad de las peliculas de la base de datos.
+ * @author Ivan Rodriguez Gomez
+ */
 @Entity
 @Table(name = "pelicula")
 public class Pelicula {

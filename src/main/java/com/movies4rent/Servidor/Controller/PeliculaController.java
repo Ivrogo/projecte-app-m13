@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
+/**
+ * Clase interficie del controlador de peliculas.
+ * @author Ivan Rodriguez Gomez
+ */
 public interface PeliculaController {
 
     ResponseEntity<ResponseDTO> getPeliculasFiltered(@RequestParam int page, @RequestParam int pageSize, @RequestParam(required = false) String director, @RequestParam(required = false) String genero,

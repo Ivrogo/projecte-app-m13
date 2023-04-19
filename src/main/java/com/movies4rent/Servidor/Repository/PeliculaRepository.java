@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Clase interficie de la entitat pelicula.
+ * @author Ivan Rodriguez Gomez.
+ */
 @Repository
 public interface PeliculaRepository extends JpaRepository<Pelicula, UUID> {
 

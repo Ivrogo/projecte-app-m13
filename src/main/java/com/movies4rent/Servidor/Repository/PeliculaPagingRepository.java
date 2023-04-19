@@ -6,7 +6,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.UUID;
 
 /**
- * Repositorio de Peliculas paginadas.
+ * Clase entidad del Repositorio de Peliculas paginadas.
+ * @author Ivan Rodriguez Gomez.
  */
 public interface PeliculaPagingRepository extends PagingAndSortingRepository<Pelicula, UUID> {
 

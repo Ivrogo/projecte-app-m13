@@ -4,6 +4,10 @@ import com.movies4rent.Servidor.Entities.Pelicula;
 
 import java.util.UUID;
 
+/**
+ * Clase DTO para obtener los datos de una película.
+ * @author Ivan Rodriguez Gomez
+ */
 public class GetPeliculaDTO {
 
     private UUID id;

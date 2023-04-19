@@ -13,7 +13,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.IntStream;
 
-
+/**
+ * Clase component per la carrega de dades de proba dins de la base de dades.(NOMES UTILITZAT PER PROVES)
+ * @author Ivan Rodriguez Gomez.
+ */
 @Component
 public class SampleDataLoader implements CommandLineRunner {
 

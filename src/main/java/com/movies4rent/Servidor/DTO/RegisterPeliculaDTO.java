@@ -2,6 +2,10 @@ package com.movies4rent.Servidor.DTO;
 
 import com.movies4rent.Servidor.Entities.Pelicula;
 
+/**
+ * Clase DTO para registrar una pelicula.
+ * @author Ivan Rodriguez Gomez
+ */
 public class RegisterPeliculaDTO {
 
     private String titulo;

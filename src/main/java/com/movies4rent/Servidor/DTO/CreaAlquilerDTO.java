@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 
+/**
+ * Clase DTO para crear alquiler
+ * @author Ivan Rodriguez Gomez
+ */
 public class CreaAlquilerDTO {
 
     @Autowired

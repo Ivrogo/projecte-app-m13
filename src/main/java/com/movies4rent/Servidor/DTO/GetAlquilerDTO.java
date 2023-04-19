@@ -6,6 +6,10 @@ import com.movies4rent.Servidor.Utils.EstadoAlquiler;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * Clase DTO con los datos para obtener un alquiler.
+ * @author Ivan Rodriguez Gomez
+ */
 public class GetAlquilerDTO {
 
     private UUID id;

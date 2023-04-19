@@ -4,6 +4,10 @@ import com.movies4rent.Servidor.Entities.Pelicula;
 
 import java.util.function.Predicate;
 
+/**
+ * Clase DTO con los filtros para filtrar las películas.
+ * @author Ivan Rodriguez Gomez
+ */
 public class PeliculaFilterDTO {
 
     private String director;
