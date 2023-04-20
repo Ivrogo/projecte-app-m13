@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 /**
  * Classe que executa els metodes cridats dins de la classe controller.
+ *
  * @author Ivan Rodriguez Gomez
  */
 @Service
@@ -52,6 +54,7 @@ public class AlquilerServiceImpl implements AlquilerService {
 
     /**
      * Metode que crea un lloguer dins de la base de dades.
+     *
      * @param peliculaId
      * @param usuariId
      * @param token
@@ -102,17 +105,19 @@ public class AlquilerServiceImpl implements AlquilerService {
         }
 
     }
+
     /**
      * Metode que llista tots els usuaris registrats en la base de dades paginats i amb la possibilitat de filtrarlos.
-     * @param page numero de la pagina
-     * @param pageSize quantitat de elements per pagina
-     * @param peliculaId variable id que filtra la llista segons el la id de la pelicula
-     * @param usuariId variable id que filtra la llista segons els la id de l'usuari
+     *
+     * @param page        numero de la pagina
+     * @param pageSize    quantitat de elements per pagina
+     * @param peliculaId  variable id que filtra la llista segons el la id de la pelicula
+     * @param usuariId    variable id que filtra la llista segons els la id de l'usuari
      * @param fechaInicio variable date que filtra la llista segons la data d'inici.
-     * @param fechaFin variable date que filtra la llista segons la data d'final.
-     * @param  precio variable integer que filtra la llista segons el preu.
-     * @param orden variable que serveix per organitzar la llista.
-     * @param token token de sessió
+     * @param fechaFin    variable date que filtra la llista segons la data d'final.
+     * @param precio      variable integer que filtra la llista segons el preu.
+     * @param orden       variable que serveix per organitzar la llista.
+     * @param token       token de sessió
      * @return un DTO amb el value de l'objecte d'una llista de lloguers
      */
     @Override
@@ -127,31 +132,30 @@ public class AlquilerServiceImpl implements AlquilerService {
         }
 
         try {
-            List<Alquiler> foundAlquileres = alquilerRepository.findAll();
-            Page<Alquiler> alquileresSinFiltroNiOrden = new PageImpl<>(foundAlquileres, pr, foundAlquileres.size());
             AlquilerFilterDTO filter = new AlquilerFilterDTO(peliculaId, usuariId, fechaInicio, fechaFin, precio);
 
-            if (foundAlquileres.isEmpty()) {
-                response.setMessage("No hay alquileres");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
+            Page<Alquiler> foundAlquileres;
             //Comprobamos si existe un orden o no
             if (orden == null || orden.isEmpty()) {
                 //Comprobamos si existe algun filtro o no
-                if (peliculaId == null && usuariId == null && fechaInicio == null && fechaFin == null && precio == null){
+                if (peliculaId == null && usuariId == null && fechaInicio == null && fechaFin == null && precio == null) {
                     response.setMessage("Mostrando alquileres...");
-                    response.setValue(alquileresSinFiltroNiOrden);
+                    foundAlquileres = alquilerRepository.findAll(pr);
+                    if (foundAlquileres.isEmpty()) {
+                        response.setMessage("No existen alquileres");
+                        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+                    }
+                    response.setValue(foundAlquileres);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                } else {
+                    List<Alquiler> alquileresFiltradosSinOrdenar = alquilerRepository.findAll().stream().filter(filter.getPredicate()).collect(Collectors.toList());
+                    foundAlquileres = PageableExecutionUtils.getPage(alquileresFiltradosSinOrdenar, pr, alquileresFiltradosSinOrdenar::size);
+                    response.setMessage("Mostrando los alquileres filtrados y sin ordenar...");
+                    response.setValue(foundAlquileres);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 }
-                List<Alquiler> alquileresFiltradosSinOrdenar = foundAlquileres.stream().filter(filter.getPredicate()).collect(Collectors.toList());
-                Page<Alquiler> alquileresFiltradosUnsorted = new PageImpl<>(alquileresFiltradosSinOrdenar, pr, alquileresFiltradosSinOrdenar.size());
 
-                response.setMessage("Mostrando los alquileres filtrados y sin ordenar...");
-                response.setValue(alquileresFiltradosUnsorted);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-
-            }else{
-
+            } else {
                 Comparator<Alquiler> comparator = null;
                 switch (orden) {
                     case "peliculaIdAsc":
@@ -187,11 +191,17 @@ public class AlquilerServiceImpl implements AlquilerService {
                     default:
                         break;
                 }
-                List<Alquiler> alquileresFinal = foundAlquileres.stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
-                Page<Alquiler> alquileres = new PageImpl<>(alquileresFinal, pr, alquileresFinal.size());
-
-                response.setMessage("mostrando alquileres segun los filtros y el orden indicados");
-                response.setValue(alquileres);
+                if (peliculaId == null && usuariId == null && fechaInicio == null && fechaFin == null && precio == null) {
+                    Page<Alquiler> foundAlquileresOrdenadosSinFiltrar = alquilerRepository.findAll(pr);
+                    foundAlquileres = new PageImpl<>(comparator != null ? foundAlquileresOrdenadosSinFiltrar.getContent().stream().sorted(comparator).collect(Collectors.toList()) : foundAlquileresOrdenadosSinFiltrar.getContent(), pr, foundAlquileresOrdenadosSinFiltrar.getTotalElements());
+                    response.setMessage("Mostrando alquileres ordenados y sin filtrar...");
+                    response.setValue(foundAlquileres);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                }
+                List<Alquiler> foundAlquileresFiltered = alquilerRepository.findAll().stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
+                foundAlquileres = PageableExecutionUtils.getPage(foundAlquileresFiltered, pr, foundAlquileresFiltered::size);
+                response.setMessage("mostrando alquileres filtrados y ordenados...");
+                response.setValue(foundAlquileres);
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }
 
@@ -203,6 +213,7 @@ public class AlquilerServiceImpl implements AlquilerService {
 
     /**
      * Metode que llista els lloguers d'un usuari especific dins de la base de dades.
+     *
      * @param usuarioId
      * @param token
      * @return un responseEntity amb tots els lloguers realitzats d'un usuari especific dins de la base de dades.
@@ -241,6 +252,7 @@ public class AlquilerServiceImpl implements AlquilerService {
 
     /**
      * Metode que troba un lloguer en especific segons la seva id.
+     *
      * @param alquilerId
      * @param token
      * @return un responseEntity amb el lloguer en especific.
@@ -274,6 +286,7 @@ public class AlquilerServiceImpl implements AlquilerService {
 
     /**
      * Metode que actualiza el estado del lloguer dins de la base de dades.
+     *
      * @param estado
      * @param alquilerId
      * @param token
@@ -318,6 +331,7 @@ public class AlquilerServiceImpl implements AlquilerService {
 
     /**
      * Metode que elimina un lloguer dins de la base de dades.
+     *
      * @param alquilerId
      * @param token
      * @return un responseEntity amb la confirmació de la eliminació del lloguer dins de la base de dades.

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -60,28 +61,28 @@ public class PeliculaServiceImpl implements PeliculaService {
         }
 
         try {
-            List<Pelicula> foundPeliculas = peliculaRepository.findAll();
-            Page<Pelicula> peliculasSinFiltroNiOrden = new PageImpl<>(foundPeliculas, pr, foundPeliculas.size());
             PeliculaFilterDTO filter = new PeliculaFilterDTO(director, genero, año, vecesAlquilada);
 
-            if (foundPeliculas.isEmpty()) {
-                response.setMessage("No hay peliculas");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-
+            Page<Pelicula> foundPeliculas;
             if (orden == null || orden.isEmpty()) {
                 if (director == null && genero == null && año == null && vecesAlquilada == null) {
                     response.setMessage("Mostrando peliculas...");
-                    response.setValue(peliculasSinFiltroNiOrden);
+                    foundPeliculas = peliculaRepository.findAll(pr);
+
+                    if (foundPeliculas.isEmpty()) {
+                        response.setMessage("No hay peliculas");
+                        return new ResponseEntity<>(response, HttpStatus.OK);
+                    }
+
+                    response.setValue(foundPeliculas);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                } else {
+                    List<Pelicula> peliculasFiltradasSinOrdenar = peliculaRepository.findAll().stream().filter(filter.getPredicate()).collect(Collectors.toList());
+                    foundPeliculas = PageableExecutionUtils.getPage(peliculasFiltradasSinOrdenar, pr, peliculasFiltradasSinOrdenar::size);
+                    response.setMessage("Mostrando peliculas filtradas y sin ordenar");
+                    response.setValue(foundPeliculas);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 }
-                List<Pelicula> peliculasFiltradasSinOrdenar = foundPeliculas.stream().filter(filter.getPredicate()).collect(Collectors.toList());
-                Page<Pelicula> peliculasFiltradasUnsorted = new PageImpl<>(peliculasFiltradasSinOrdenar, pr, peliculasFiltradasSinOrdenar.size());
-
-                response.setMessage("Mostrando peliculas filtradas y sin ordenar");
-                response.setValue(peliculasFiltradasUnsorted);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-
             } else {
 
                 Comparator<Pelicula> comparator = null;
@@ -106,12 +107,19 @@ public class PeliculaServiceImpl implements PeliculaService {
                     default:
                         break;
                 }
-                List<Pelicula> peliculasFinal = foundPeliculas.stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
-                Page<Pelicula> peliculas = new PageImpl<>(peliculasFinal, pr, peliculasFinal.size());
-
-                response.setMessage("Mostrando peliculas segun los filtros indicados");
-                response.setValue(peliculas);
-                return new ResponseEntity<>(response, HttpStatus.OK);
+                if (director == null && genero == null && año == null && vecesAlquilada == null) {
+                    Page<Pelicula> foundPeliculasOrdenadasSinFiltrar = peliculaRepository.findAll(pr);
+                    foundPeliculas = new PageImpl<>(comparator != null ? foundPeliculasOrdenadasSinFiltrar.getContent().stream().sorted(comparator).collect(Collectors.toList()) : foundPeliculasOrdenadasSinFiltrar.getContent(), pr, foundPeliculasOrdenadasSinFiltrar.getTotalElements());
+                    response.setMessage("Mostrando peliculas ordenadas sin filtrar");
+                    response.setValue(foundPeliculas);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                } else {
+                    List<Pelicula> foundPeliculasFiltradasOrdenadas = peliculaRepository.findAll().stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
+                    foundPeliculas = PageableExecutionUtils.getPage(foundPeliculasFiltradasOrdenadas, pr, foundPeliculasFiltradasOrdenadas::size);
+                    response.setMessage("Mostrando peliculas filtradas y ordenadas");
+                    response.setValue(foundPeliculas);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                }
             }
 
         } catch (Exception e) {

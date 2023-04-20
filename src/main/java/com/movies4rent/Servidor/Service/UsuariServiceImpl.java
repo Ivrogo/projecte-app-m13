@@ -70,6 +70,12 @@ public class UsuariServiceImpl implements UsuariService {
                 if (nombre == null && apellidos == null && username == null) {
                     response.setMessage("Mostrando usuarios...");
                     foundUsuaris = usuariRepository.findAll(pr);
+
+                    if (foundUsuaris.isEmpty()) {
+                        response.setMessage("No hi ha usuaris registats");
+                        return new ResponseEntity<>(response, HttpStatus.OK);
+                    }
+
                     response.setValue(foundUsuaris);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 } else {
@@ -103,11 +109,19 @@ public class UsuariServiceImpl implements UsuariService {
                     default:
                         break;
                 }
-                Page<Usuari> foundUsuarisFiltered = usuariRepository.findAll(pr);
-                foundUsuaris = new PageImpl<>(comparator != null ? foundUsuarisFiltered.getContent().stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList()) : foundUsuarisFiltered.getContent(), pr, foundUsuarisFiltered.getTotalElements());
-                response.setMessage("Mostrando usuarios filtrados y ordenados...");
-                response.setValue(foundUsuaris);
-                return new ResponseEntity<>(response, HttpStatus.OK);
+                if (nombre == null && apellidos == null && username == null) {
+                    Page<Usuari> foundUsuarisOrdenadosSinFiltrar = usuariRepository.findAll(pr);
+                    foundUsuaris = new PageImpl<>(comparator != null ? foundUsuarisOrdenadosSinFiltrar.getContent().stream().sorted(comparator).collect(Collectors.toList()) : foundUsuarisOrdenadosSinFiltrar.getContent(), pr, foundUsuarisOrdenadosSinFiltrar.getTotalElements());
+                    response.setMessage("Mostrando usuarios ordenados sin filtrar...");
+                    response.setValue(foundUsuaris);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                } else {
+                    List<Usuari> foundUsuarisFiltradosOrdenados = usuariRepository.findAll().stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
+                    foundUsuaris = PageableExecutionUtils.getPage(foundUsuarisFiltradosOrdenados, pr, foundUsuarisFiltradosOrdenados::size);
+                    response.setMessage("Mostrando usuarios filtrados y ordenados...");
+                    response.setValue(foundUsuaris);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                }
             }
 
         } catch (Exception e) {
