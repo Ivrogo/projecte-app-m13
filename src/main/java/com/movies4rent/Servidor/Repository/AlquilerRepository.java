@@ -15,4 +15,5 @@ public interface AlquilerRepository extends JpaRepository<Alquiler, UUID> {
     List<Alquiler> findByPelicula (UUID pelicula);
 
     List<Alquiler> findByUsuari (UUID usuario);
+
 }

@@ -178,18 +178,31 @@ public class PeliculaServiceImpl implements PeliculaService {
         }
 
         try {
-            if (peliculaDTO.getTitulo().isEmpty() || peliculaDTO.getDirector().isEmpty() || peliculaDTO.getGenero().isEmpty()) {
+
+            if (peliculaDTO.getTitulo() == null || peliculaDTO.getDirector() == null || peliculaDTO.getGenero() == null) {
+                response.setMessage("Los campos no pueden ser nulos");
+                return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+            } else if (peliculaDTO.getTitulo().isEmpty() || peliculaDTO.getDirector().isEmpty() || peliculaDTO.getGenero().isEmpty()) {
                 response.setMessage("Los campos no pueden estar vacios");
                 return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
             }
-            peliculaRepository.save(RegisterPeliculaDTO.fromDTOToEntity(peliculaDTO));
-            response.setMessage("Pelicula añadida correctamente");
-            return new ResponseEntity<>(response, HttpStatus.OK);
+
+            Optional<Pelicula> foundPeliculas = peliculaRepository.findByTitulo(peliculaDTO.getTitulo());
+
+            if (!foundPeliculas.isEmpty()) {
+                response.setMessage("La pelicula ya existe");
+                return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            } else {
+                peliculaRepository.save(RegisterPeliculaDTO.fromDTOToEntity(peliculaDTO));
+                response.setMessage("Pelicula añadida correctamente");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
         } catch (Exception e) {
-            response.setMessage("Pelicula ya existe");
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            response.setMessage("Error");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     /**
      * Metode que actualiza una pelicula.

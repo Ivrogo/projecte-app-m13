@@ -320,7 +320,7 @@ public class UsuariServiceImpl implements UsuariService {
             Optional<Usuari> foundUser = tokenUtils.getUser(token);
             if (foundUser == null ||!foundUser.isPresent()) {
                 response.setMessage("Sesión no válida");
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
             UserChangePasswordDTO.fromDTOToEntityUpdate(foundUser.get(), userChangePasswordDTO);
