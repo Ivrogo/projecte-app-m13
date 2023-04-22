@@ -18,7 +18,7 @@ public interface PeliculaController {
 
     ResponseEntity<ResponseDTO> getPeliculasFiltered(@RequestParam int page, @RequestParam int pageSize, @RequestParam(required = false) String director, @RequestParam(required = false) String genero,
                                                      @RequestParam(required = false) Integer año, @RequestParam(required = false) Integer vecesAlquildada, @RequestParam(value = "token", required = true) String token,
-                                                     @RequestParam(value = "vecesAlquiladaAsc, vecesAlquiladaDesc, duracionAsc, duracionDesc, añoAsc, añoDesc", required = false) String orden);
+                                                     @RequestParam(value = "orden", required = false) String orden);
 
     ResponseEntity<ResponseDTO> getPelicula(@PathVariable UUID id, @RequestParam(value = "token", required = true) String token);
 
