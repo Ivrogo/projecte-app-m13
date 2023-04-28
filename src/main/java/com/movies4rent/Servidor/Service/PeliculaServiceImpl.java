@@ -50,7 +50,7 @@ public class PeliculaServiceImpl implements PeliculaService {
      * @return un responseEntity amb una llista de peliculas.
      */
     @Override
-    public ResponseEntity<ResponseDTO> findPeliculasFiltered(int page, int pageSize, String director, String genero, Integer año, Integer vecesAlquilada, String token, String orden) {
+    public ResponseEntity<ResponseDTO> findPeliculasFiltered(int page, int pageSize, String director, String genero, Integer ano, Integer vecesAlquilada, String token, String orden) {
 
         ResponseDTO<Page<Pelicula>> response = new ResponseDTO();
         PageRequest pr = PageRequest.of(page, pageSize);
@@ -61,11 +61,11 @@ public class PeliculaServiceImpl implements PeliculaService {
         }
 
         try {
-            PeliculaFilterDTO filter = new PeliculaFilterDTO(director, genero, año, vecesAlquilada);
+            PeliculaFilterDTO filter = new PeliculaFilterDTO(director, genero, ano, vecesAlquilada);
 
             Page<Pelicula> foundPeliculas;
             if (orden == null || orden.isEmpty()) {
-                if (director == null && genero == null && año == null && vecesAlquilada == null) {
+                if (director == null && genero == null && ano == null && vecesAlquilada == null) {
                     response.setMessage("Mostrando peliculas...");
                     foundPeliculas = peliculaRepository.findAll(pr);
 
@@ -99,15 +99,15 @@ public class PeliculaServiceImpl implements PeliculaService {
                     case "duracionDesc":
                         comparator = Comparator.comparing(Pelicula::getDuracion).reversed();
                         break;
-                    case "añoAsc":
+                    case "anoAsc":
                         comparator = Comparator.comparing(Pelicula::getAño);
                         break;
-                    case "añoDesc":
+                    case "anoDesc":
                         comparator = Comparator.comparing(Pelicula::getAño).reversed();
                     default:
                         break;
                 }
-                if (director == null && genero == null && año == null && vecesAlquilada == null) {
+                if (director == null && genero == null && ano == null && vecesAlquilada == null) {
                     Page<Pelicula> foundPeliculasOrdenadasSinFiltrar = peliculaRepository.findAll(pr);
                     foundPeliculas = new PageImpl<>(comparator != null ? foundPeliculasOrdenadasSinFiltrar.getContent().stream().sorted(comparator).collect(Collectors.toList()) : foundPeliculasOrdenadasSinFiltrar.getContent(), pr, foundPeliculasOrdenadasSinFiltrar.getTotalElements());
                     response.setMessage("Mostrando peliculas ordenadas sin filtrar");
