@@ -43,10 +43,10 @@ public class AlquilerFilterDTO {
             predicate = predicate.and(alquiler -> alquiler.getUsuari().equals(usuari));
         }
         if (fechaInicio != null) {
-            predicate = predicate.and(alquiler -> alquiler.getFechaInicio() == fechaInicio);
+            predicate = predicate.and(alquiler -> alquiler.getFechaInicio().toString().equals(fechaInicio.toString()));
         }
         if (fechaFin != null) {
-            predicate = predicate.and(alquiler -> alquiler.getFechaFin() == fechaFin);
+            predicate = predicate.and(alquiler -> alquiler.getFechaFin().toString().equals(fechaFin.toString()));
         }
         if (precio != null )  {
             predicate = predicate.and(alquiler -> alquiler.getPrecio() == precio);

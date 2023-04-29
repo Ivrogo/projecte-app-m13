@@ -30,10 +30,10 @@ public class PeliculaFilterDTO {
         if (genero != null && !genero.isEmpty()) {
             predicate = predicate.and(pelicula -> pelicula.getGenero().equalsIgnoreCase(genero));
         }
-        if (año != null && año > 0) {
+        if (año != null && año >= 0) {
             predicate = predicate.and(pelicula -> pelicula.getAño() == año);
         }
-        if (vecesAlquilada != null && vecesAlquilada > 0) {
+        if (vecesAlquilada != null && vecesAlquilada >= 0) {
             predicate = predicate.and(pelicula -> pelicula.getVecesAlquilada() == vecesAlquilada);
         }
         return predicate;
