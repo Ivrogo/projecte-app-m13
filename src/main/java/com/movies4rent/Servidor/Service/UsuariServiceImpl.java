@@ -10,15 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -80,7 +76,18 @@ public class UsuariServiceImpl implements UsuariService {
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 } else {
                     List<Usuari> usuarisFiltradosSinOrdenar = usuariRepository.findAll().stream().filter(filter.getPredicate()).collect(Collectors.toList());
-                    foundUsuaris = PageableExecutionUtils.getPage(usuarisFiltradosSinOrdenar, pr, usuarisFiltradosSinOrdenar::size);
+                    int paginaSize = pr.getPageSize();
+                    int currentPage = pr.getPageNumber();
+                    int startItem = currentPage * paginaSize;
+                    List<Usuari> paginatedUsuaris;
+
+                    if(usuarisFiltradosSinOrdenar.size() < startItem) {
+                        paginatedUsuaris = Collections.emptyList();
+                    } else {
+                        int toIndex = Math.min(startItem + paginaSize, usuarisFiltradosSinOrdenar.size());
+                        paginatedUsuaris = usuarisFiltradosSinOrdenar.subList(startItem, toIndex);
+                    }
+                    foundUsuaris = new PageImpl<>(paginatedUsuaris, pr, usuarisFiltradosSinOrdenar.size());
                     response.setMessage("Mostrando usuarios filtrados y sin ordenar...");
                     response.setValue(foundUsuaris);
                     return new ResponseEntity<>(response, HttpStatus.OK);
@@ -110,14 +117,40 @@ public class UsuariServiceImpl implements UsuariService {
                         break;
                 }
                 if (nombre == null && apellidos == null && username == null) {
-                    Page<Usuari> foundUsuarisOrdenadosSinFiltrar = usuariRepository.findAll(pr);
-                    foundUsuaris = new PageImpl<>(comparator != null ? foundUsuarisOrdenadosSinFiltrar.getContent().stream().sorted(comparator).collect(Collectors.toList()) : foundUsuarisOrdenadosSinFiltrar.getContent(), pr, foundUsuarisOrdenadosSinFiltrar.getTotalElements());
+                    List<Usuari> foundUsuarisSinFiltrarOrdenados = usuariRepository.findAll();
+
+                    if (comparator != null) {
+                        foundUsuarisSinFiltrarOrdenados.sort(comparator);
+                    }
+                    int paginaSize = pr.getPageSize();
+                    int currentPage = pr.getPageNumber();
+                    int startItem = currentPage * paginaSize;
+                    List<Usuari> paginatedUsuaris;
+
+                    if (foundUsuarisSinFiltrarOrdenados.size() < startItem) {
+                        paginatedUsuaris = Collections.emptyList();
+                    } else {
+                        int toIndex = Math.min(startItem + paginaSize, foundUsuarisSinFiltrarOrdenados.size());
+                        paginatedUsuaris = foundUsuarisSinFiltrarOrdenados.subList(startItem, toIndex);
+                    }
+                    foundUsuaris = new PageImpl<>(paginatedUsuaris, pr, foundUsuarisSinFiltrarOrdenados.size());
                     response.setMessage("Mostrando usuarios ordenados sin filtrar...");
                     response.setValue(foundUsuaris);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 } else {
                     List<Usuari> foundUsuarisFiltradosOrdenados = usuariRepository.findAll().stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
-                    foundUsuaris = PageableExecutionUtils.getPage(foundUsuarisFiltradosOrdenados, pr, foundUsuarisFiltradosOrdenados::size);
+                    int paginaSize = pr.getPageSize();
+                    int currentPage = pr.getPageNumber();
+                    int startItem = currentPage * paginaSize;
+                    List<Usuari> paginatedUsuaris;
+
+                    if (foundUsuarisFiltradosOrdenados.size() < startItem) {
+                        paginatedUsuaris = Collections.emptyList();
+                    } else {
+                        int toIndex = Math.min(startItem + paginaSize, foundUsuarisFiltradosOrdenados.size());
+                        paginatedUsuaris = foundUsuarisFiltradosOrdenados.subList(startItem, toIndex);
+                    }
+                    foundUsuaris = new PageImpl<>(paginatedUsuaris, pr, foundUsuarisFiltradosOrdenados.size());
                     response.setMessage("Mostrando usuarios filtrados y ordenados...");
                     response.setValue(foundUsuaris);
                     return new ResponseEntity<>(response, HttpStatus.OK);

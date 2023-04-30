@@ -10,15 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -78,7 +74,18 @@ public class PeliculaServiceImpl implements PeliculaService {
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 } else {
                     List<Pelicula> peliculasFiltradasSinOrdenar = peliculaRepository.findAll().stream().filter(filter.getPredicate()).collect(Collectors.toList());
-                    foundPeliculas = PageableExecutionUtils.getPage(peliculasFiltradasSinOrdenar, pr, peliculasFiltradasSinOrdenar::size);
+                    int paginaSize = pr.getPageSize();
+                    int currentPage  = pr.getPageNumber();
+                    int startItem = currentPage * paginaSize;
+                    List<Pelicula> paginatedPeliculas;
+
+                     if(peliculasFiltradasSinOrdenar.size() < startItem) {
+                         paginatedPeliculas = Collections.emptyList();
+                     } else {
+                         int toIndex = Math.min(startItem + paginaSize, peliculasFiltradasSinOrdenar.size());
+                         paginatedPeliculas = peliculasFiltradasSinOrdenar.subList(startItem, toIndex);
+                     }
+                    foundPeliculas = new PageImpl<>(paginatedPeliculas, pr, peliculasFiltradasSinOrdenar.size());
                     response.setMessage("Mostrando peliculas filtradas y sin ordenar");
                     response.setValue(foundPeliculas);
                     return new ResponseEntity<>(response, HttpStatus.OK);
@@ -87,6 +94,12 @@ public class PeliculaServiceImpl implements PeliculaService {
 
                 Comparator<Pelicula> comparator = null;
                 switch (orden) {
+                    case "directorAsc":
+                        comparator = Comparator.comparing(Pelicula::getDirector);
+                        break;
+                    case "directorDesc":
+                        comparator = Comparator.comparing(Pelicula::getDirector).reversed();
+                        break;
                     case "vecesAlquiladaAsc":
                         comparator = Comparator.comparing(Pelicula::getVecesAlquilada);
                         break;
@@ -108,16 +121,42 @@ public class PeliculaServiceImpl implements PeliculaService {
                         break;
                 }
                 if (director == null && genero == null && año == null && vecesAlquilada == null) {
-                    Page<Pelicula> foundPeliculasOrdenadasSinFiltrar = peliculaRepository.findAll(pr);
-                    foundPeliculas = new PageImpl<>(comparator != null ? foundPeliculasOrdenadasSinFiltrar.getContent().stream().sorted(comparator).collect(Collectors.toList()) : foundPeliculasOrdenadasSinFiltrar.getContent(), pr, foundPeliculasOrdenadasSinFiltrar.getTotalElements());
+                    List<Pelicula> foundPeliculasSinFiltrarOrdenados = peliculaRepository.findAll();
+
+                    if (comparator != null) {
+                        foundPeliculasSinFiltrarOrdenados.sort(comparator);
+                    }
+                    int paginaSize = pr.getPageSize();
+                    int currentPage  = pr.getPageNumber();
+                    int startItem = currentPage * paginaSize;
+                    List<Pelicula> paginatedPeliculas;
+
+                    if (foundPeliculasSinFiltrarOrdenados.size() < startItem) {
+                        paginatedPeliculas = Collections.emptyList();
+                    } else {
+                        int toIndex = Math.min(startItem + paginaSize, foundPeliculasSinFiltrarOrdenados.size());
+                        paginatedPeliculas = foundPeliculasSinFiltrarOrdenados.subList(startItem, toIndex);
+                    }
+                    Page<Pelicula> foundPeliculasFinal = new PageImpl<>(paginatedPeliculas, pr, foundPeliculasSinFiltrarOrdenados.size());
                     response.setMessage("Mostrando peliculas ordenadas sin filtrar");
-                    response.setValue(foundPeliculas);
+                    response.setValue(foundPeliculasFinal);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 } else {
                     List<Pelicula> foundPeliculasFiltradasOrdenadas = peliculaRepository.findAll().stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
-                    foundPeliculas = PageableExecutionUtils.getPage(foundPeliculasFiltradasOrdenadas, pr, foundPeliculasFiltradasOrdenadas::size);
+                    int paginaSize = pr.getPageSize();
+                    int currentPage = pr.getPageNumber();
+                    int startItem = currentPage * paginaSize;
+                    List<Pelicula> paginatedPeliculas;
+
+                    if (foundPeliculasFiltradasOrdenadas.size() < startItem) {
+                        paginatedPeliculas = Collections.emptyList();
+                    } else {
+                        int toIndex = Math.min(startItem + paginaSize, foundPeliculasFiltradasOrdenadas.size());
+                        paginatedPeliculas = foundPeliculasFiltradasOrdenadas.subList(startItem, toIndex);
+                    }
+                    Page<Pelicula> finalFoundPeliculas = new PageImpl<>(paginatedPeliculas, pr, foundPeliculasFiltradasOrdenadas.size());
                     response.setMessage("Mostrando peliculas filtradas y ordenadas");
-                    response.setValue(foundPeliculas);
+                    response.setValue(finalFoundPeliculas);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 }
             }

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -149,7 +148,18 @@ public class AlquilerServiceImpl implements AlquilerService {
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 } else {
                     List<Alquiler> alquileresFiltradosSinOrdenar = alquilerRepository.findAll().stream().filter(filter.getPredicate()).collect(Collectors.toList());
-                    foundAlquileres = PageableExecutionUtils.getPage(alquileresFiltradosSinOrdenar, pr, alquileresFiltradosSinOrdenar::size);
+                    int paginaSize = pr.getPageSize();
+                    int currentPage = pr.getPageNumber();
+                    int startItem = currentPage * paginaSize;
+                    List<Alquiler> paginatedAlquileres;
+
+                    if (alquileresFiltradosSinOrdenar.size() < startItem) {
+                        paginatedAlquileres = Collections.emptyList();
+                    } else {
+                        int toIndex = Math.min(startItem + paginaSize, alquileresFiltradosSinOrdenar.size());
+                        paginatedAlquileres = alquileresFiltradosSinOrdenar.subList(startItem, toIndex);
+                    }
+                    foundAlquileres = new PageImpl<>(paginatedAlquileres, pr, alquileresFiltradosSinOrdenar.size());
                     response.setMessage("Mostrando los alquileres filtrados y sin ordenar...");
                     response.setValue(foundAlquileres);
                     return new ResponseEntity<>(response, HttpStatus.OK);
@@ -192,14 +202,40 @@ public class AlquilerServiceImpl implements AlquilerService {
                         break;
                 }
                 if (peliculaId == null && usuariId == null && fechaInicio == null && fechaFin == null && precio == null) {
-                    Page<Alquiler> foundAlquileresOrdenadosSinFiltrar = alquilerRepository.findAll(pr);
-                    foundAlquileres = new PageImpl<>(comparator != null ? foundAlquileresOrdenadosSinFiltrar.getContent().stream().sorted(comparator).collect(Collectors.toList()) : foundAlquileresOrdenadosSinFiltrar.getContent(), pr, foundAlquileresOrdenadosSinFiltrar.getTotalElements());
+                    List<Alquiler> foundAlquileresSinFiltrarOrdenados = alquilerRepository.findAll();
+
+                    if (comparator != null) {
+                        foundAlquileresSinFiltrarOrdenados.sort(comparator);
+                    }
+                    int paginaSize = pr.getPageSize();
+                    int currentPage = pr.getPageNumber();
+                    int startItem = currentPage * paginaSize;
+                    List<Alquiler> paginatedAlquileres;
+
+                    if (foundAlquileresSinFiltrarOrdenados.size() < startItem) {
+                        paginatedAlquileres = Collections.emptyList();
+                    } else {
+                        int toIndex = Math.min(startItem + paginaSize, foundAlquileresSinFiltrarOrdenados.size());
+                        paginatedAlquileres = foundAlquileresSinFiltrarOrdenados.subList(startItem, toIndex);
+                    }
+                    foundAlquileres = new PageImpl<>(paginatedAlquileres, pr, foundAlquileresSinFiltrarOrdenados.size());
                     response.setMessage("Mostrando alquileres ordenados y sin filtrar...");
                     response.setValue(foundAlquileres);
                     return new ResponseEntity<>(response, HttpStatus.OK);
                 }
                 List<Alquiler> foundAlquileresFiltered = alquilerRepository.findAll().stream().filter(filter.getPredicate()).sorted(comparator).collect(Collectors.toList());
-                foundAlquileres = PageableExecutionUtils.getPage(foundAlquileresFiltered, pr, foundAlquileresFiltered::size);
+                int paginaSize = pr.getPageSize();
+                int currentPage = pr.getPageNumber();
+                int startItem = currentPage * paginaSize;
+                List<Alquiler> paginatedAlquileres;
+
+                if (foundAlquileresFiltered.size() < startItem) {
+                    paginatedAlquileres = Collections.emptyList();
+                } else {
+                    int toIndex = Math.min(startItem + paginaSize, foundAlquileresFiltered.size());
+                    paginatedAlquileres = foundAlquileresFiltered.subList(startItem, toIndex);
+                }
+                foundAlquileres = new PageImpl<>(paginatedAlquileres, pr, foundAlquileresFiltered.size());
                 response.setMessage("mostrando alquileres filtrados y ordenados...");
                 response.setValue(foundAlquileres);
                 return new ResponseEntity<>(response, HttpStatus.OK);
