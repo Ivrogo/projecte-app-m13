@@ -39,14 +39,14 @@ public class PeliculaServiceImpl implements PeliculaService {
      * @param pageSize
      * @param director
      * @param genero
-     * @param año
+     * @param ano
      * @param vecesAlquilada
      * @param token
      * @param orden
      * @return un responseEntity amb una llista de peliculas.
      */
     @Override
-    public ResponseEntity<ResponseDTO> findPeliculasFiltered(int page, int pageSize, String director, String genero, Integer año, Integer vecesAlquilada, String token, String orden) {
+    public ResponseEntity<ResponseDTO> findPeliculasFiltered(int page, int pageSize,String titulo, String director, String genero, Integer ano, Integer vecesAlquilada, String token, String orden) {
 
         ResponseDTO<Page<Pelicula>> response = new ResponseDTO();
         PageRequest pr = PageRequest.of(page, pageSize);
@@ -57,17 +57,17 @@ public class PeliculaServiceImpl implements PeliculaService {
         }
 
         try {
-            PeliculaFilterDTO filter = new PeliculaFilterDTO(director, genero, año, vecesAlquilada);
+            PeliculaFilterDTO filter = new PeliculaFilterDTO(titulo, director, genero, ano, vecesAlquilada);
 
             Page<Pelicula> foundPeliculas;
             if (orden == null || orden.isEmpty()) {
-                if (director == null && genero == null && año == null && vecesAlquilada == null) {
+                if (titulo == null && director == null && genero == null && ano == null && vecesAlquilada == null) {
                     response.setMessage("Mostrando peliculas...");
                     foundPeliculas = peliculaRepository.findAll(pr);
 
                     if (foundPeliculas.isEmpty()) {
                         response.setMessage("No hay peliculas");
-                        return new ResponseEntity<>(response, HttpStatus.OK);
+                        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
                     }
 
                     response.setValue(foundPeliculas);
@@ -94,6 +94,12 @@ public class PeliculaServiceImpl implements PeliculaService {
 
                 Comparator<Pelicula> comparator = null;
                 switch (orden) {
+                    case "tituloAsc":
+                        comparator = Comparator.comparing(Pelicula::getTitulo);
+                        break;
+                    case "tituloDesc":
+                        comparator = Comparator.comparing(Pelicula::getTitulo).reversed();
+                        break;
                     case "directorAsc":
                         comparator = Comparator.comparing(Pelicula::getDirector);
                         break;
@@ -120,7 +126,7 @@ public class PeliculaServiceImpl implements PeliculaService {
                     default:
                         break;
                 }
-                if (director == null && genero == null && año == null && vecesAlquilada == null) {
+                if (titulo == null && director == null && genero == null && ano == null && vecesAlquilada == null) {
                     List<Pelicula> foundPeliculasSinFiltrarOrdenados = peliculaRepository.findAll();
 
                     if (comparator != null) {

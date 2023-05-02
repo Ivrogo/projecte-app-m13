@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,4 +31,11 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, UUID> {
 
     @Query("SELECT p FROM Pelicula p WHERE p.año = :año")
     Page<Pelicula> findByAño(Pageable pageable, @Param("año") int año);
+
+    @Query("SELECT p FROM Pelicula p WHERE p.vecesAlquilada >= 0 ORDER BY p.vecesAlquilada DESC")
+    Page<Pelicula> findByVecesAlquilada(Pageable pageable);
+
+    @Query("SELECT p FROM Pelicula p WHERE p.vecesAlquilada >= 0 ORDER BY p.vecesAlquilada DESC")
+    List<Pelicula> findPeliculasByVecesAlquilada();
+
 }

@@ -7,6 +7,7 @@ import com.movies4rent.Servidor.Entities.Token;
 import com.movies4rent.Servidor.Entities.Usuari;
 import com.movies4rent.Servidor.Repository.TokenRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
+import com.movies4rent.Servidor.Utils.PasswordEncryptUtil;
 import com.movies4rent.Servidor.Utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,8 @@ public class LoginServiceImpl implements LoginService {
     UsuariRepository usuariRepository;
     @Autowired
     private TokenUtils tokenUtils;
+    @Autowired
+    private PasswordEncryptUtil passwordEncryptUtil;
 
     /**
      * Implementa el metode login, aquest rep un usuari i una contrasenya i retorna un token de sessió.
@@ -40,7 +43,6 @@ public class LoginServiceImpl implements LoginService {
      */
     @Override
     public ResponseEntity<ResponseDTO> login(String username, String password) {
-
         ResponseDTO<LoginTokenDTO> responseDTO = new ResponseDTO();
         try {
             Optional<Usuari> usuari = usuariRepository.findUserByUsername(username);
@@ -49,8 +51,11 @@ public class LoginServiceImpl implements LoginService {
                 responseDTO.setMessage("No existe el usuario");
                 return new ResponseEntity<>(responseDTO, HttpStatus.NOT_FOUND);
             } else {
-                boolean match = password.equals(usuari.get().getPassword());
-                if (!match) {
+                // Desencriptar la contraseña almacenada en la base de datos
+                String decryptedPassword = PasswordEncryptUtil.decryptPassword(usuari.get().getPassword());
+
+                // Verificar si la contraseña coincide
+                if (!password.equals(decryptedPassword)) {
                     responseDTO.setMessage("La contraseña no coincide");
                     return new ResponseEntity<>(responseDTO, HttpStatus.CONFLICT);
                 }
@@ -68,6 +73,7 @@ public class LoginServiceImpl implements LoginService {
             return new ResponseEntity<>(responseDTO, HttpStatus.BAD_REQUEST);
         }
     }
+
 
     /**
      * Implementa el metode logout, aquest rep un token i retorna un dto amb un missatge confirmant el fi de la sessió.
@@ -117,12 +123,22 @@ public class LoginServiceImpl implements LoginService {
                 response.setMessage("Los campos no pueden ser nulos");
                 return new ResponseEntity<>(response, HttpStatus.CONFLICT);
             }
-            usuariRepository.save(RegisterUserDTO.fromDTOToEntity(userDTO));
+
+            // Encriptar la contraseña antes de guardarla en la base de datos
+            String encryptedPassword = PasswordEncryptUtil.encryptPassword(userDTO.getPassword());
+
+            // Crear un objeto Usuari y asignar los valores del DTO
+            Usuari user = RegisterUserDTO.fromDTOToEntity(userDTO);
+            user.setPassword(encryptedPassword);
+
+            usuariRepository.save(user);
+
             response.setMessage("Usuario registrado correctamente");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            response.setMessage("Usuari ja existeix");
+            response.setMessage("Usuario ya existe");
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
     }
+
 }

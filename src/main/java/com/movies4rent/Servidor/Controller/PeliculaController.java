@@ -16,8 +16,8 @@ import java.util.UUID;
  */
 public interface PeliculaController {
 
-    ResponseEntity<ResponseDTO> getPeliculasFiltered(@RequestParam int page, @RequestParam int pageSize, @RequestParam(required = false) String director, @RequestParam(required = false) String genero,
-                                                     @RequestParam(required = false) Integer año, @RequestParam(required = false) Integer vecesAlquildada, @RequestParam(value = "token", required = true) String token,
+    ResponseEntity<ResponseDTO> getPeliculasFiltered(@RequestParam int page, @RequestParam int pageSize, @RequestParam(required = false) String titulo, @RequestParam(required = false) String director, @RequestParam(required = false) String genero,
+                                                     @RequestParam(required = false) Integer ano, @RequestParam(required = false) Integer vecesAlquildada, @RequestParam(value = "token", required = true) String token,
                                                      @RequestParam(value = "orden", required = false) String orden);
     ResponseEntity<ResponseDTO> getPelicula(@PathVariable UUID id, @RequestParam(value = "token", required = true) String token);
 

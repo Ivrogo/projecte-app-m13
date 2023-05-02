@@ -18,6 +18,16 @@ public class RegisterUserDTO {
     private String direccion;
 
 
+    public RegisterUserDTO(String email, String username, String password, String nombre, String apellidos, String telefono, String direccion) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.telefono = telefono;
+        this.direccion = direccion;
+    }
+
     /**
      * Metode per transformar un DTO a un objecte usuari
      * @param userDTO DTO amb les dades de l'usuari a transformar

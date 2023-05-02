@@ -5,6 +5,8 @@ import com.movies4rent.Servidor.Entities.Pelicula;
 import com.movies4rent.Servidor.Entities.Usuari;
 import com.movies4rent.Servidor.Repository.PeliculaRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
+import com.movies4rent.Servidor.Service.LoginService;
+import com.movies4rent.Servidor.Utils.PasswordEncryptUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -21,12 +23,18 @@ import java.util.stream.IntStream;
 public class SampleDataLoader implements CommandLineRunner {
 
     private Logger logger = LoggerFactory.getLogger(SampleDataLoader.class);
+    private final LoginService loginService;
+
+    private final PasswordEncryptUtil passwordEncryptUtil;
+
     private final UsuariRepository userRepository;
 
     private final PeliculaRepository pelRepository;
     private final Faker faker;
 
-    public SampleDataLoader(UsuariRepository userRepository, PeliculaRepository pelRepository) {
+    public SampleDataLoader(LoginService loginService, PasswordEncryptUtil passwordEncryptUtil, UsuariRepository userRepository, PeliculaRepository pelRepository) {
+        this.loginService = loginService;
+        this.passwordEncryptUtil = passwordEncryptUtil;
         this.userRepository = userRepository;
         this.pelRepository = pelRepository;
         this.faker = new Faker();
@@ -43,14 +51,15 @@ public class SampleDataLoader implements CommandLineRunner {
         usuari.setEmail("saoyara@gmail.com");
         usuari.setDireccion("demo");
         usuari.setUsername("admin");
-        usuari.setPassword("admin");
+        usuari.setPassword(PasswordEncryptUtil.encryptPassword("admin"));
         usuari.setIsAdmin(true);
+
 
         userRepository.save(usuari);
 
 
         //Creamos 50 usuarios
-        List<Usuari> usuaris = IntStream.rangeClosed(1,50)
+        List<Usuari> users = IntStream.rangeClosed(1,50)
                 .mapToObj(i -> new Usuari(
                         faker.name().firstName(),
                         faker.name().lastName(),
@@ -58,12 +67,12 @@ public class SampleDataLoader implements CommandLineRunner {
                         faker.internet().emailAddress(),
                         faker.address().streetAddress(),
                         faker.name().username(),
-                        faker.internet().password(),
+                        PasswordEncryptUtil.encryptPassword(faker.internet().password()),
                         false
                 ))
                 .toList();
 
-        userRepository.saveAll(usuaris);
+        userRepository.saveAll(users);
 
 
         //Creamos 10 peliculas con el mismo director
