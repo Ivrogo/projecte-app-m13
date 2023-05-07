@@ -2,6 +2,7 @@ package com.movies4rent.Servidor.Service;
 
 import com.movies4rent.Servidor.DTO.PeliculaUpdateDTO;
 import com.movies4rent.Servidor.DTO.RegisterPeliculaDTO;
+import com.movies4rent.Servidor.DTO.RegisterUserDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.Entities.Pelicula;
 import com.movies4rent.Servidor.Entities.Token;
@@ -9,6 +10,7 @@ import com.movies4rent.Servidor.Entities.Usuari;
 import com.movies4rent.Servidor.Repository.PeliculaRepository;
 import com.movies4rent.Servidor.Repository.TokenRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
+import com.movies4rent.Servidor.Utils.PasswordEncryptUtil;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -60,16 +62,18 @@ public class PeliculaServiceTest {
     @Order(1)
     @DisplayName("Registra un usuario")
     public void AfegimUsuariBaseDades() {
-        Usuari usuari = new Usuari();
-        usuari.setUsername("demo");
-        usuari.setPassword("demo");
-        usuari.setEmail("demo");
-        usuari.setNombre("demo");
-        usuari.setTelefono("123");
-        usuari.setApellidos("demo");
-        usuari.setDireccion("demo");
+        RegisterUserDTO user = new RegisterUserDTO(
+                "demo",
+                "demo",
+                "demo",
+                "demo",
+                "demo demo",
+                "1234567",
+                "demo"
+        );
 
-        usuariRepository.save(usuari);
+        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
@@ -78,7 +82,7 @@ public class PeliculaServiceTest {
     public void AfegimAdminBaseDades() {
         Usuari usuari = new Usuari();
         usuari.setUsername("admin");
-        usuari.setPassword("admin");
+        usuari.setPassword(PasswordEncryptUtil.encryptPassword("admin"));
         usuari.setEmail("admin");
         usuari.setNombre("admin");
         usuari.setTelefono("123");
@@ -284,7 +288,7 @@ public class PeliculaServiceTest {
 
 
         Optional<Token> token = tokenRepository.findByUsername("admin");
-        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, pelicula.getDirector(), pelicula.getGenero(), pelicula.getAño(), pelicula.getVecesAlquilada(), token.get().getToken(), "");
+        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, pelicula.getTitulo(), pelicula.getDirector(), pelicula.getGenero(), pelicula.getAño(), pelicula.getVecesAlquilada(), token.get().getToken(), "");
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -300,9 +304,10 @@ public class PeliculaServiceTest {
         String director = "George Lucas";
         String genero = "";
         String orden = "";
+        String titulo = "";
 
         Optional<Token> token = tokenRepository.findByUsername("admin");
-        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, director, genero, año, vecesAlquilada, token.get().getToken(), orden);
+        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize,titulo, director, genero, año, vecesAlquilada, token.get().getToken(), orden);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -315,12 +320,13 @@ public class PeliculaServiceTest {
         int pageSize = 5;
         Integer año = null;
         Integer vecesAlquilada = null;
+        String titulo = "";
         String director = "";
         String genero = "Ciencia ficción";
         String orden = "";
 
         Optional<Token> token = tokenRepository.findByUsername("admin");
-        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, director, genero, año, vecesAlquilada, token.get().getToken(), orden);
+        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, titulo, director, genero, año, vecesAlquilada, token.get().getToken(), orden);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -333,12 +339,13 @@ public class PeliculaServiceTest {
         int pageSize = 5;
         Integer año = 2020;
         Integer vecesAlquilada = null;
+        String titulo = "";
         String director = "";
         String genero = "";
         String orden = "";
 
         Optional<Token> token = tokenRepository.findByUsername("admin");
-        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, director, genero, año, vecesAlquilada, token.get().getToken(), orden);
+        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, titulo, director, genero, año, vecesAlquilada, token.get().getToken(), orden);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -351,35 +358,56 @@ public class PeliculaServiceTest {
         int pageSize = 5;
         Integer año = null;
         Integer vecesAlquilada = 4;
+        String titulo = "";
         String director = "";
         String genero = "";
         String orden = "";
 
         Optional<Token> token = tokenRepository.findByUsername("admin");
-        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, director, genero, año, vecesAlquilada, token.get().getToken(), orden);
+        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, titulo, director, genero, año, vecesAlquilada, token.get().getToken(), orden);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     @Order(19)
+    @DisplayName("Muestra peliculas segun el titulo")
+    public void MuestrapeliculasFiltroTitulo() {
+
+        int page = 0;
+        int pageSize = 5;
+        Integer año = null;
+        Integer vecesAlquilada = null;
+        String titulo = "La guerra de las galaxias";
+        String director = "";
+        String genero = "";
+        String orden = "";
+
+        Optional<Token> token = tokenRepository.findByUsername("admin");
+        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, titulo, director, genero, año, vecesAlquilada, token.get().getToken(), orden);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @Order(20)
     @DisplayName("Muestra peliculas pero token no es valido")
     public void MuestraUnaPeliculaFiltroTokenInvalido() {
         int page = 0;
         int pageSize = 5;
         Integer año = null;
         Integer vecesAlquilada = null;
+        String titulo = "";
         String director = "";
         String genero = "";
         String orden = "";
 
         Optional<Token> token = tokenRepository.findByUsername("admin");
-        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, director, genero, año, vecesAlquilada, "", orden);
+        ResponseEntity<ResponseDTO> response = peliculaService.findPeliculasFiltered(page, pageSize, titulo, director, genero, año, vecesAlquilada, "", orden);
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
 
     @Test
-    @Order(20)
+    @Order(21)
     @DisplayName("Muestra una pelicula")
     public void MuestraUnaPelicula() {
 
@@ -390,7 +418,7 @@ public class PeliculaServiceTest {
     }
 
     @Test
-    @Order(21)
+    @Order(22)
     @DisplayName("updatea una pelicula")
     public void updateaUnaPelicula() {
 
@@ -409,7 +437,7 @@ public class PeliculaServiceTest {
     }
 
     @Test
-    @Order(22)
+    @Order(23)
     @DisplayName("updatea una pelicula: token no valido")
     public void updateaUnaPeliculaTokenInvalido() {
 
@@ -427,7 +455,7 @@ public class PeliculaServiceTest {
     }
 
     @Test
-    @Order(23)
+    @Order(24)
     @DisplayName("updatea una pelicula: no tiene permisos")
     public void updateaUnaPeliculaNoTienePermisos() {
         PeliculaUpdateDTO peliculaUpdateDTO = new PeliculaUpdateDTO();
@@ -444,7 +472,7 @@ public class PeliculaServiceTest {
     }
 
     @Test
-    @Order(24)
+    @Order(25)
     @DisplayName("elimina una pelicula")
     public void eliminaUnaPelicula() {
 
@@ -455,7 +483,7 @@ public class PeliculaServiceTest {
     }
 
     @Test
-    @Order(25)
+    @Order(26)
     @DisplayName("elimina una pelicula: token no valido")
     public void eliminaUnaPeliculaTokenInvalido() {
 

@@ -1,5 +1,6 @@
 package com.movies4rent.Servidor.Service;
 
+import com.movies4rent.Servidor.DTO.RegisterUserDTO;
 import com.movies4rent.Servidor.DTO.ResponseDTO;
 import com.movies4rent.Servidor.Entities.Alquiler;
 import com.movies4rent.Servidor.Entities.Pelicula;
@@ -10,6 +11,7 @@ import com.movies4rent.Servidor.Repository.PeliculaRepository;
 import com.movies4rent.Servidor.Repository.TokenRepository;
 import com.movies4rent.Servidor.Repository.UsuariRepository;
 import com.movies4rent.Servidor.Utils.EstadoAlquiler;
+import com.movies4rent.Servidor.Utils.PasswordEncryptUtil;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -68,16 +70,18 @@ public class AlquilerServiceTest {
     @Order(1)
     @DisplayName("Registra un usuario")
     public void AfegimUsuariBaseDades() {
-        Usuari usuari = new Usuari();
-        usuari.setUsername("demo");
-        usuari.setPassword("demo");
-        usuari.setEmail("saoyara@gmail.com");
-        usuari.setNombre("demo");
-        usuari.setTelefono("123");
-        usuari.setApellidos("demo");
-        usuari.setDireccion("demo");
+        RegisterUserDTO user = new RegisterUserDTO(
+                "saoyara@gmail.com",
+                "demo",
+                "demo",
+                "demo",
+                "demo demo",
+                "1234567",
+                "demo"
+        );
 
-        usuariRepository.save(usuari);
+        ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
@@ -86,7 +90,7 @@ public class AlquilerServiceTest {
     public void AfegimAdminBaseDades() {
         Usuari usuari = new Usuari();
         usuari.setUsername("admin");
-        usuari.setPassword("admin");
+        usuari.setPassword(PasswordEncryptUtil.encryptPassword("admin"));
         usuari.setEmail("admin");
         usuari.setNombre("admin");
         usuari.setTelefono("123");

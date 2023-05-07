@@ -51,14 +51,15 @@ class LoginServiceTest {
     @Order(1)
     @DisplayName("Registra un usuario")
     public void TestRegisterUserOK() {
-        RegisterUserDTO user = new RegisterUserDTO();
-        user.setDireccion("demo");
-        user.setUsername("demo");
-        user.setPassword("demo");
-        user.setEmail("demo");
-        user.setNombre("demo");
-        user.setTelefono("123");
-        user.setApellidos("demo");
+        RegisterUserDTO user = new RegisterUserDTO(
+                "demo",
+                "demo",
+                "demo",
+                "demo",
+                "demo demo",
+                "1234567",
+                "demo"
+        );
 
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -71,14 +72,16 @@ class LoginServiceTest {
     @Order(2)
     @DisplayName("Error registra un usuario existente")
     public void registerUserError() {
-        RegisterUserDTO user = new RegisterUserDTO();
-        user.setDireccion("demo");
-        user.setUsername("demo");
-        user.setPassword("demo");
-        user.setEmail("demo");
-        user.setNombre("demo");
-        user.setTelefono("123");
-        user.setApellidos("demo");
+        RegisterUserDTO user = new RegisterUserDTO(
+                "demo",
+                "demo",
+                "demo",
+                "demo",
+                "demo demo",
+                "1234567",
+                "demo"
+        );
+
 
 
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
@@ -106,14 +109,16 @@ class LoginServiceTest {
     @Order(4)
     @DisplayName("Error registra un usuario: empty user")
     public void registerUserEmpty() {
-        RegisterUserDTO user = new RegisterUserDTO();
-        user.setDireccion("demo");
-        user.setUsername("");
-        user.setPassword("demo");
-        user.setEmail("demo");
-        user.setNombre("demo");
-        user.setTelefono("123");
-        user.setApellidos("demo");
+        RegisterUserDTO user = new RegisterUserDTO(
+                "demo",
+                "",
+                "demo",
+                "demo",
+                "demo demo",
+                "1234567",
+                "demo"
+        );
+;
 
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
         Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -126,14 +131,16 @@ class LoginServiceTest {
     @Order(5)
     @DisplayName("Error registra un usuario: null password")
     public void registerUserNullPassword() {
-        RegisterUserDTO user = new RegisterUserDTO();
-        user.setDireccion("demo");
-        user.setUsername("demo");
-        user.setPassword(null);
-        user.setEmail("demo");
-        user.setNombre("demo");
-        user.setTelefono("123");
-        user.setApellidos("demo");
+        RegisterUserDTO user = new RegisterUserDTO(
+                "demo",
+                "demo",
+                null,
+                "demo",
+                "demo demo",
+                "1234567",
+                "demo"
+        );
+
 
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
         Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
@@ -147,14 +154,15 @@ class LoginServiceTest {
     @Order(6)
     @DisplayName("Error registra un usuario: empty password")
     public void registerUserEmptyPassword() {
-        RegisterUserDTO user = new RegisterUserDTO();
-        user.setDireccion("demo");
-        user.setUsername("demo");
-        user.setPassword("");
-        user.setEmail("demo");
-        user.setNombre("demo");
-        user.setTelefono("123");
-        user.setApellidos("demo");
+        RegisterUserDTO user = new RegisterUserDTO(
+                "demo",
+                "demo",
+                "",
+                "demo",
+                "demo demo",
+                "1234567",
+                "demo"
+        );
 
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
         Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -167,14 +175,16 @@ class LoginServiceTest {
     @Order(7)
     @DisplayName("Error registra un usuario: null email")
     public void registerUserNullEmail() {
-        RegisterUserDTO user = new RegisterUserDTO();
-        user.setDireccion("demo");
-        user.setUsername("demo");
-        user.setPassword("demo");
-        user.setEmail(null);
-        user.setNombre("demo");
-        user.setTelefono("123");
-        user.setApellidos("demo");
+        RegisterUserDTO user = new RegisterUserDTO(
+                null,
+                "demo",
+                "demo",
+                "demo",
+                "demo demo",
+                "1234567",
+                "demo"
+        );
+
 
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
         Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
@@ -187,14 +197,15 @@ class LoginServiceTest {
     @Order(8)
     @DisplayName("Error registra un usuario: empty email")
     public void registerUserEmptyEmail() {
-        RegisterUserDTO user = new RegisterUserDTO();
-        user.setDireccion("demo");
-        user.setUsername("demo");
-        user.setPassword("demo");
-        user.setEmail("");
-        user.setNombre("demo");
-        user.setTelefono("123");
-        user.setApellidos("demo");
+        RegisterUserDTO user = new RegisterUserDTO(
+                "",
+                "demo",
+                "demo",
+                "demo",
+                "demo demo",
+                "1234567",
+                "demo"
+        );
 
         ResponseEntity<ResponseDTO> response = loginService.registerUsuari(user);
         Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
