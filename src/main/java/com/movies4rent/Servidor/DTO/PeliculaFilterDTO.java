@@ -9,14 +9,12 @@ import java.util.function.Predicate;
  * @author Ivan Rodriguez Gomez
  */
 public class PeliculaFilterDTO {
-    private String titulo;
     private String director;
     private String genero;
     private Integer año;
     private Integer vecesAlquilada;
 
-    public PeliculaFilterDTO(String titulo, String director, String genero, Integer año, Integer vecesAlquilada) {
-        this.titulo = titulo;
+    public PeliculaFilterDTO(String director, String genero, Integer año, Integer vecesAlquilada) {
         this.director = director;
         this.genero = genero;
         this.año = año;
@@ -25,9 +23,6 @@ public class PeliculaFilterDTO {
 
     public Predicate<Pelicula> getPredicate() {
         Predicate<Pelicula> predicate = pelicula -> true;
-        if (titulo != null && !titulo.isEmpty()) {
-            predicate = predicate.and(pelicula -> pelicula.getTitulo().equalsIgnoreCase(titulo));
-        }
         if (director != null && !director.isEmpty()) {
             predicate = predicate.and(pelicula -> pelicula.getDirector().equalsIgnoreCase(director));
         }

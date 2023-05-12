@@ -46,7 +46,7 @@ public class PeliculaServiceImpl implements PeliculaService {
      * @return un responseEntity amb una llista de peliculas.
      */
     @Override
-    public ResponseEntity<ResponseDTO> findPeliculasFiltered(int page, int pageSize,String titulo, String director, String genero, Integer ano, Integer vecesAlquilada, String token, String orden) {
+    public ResponseEntity<ResponseDTO> findPeliculasFiltered(int page, int pageSize, String director, String genero, Integer ano, Integer vecesAlquilada, String token, String orden) {
 
         ResponseDTO<Page<Pelicula>> response = new ResponseDTO();
         PageRequest pr = PageRequest.of(page, pageSize);
@@ -57,7 +57,7 @@ public class PeliculaServiceImpl implements PeliculaService {
         }
 
         try {
-            PeliculaFilterDTO filter = new PeliculaFilterDTO(titulo, director, genero, ano, vecesAlquilada);
+            PeliculaFilterDTO filter = new PeliculaFilterDTO(director, genero, ano, vecesAlquilada);
 
             Page<Pelicula> foundPeliculas;
             if (orden == null || orden.isEmpty()) {

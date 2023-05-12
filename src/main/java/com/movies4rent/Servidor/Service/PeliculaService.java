@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface PeliculaService {
 
-    ResponseEntity<ResponseDTO> findPeliculasFiltered(int page, int pageSize,String titulo, String director, String genero, Integer ano, Integer vecesAlquilada, String token, String orden);
+    ResponseEntity<ResponseDTO> findPeliculasFiltered(int page, int pageSize, String director, String genero, Integer ano, Integer vecesAlquilada, String token, String orden);
 
     ResponseEntity<ResponseDTO> findById(UUID id, String token);
 

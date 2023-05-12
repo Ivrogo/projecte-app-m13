@@ -36,8 +36,8 @@ public class PeliculaControllerImpl implements PeliculaController{
      */
     @Override
     @GetMapping
-    public ResponseEntity<ResponseDTO> getPeliculasFiltered(int page, int pageSize, String titulo, String director, String genero, Integer ano, Integer vecesAlquilada, String token, String orden) {
-        return peliculaService.findPeliculasFiltered(page, pageSize, titulo, director, genero, ano, vecesAlquilada, token, orden);
+    public ResponseEntity<ResponseDTO> getPeliculasFiltered(int page, int pageSize, String director, String genero, Integer ano, Integer vecesAlquilada, String token, String orden) {
+        return peliculaService.findPeliculasFiltered(page, pageSize, director, genero, ano, vecesAlquilada, token, orden);
     }
 
     /**
