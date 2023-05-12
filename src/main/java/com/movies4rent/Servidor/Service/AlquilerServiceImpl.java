@@ -353,6 +353,8 @@ public class AlquilerServiceImpl implements AlquilerService {
 
             if (updatedAlquiler.get().getEstado() == EstadoAlquiler.FINALIZADO) {
                 emailService.sendEmailFinalizacion(updatedAlquiler.get(), foundUsuari.get().getEmail());
+            } else if (updatedAlquiler.get().getEstado() == EstadoAlquiler.CANCELADO) {
+                emailService.sendEmailCancelacion(updatedAlquiler.get(), foundUsuari.get().getEmail());
             }
 
             response.setValue(updatedAlquiler.get());

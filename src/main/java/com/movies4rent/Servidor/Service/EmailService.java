@@ -8,4 +8,6 @@ public interface EmailService {
 
     void sendEmailFinalizacion(Alquiler alquiler, String userEmail);
 
+    void sendEmailCancelacion(Alquiler alquiler, String userEmail);
+
 }

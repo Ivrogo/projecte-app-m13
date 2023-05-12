@@ -60,4 +60,22 @@ public class EmailServiceImpl implements EmailService {
 
         mailSender.send(message);
     }
+
+    @Override
+    public void sendEmailCancelacion(Alquiler alquiler, String userEmail) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setFrom(emailUser);
+        message.setTo(userEmail);
+        message.setSubject("Cancelación de alquiler");
+        message.setText("Hola " + usuariRepository.findById(alquiler.getUsuari()).get().getNombre() + ",\n\n"
+                + "Este correo es para notificarte que tu alquiler ha sido cancelado.\n\n"
+                + "Gracias por utilizar nuestro servicio.\n\n"
+                + "Saludos cordiales,\n\n"
+                + "Movies4Rent.");
+
+        mailSender.send(message);
+    }
+
 }
