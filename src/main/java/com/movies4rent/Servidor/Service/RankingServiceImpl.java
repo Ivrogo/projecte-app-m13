@@ -18,6 +18,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Classe que executa els metodes cridats dins de la classe controller.
+ * @author Ivan Rodriguez Gomez
+ */
 @Service
 public class RankingServiceImpl implements RankingService{
     @Autowired
@@ -28,6 +32,18 @@ public class RankingServiceImpl implements RankingService{
 
     @Autowired
     private TokenUtils tokenUtils;
+
+    /**
+     * Metode que mostra obté el ranking de pelicules ordenats de mes llogada a menys i que conté diferents filtres per totes les possibilitats.
+     * @param page parametre que especifica la pagina
+     * @param pageSize parametre que especifica la quantitat d'elements dins de cada pagina
+     * @param titulo filtre per trobar les pelicules segons el seu titol.
+     * @param director filtre per trobar les pelicules del mateix director.
+     * @param genero filtre per trobar les pelicules del mateix genere
+     * @param ano filtre per trobar les pelicules del mateix any
+     * @param token token de sessió
+     * @author Ivan Rodriguez Gomez
+     */
     @Override
     public ResponseEntity<ResponseDTO> getPeliculasRankingFiltered(int page, int pageSize, String titulo, String director, String genero, Integer ano, String token) {
 

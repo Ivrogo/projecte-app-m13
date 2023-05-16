@@ -6,7 +6,10 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
+/**
+ * Classe interficie per als metodes de gestió de lloguers.
+ * @author Iván Rodríguez Gómez
+ */
 public interface AlquilerService {
 
     ResponseEntity<ResponseDTO> crearAlquiler(UUID peliculaId, UUID usuarioId, String token);

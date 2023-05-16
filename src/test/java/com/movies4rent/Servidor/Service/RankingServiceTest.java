@@ -21,6 +21,9 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+/**
+ * Clase que conte les proves unitaries de RankingService
+ */
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RankingServiceTest {
